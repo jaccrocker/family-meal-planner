@@ -1,0 +1,968 @@
+[
+  {
+    "id": "asparagus",
+    "name": "asparagus",
+    "category": "Produce",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "1 lb bunch"
+    },
+    "aliases": [
+      "asparagus"
+    ]
+  },
+  {
+    "id": "basil",
+    "name": "fresh basil",
+    "category": "Produce",
+    "pack": {
+      "size": 0.75,
+      "unit": "oz",
+      "label": "0.75 oz pack"
+    },
+    "aliases": [
+      "basil"
+    ]
+  },
+  {
+    "id": "bell-pepper",
+    "name": "bell peppers",
+    "category": "Produce",
+    "pack": {
+      "size": 1,
+      "unit": "each",
+      "label": "each"
+    },
+    "aliases": [
+      "bell pepper",
+      "bell peppers"
+    ]
+  },
+  {
+    "id": "broccoli",
+    "name": "broccoli crowns",
+    "category": "Produce",
+    "pack": {
+      "size": 12,
+      "unit": "oz",
+      "label": "crown, about 12 oz"
+    },
+    "aliases": [
+      "broccoli"
+    ]
+  },
+  {
+    "id": "brussels-sprouts",
+    "name": "brussels sprouts",
+    "category": "Produce",
+    "pack": {
+      "size": 12,
+      "unit": "oz",
+      "label": "12 oz bag"
+    },
+    "aliases": [
+      "brussels sprouts"
+    ]
+  },
+  {
+    "id": "butternut-squash",
+    "name": "butternut squash",
+    "category": "Produce",
+    "pack": {
+      "size": 40,
+      "unit": "oz",
+      "label": "squash, about 2.5 lb"
+    },
+    "aliases": [
+      "butternut squash"
+    ]
+  },
+  {
+    "id": "carrots",
+    "name": "carrots",
+    "category": "Produce",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "1 lb bag"
+    },
+    "aliases": [
+      "carrots"
+    ]
+  },
+  {
+    "id": "cherry-tomatoes",
+    "name": "cherry tomatoes",
+    "category": "Produce",
+    "pack": {
+      "size": 10,
+      "unit": "oz",
+      "label": "10 oz pint"
+    },
+    "aliases": [
+      "cherry tomatoes"
+    ]
+  },
+  {
+    "id": "corn",
+    "name": "corn on the cob",
+    "category": "Produce",
+    "pack": {
+      "size": 1,
+      "unit": "each",
+      "label": "ear"
+    },
+    "aliases": [
+      "corn"
+    ]
+  },
+  {
+    "id": "garlic",
+    "name": "garlic",
+    "category": "Produce",
+    "pack": {
+      "size": 10,
+      "unit": "each",
+      "label": "head, about 10 cloves"
+    },
+    "aliases": [
+      "garlic"
+    ],
+    "staple": true
+  },
+  {
+    "id": "lemon",
+    "name": "lemons",
+    "category": "Produce",
+    "pack": {
+      "size": 1,
+      "unit": "each",
+      "label": "each"
+    },
+    "aliases": [
+      "lemon"
+    ]
+  },
+  {
+    "id": "lettuce",
+    "name": "green leaf lettuce",
+    "category": "Produce",
+    "pack": {
+      "size": 12,
+      "unit": "oz",
+      "label": "head"
+    },
+    "aliases": [
+      "lettuce"
+    ]
+  },
+  {
+    "id": "onion",
+    "name": "yellow onions",
+    "category": "Produce",
+    "pack": {
+      "size": 1,
+      "unit": "each",
+      "label": "each"
+    },
+    "aliases": [
+      "onion",
+      "onions"
+    ]
+  },
+  {
+    "id": "potatoes",
+    "name": "yukon gold potatoes",
+    "category": "Produce",
+    "pack": {
+      "size": 48,
+      "unit": "oz",
+      "label": "3 lb bag"
+    },
+    "aliases": [
+      "potatoes"
+    ]
+  },
+  {
+    "id": "romaine",
+    "name": "romaine hearts",
+    "category": "Produce",
+    "pack": {
+      "size": 18,
+      "unit": "oz",
+      "label": "3 hearts, about 18 oz"
+    },
+    "aliases": [
+      "romaine",
+      "romaine lettuce"
+    ]
+  },
+  {
+    "id": "spinach",
+    "name": "baby spinach",
+    "category": "Produce",
+    "pack": {
+      "size": 5,
+      "unit": "oz",
+      "label": "5 oz clamshell"
+    },
+    "aliases": [
+      "spinach"
+    ]
+  },
+  {
+    "id": "sweet-potatoes",
+    "name": "sweet potatoes",
+    "category": "Produce",
+    "pack": {
+      "size": 1,
+      "unit": "each",
+      "label": "each, about 8 oz"
+    },
+    "aliases": [
+      "sweet potatoes"
+    ]
+  },
+  {
+    "id": "thai-basil",
+    "name": "thai basil",
+    "category": "Produce",
+    "pack": {
+      "size": 0.75,
+      "unit": "oz",
+      "label": "0.75 oz pack"
+    },
+    "aliases": [
+      "thai basil"
+    ]
+  },
+  {
+    "id": "tomato",
+    "name": "tomatoes",
+    "category": "Produce",
+    "pack": {
+      "size": 1,
+      "unit": "each",
+      "label": "each"
+    },
+    "aliases": [
+      "tomato"
+    ]
+  },
+  {
+    "id": "rosemary",
+    "name": "fresh rosemary",
+    "category": "Produce",
+    "pack": {
+      "size": 0.75,
+      "unit": "oz",
+      "label": "0.75 oz pack"
+    },
+    "aliases": [
+      "rosemary"
+    ]
+  },
+  {
+    "id": "banana",
+    "name": "bananas",
+    "category": "Produce",
+    "pack": {
+      "size": 1,
+      "unit": "each",
+      "label": "each"
+    },
+    "aliases": [
+      "banana"
+    ]
+  },
+  {
+    "id": "berries",
+    "name": "blueberries",
+    "category": "Produce",
+    "pack": {
+      "size": 6,
+      "unit": "oz",
+      "label": "6 oz clamshell"
+    },
+    "aliases": [
+      "berries"
+    ]
+  },
+  {
+    "id": "chicken-breast",
+    "name": "boneless skinless chicken breast",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 32,
+      "unit": "oz",
+      "label": "2 lb family pack"
+    },
+    "aliases": [
+      "chicken breast",
+      "chicken breasts"
+    ]
+  },
+  {
+    "id": "whole-chicken",
+    "name": "whole chicken",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 1,
+      "unit": "each",
+      "label": "whole chicken, about 4 lb"
+    },
+    "aliases": [
+      "whole chicken"
+    ]
+  },
+  {
+    "id": "filet-mignon",
+    "name": "filet mignon steaks",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 12,
+      "unit": "oz",
+      "label": "2 steaks, about 12 oz"
+    },
+    "aliases": [
+      "filet mignon",
+      "filet mignon steaks"
+    ]
+  },
+  {
+    "id": "ground-beef",
+    "name": "ground beef",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "1 lb pack"
+    },
+    "aliases": [
+      "ground beef"
+    ]
+  },
+  {
+    "id": "italian-sausage",
+    "name": "italian sausage",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "1 lb pack"
+    },
+    "aliases": [
+      "italian sausage"
+    ]
+  },
+  {
+    "id": "pancetta",
+    "name": "diced pancetta",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 4,
+      "unit": "oz",
+      "label": "4 oz pack"
+    },
+    "aliases": [
+      "pancetta"
+    ]
+  },
+  {
+    "id": "ribs",
+    "name": "baby back ribs",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 48,
+      "unit": "oz",
+      "label": "rack, about 3 lb"
+    },
+    "aliases": [
+      "ribs"
+    ]
+  },
+  {
+    "id": "salmon",
+    "name": "salmon fillets",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 8,
+      "unit": "oz",
+      "label": "8 oz fillet"
+    },
+    "aliases": [
+      "salmon",
+      "salmon fillets"
+    ]
+  },
+  {
+    "id": "scallops",
+    "name": "sea scallops",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 8,
+      "unit": "oz",
+      "label": "8 oz pack"
+    },
+    "aliases": [
+      "scallops"
+    ]
+  },
+  {
+    "id": "shrimp",
+    "name": "raw shrimp",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "1 lb bag"
+    },
+    "aliases": [
+      "shrimp"
+    ]
+  },
+  {
+    "id": "turkey",
+    "name": "sliced deli turkey",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 8,
+      "unit": "oz",
+      "label": "8 oz pack"
+    },
+    "aliases": [
+      "turkey"
+    ]
+  },
+  {
+    "id": "bacon",
+    "name": "bacon",
+    "category": "Meat & Seafood",
+    "pack": {
+      "size": 12,
+      "unit": "oz",
+      "label": "12 oz pack"
+    },
+    "aliases": [
+      "bacon"
+    ]
+  },
+  {
+    "id": "eggs",
+    "name": "large eggs",
+    "category": "Dairy & Eggs",
+    "pack": {
+      "size": 12,
+      "unit": "each",
+      "label": "dozen"
+    },
+    "aliases": [
+      "egg",
+      "eggs"
+    ]
+  },
+  {
+    "id": "butter",
+    "name": "unsalted butter",
+    "category": "Dairy & Eggs",
+    "pack": {
+      "size": 32,
+      "unit": "tbsp",
+      "label": "1 lb, 4 sticks"
+    },
+    "aliases": [
+      "butter"
+    ],
+    "staple": true
+  },
+  {
+    "id": "cheese",
+    "name": "shredded cheese",
+    "category": "Dairy & Eggs",
+    "pack": {
+      "size": 8,
+      "unit": "oz",
+      "label": "8 oz bag"
+    },
+    "aliases": [
+      "cheese"
+    ]
+  },
+  {
+    "id": "heavy-cream",
+    "name": "heavy cream",
+    "category": "Dairy & Eggs",
+    "pack": {
+      "size": 16,
+      "unit": "floz",
+      "label": "1 pint"
+    },
+    "aliases": [
+      "cream",
+      "heavy cream"
+    ]
+  },
+  {
+    "id": "cream-cheese",
+    "name": "cream cheese",
+    "category": "Dairy & Eggs",
+    "pack": {
+      "size": 8,
+      "unit": "oz",
+      "label": "8 oz block"
+    },
+    "aliases": [
+      "cream cheese"
+    ]
+  },
+  {
+    "id": "milk",
+    "name": "milk",
+    "category": "Dairy & Eggs",
+    "pack": {
+      "size": 64,
+      "unit": "floz",
+      "label": "half gallon"
+    },
+    "aliases": [
+      "milk"
+    ]
+  },
+  {
+    "id": "parmesan",
+    "name": "grated parmesan",
+    "category": "Dairy & Eggs",
+    "pack": {
+      "size": 5,
+      "unit": "oz",
+      "label": "5 oz container"
+    },
+    "aliases": [
+      "parmesan"
+    ]
+  },
+  {
+    "id": "sour-cream",
+    "name": "sour cream",
+    "category": "Dairy & Eggs",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "16 oz tub"
+    },
+    "aliases": [
+      "sour cream"
+    ]
+  },
+  {
+    "id": "bread",
+    "name": "sandwich bread",
+    "category": "Bakery",
+    "pack": {
+      "size": 20,
+      "unit": "each",
+      "label": "loaf, about 20 slices"
+    },
+    "aliases": [
+      "bread"
+    ]
+  },
+  {
+    "id": "bagel",
+    "name": "bagels",
+    "category": "Bakery",
+    "pack": {
+      "size": 6,
+      "unit": "each",
+      "label": "6 pack"
+    },
+    "aliases": [
+      "bagel"
+    ]
+  },
+  {
+    "id": "english-muffin",
+    "name": "english muffins",
+    "category": "Bakery",
+    "pack": {
+      "size": 6,
+      "unit": "each",
+      "label": "6 pack"
+    },
+    "aliases": [
+      "english muffin"
+    ]
+  },
+  {
+    "id": "tortillas",
+    "name": "flour tortillas",
+    "category": "Bakery",
+    "pack": {
+      "size": 10,
+      "unit": "each",
+      "label": "10 pack"
+    },
+    "aliases": [
+      "tortilla",
+      "tortillas"
+    ]
+  },
+  {
+    "id": "peas",
+    "name": "frozen peas",
+    "category": "Frozen",
+    "pack": {
+      "size": 12,
+      "unit": "oz",
+      "label": "12 oz bag"
+    },
+    "aliases": [
+      "peas"
+    ]
+  },
+  {
+    "id": "chili-sauce",
+    "name": "sweet chili sauce",
+    "category": "Pantry",
+    "pack": {
+      "size": 17,
+      "unit": "floz",
+      "label": "17 oz bottle"
+    },
+    "aliases": [
+      "chili sauce"
+    ]
+  },
+  {
+    "id": "couscous",
+    "name": "couscous",
+    "category": "Pantry",
+    "pack": {
+      "size": 10,
+      "unit": "oz",
+      "label": "10 oz box"
+    },
+    "aliases": [
+      "couscous"
+    ]
+  },
+  {
+    "id": "dry-rub",
+    "name": "dry rub seasoning",
+    "category": "Pantry",
+    "pack": {
+      "size": 5,
+      "unit": "oz",
+      "label": "5 oz jar"
+    },
+    "aliases": [
+      "dry rub",
+      "dry rub seasoning"
+    ]
+  },
+  {
+    "id": "fajita-seasoning",
+    "name": "fajita seasoning",
+    "category": "Pantry",
+    "pack": {
+      "size": 1,
+      "unit": "oz",
+      "label": "1 oz packet"
+    },
+    "aliases": [
+      "fajita seasoning"
+    ]
+  },
+  {
+    "id": "fish-sauce",
+    "name": "fish sauce",
+    "category": "Pantry",
+    "pack": {
+      "size": 6.75,
+      "unit": "floz",
+      "label": "6.75 oz bottle"
+    },
+    "aliases": [
+      "fish sauce"
+    ]
+  },
+  {
+    "id": "gnocchi",
+    "name": "potato gnocchi",
+    "category": "Pantry",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "16 oz pack"
+    },
+    "aliases": [
+      "gnocchi"
+    ]
+  },
+  {
+    "id": "herbs",
+    "name": "dried italian herbs",
+    "category": "Pantry",
+    "pack": {
+      "size": 24,
+      "unit": "tsp",
+      "label": "jar"
+    },
+    "aliases": [
+      "herbs"
+    ],
+    "staple": true
+  },
+  {
+    "id": "olive-oil",
+    "name": "olive oil",
+    "category": "Pantry",
+    "pack": {
+      "size": 16.9,
+      "unit": "floz",
+      "label": "16.9 oz bottle"
+    },
+    "aliases": [
+      "olive oil"
+    ],
+    "staple": true
+  },
+  {
+    "id": "pasta",
+    "name": "penne pasta",
+    "category": "Pantry",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "1 lb box"
+    },
+    "aliases": [
+      "pasta"
+    ]
+  },
+  {
+    "id": "fettuccine",
+    "name": "fettuccine",
+    "category": "Pantry",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "1 lb box"
+    },
+    "aliases": [
+      "fettuccine"
+    ]
+  },
+  {
+    "id": "pepper",
+    "name": "black pepper",
+    "category": "Pantry",
+    "pack": {
+      "size": 48,
+      "unit": "tsp",
+      "label": "jar"
+    },
+    "aliases": [
+      "pepper"
+    ],
+    "staple": true
+  },
+  {
+    "id": "salt",
+    "name": "salt",
+    "category": "Pantry",
+    "pack": {
+      "size": 156,
+      "unit": "tsp",
+      "label": "26 oz container"
+    },
+    "aliases": [
+      "salt"
+    ],
+    "staple": true
+  },
+  {
+    "id": "pesto",
+    "name": "basil pesto",
+    "category": "Pantry",
+    "pack": {
+      "size": 6.7,
+      "unit": "oz",
+      "label": "6.7 oz jar"
+    },
+    "aliases": [
+      "pesto",
+      "pesto sauce"
+    ]
+  },
+  {
+    "id": "ravioli",
+    "name": "cheese ravioli",
+    "category": "Pantry",
+    "pack": {
+      "size": 20,
+      "unit": "oz",
+      "label": "20 oz pack"
+    },
+    "aliases": [
+      "ravioli"
+    ]
+  },
+  {
+    "id": "rice",
+    "name": "jasmine rice",
+    "category": "Pantry",
+    "pack": {
+      "size": 32,
+      "unit": "oz",
+      "label": "2 lb bag"
+    },
+    "aliases": [
+      "rice"
+    ]
+  },
+  {
+    "id": "soy-sauce",
+    "name": "soy sauce",
+    "category": "Pantry",
+    "pack": {
+      "size": 10,
+      "unit": "floz",
+      "label": "10 oz bottle"
+    },
+    "aliases": [
+      "soy sauce"
+    ]
+  },
+  {
+    "id": "tortellini",
+    "name": "cheese tortellini",
+    "category": "Pantry",
+    "pack": {
+      "size": 20,
+      "unit": "oz",
+      "label": "20 oz pack"
+    },
+    "aliases": [
+      "tortellini"
+    ]
+  },
+  {
+    "id": "tomato-sauce",
+    "name": "marinara sauce",
+    "category": "Pantry",
+    "pack": {
+      "size": 24,
+      "unit": "oz",
+      "label": "24 oz jar"
+    },
+    "aliases": [
+      "tomato sauce"
+    ]
+  },
+  {
+    "id": "tomato-soup",
+    "name": "tomato soup",
+    "category": "Pantry",
+    "pack": {
+      "size": 18,
+      "unit": "oz",
+      "label": "18 oz can"
+    },
+    "aliases": [
+      "tomato soup"
+    ]
+  },
+  {
+    "id": "caesar-dressing",
+    "name": "caesar dressing",
+    "category": "Pantry",
+    "pack": {
+      "size": 12,
+      "unit": "floz",
+      "label": "12 oz bottle"
+    },
+    "aliases": [
+      "caesar dressing"
+    ]
+  },
+  {
+    "id": "cereal",
+    "name": "cereal",
+    "category": "Pantry",
+    "pack": {
+      "size": 12,
+      "unit": "oz",
+      "label": "12 oz box"
+    },
+    "aliases": [
+      "cereal"
+    ]
+  },
+  {
+    "id": "croutons",
+    "name": "croutons",
+    "category": "Pantry",
+    "pack": {
+      "size": 5,
+      "unit": "oz",
+      "label": "5 oz bag"
+    },
+    "aliases": [
+      "croutons"
+    ]
+  },
+  {
+    "id": "honey",
+    "name": "honey",
+    "category": "Pantry",
+    "pack": {
+      "size": 12,
+      "unit": "floz",
+      "label": "12 oz bottle"
+    },
+    "aliases": [
+      "honey"
+    ]
+  },
+  {
+    "id": "mayo",
+    "name": "mayonnaise",
+    "category": "Pantry",
+    "pack": {
+      "size": 30,
+      "unit": "floz",
+      "label": "30 oz jar"
+    },
+    "aliases": [
+      "mayo"
+    ]
+  },
+  {
+    "id": "oats",
+    "name": "old fashioned oats",
+    "category": "Pantry",
+    "pack": {
+      "size": 18,
+      "unit": "oz",
+      "label": "18 oz canister"
+    },
+    "aliases": [
+      "oats"
+    ]
+  },
+  {
+    "id": "salsa",
+    "name": "salsa",
+    "category": "Pantry",
+    "pack": {
+      "size": 16,
+      "unit": "oz",
+      "label": "16 oz jar"
+    },
+    "aliases": [
+      "salsa"
+    ]
+  }
+]

@@ -1,0 +1,918 @@
+{
+  "status": "draft",
+  "note": "Per serving amounts for one adult portion. Drafted for review; the 15 dinners need Jac's check before Sunday's feature freeze. Quantities at runtime come only from the engine.",
+  "meals": {
+    "M01": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "bagel",
+          "item": "bagel",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "cream cheese",
+          "item": "cream-cheese",
+          "qty": 1,
+          "unit": "oz"
+        }
+      ]
+    },
+    "M02": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "eggs",
+          "item": "eggs",
+          "qty": 2,
+          "unit": "each"
+        },
+        {
+          "ingredient": "tortilla",
+          "item": "tortillas",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "cheese",
+          "item": "cheese",
+          "qty": 1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "bell peppers",
+          "item": "bell-pepper",
+          "qty": 0.25,
+          "unit": "each"
+        },
+        {
+          "ingredient": "onions",
+          "item": "onion",
+          "qty": 0.125,
+          "unit": "each"
+        },
+        {
+          "ingredient": "salsa",
+          "item": "salsa",
+          "qty": 1,
+          "unit": "oz"
+        }
+      ]
+    },
+    "M03": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "english muffin",
+          "item": "english-muffin",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "egg",
+          "item": "eggs",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "cheese",
+          "item": "cheese",
+          "qty": 0.75,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "bacon",
+          "item": "bacon",
+          "qty": 1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "butter",
+          "item": "butter",
+          "qty": 0.5,
+          "unit": "tbsp"
+        }
+      ]
+    },
+    "M04": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "cereal",
+          "item": "cereal",
+          "qty": 1.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "milk",
+          "item": "milk",
+          "qty": 6,
+          "unit": "floz"
+        }
+      ]
+    },
+    "M05": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "oats",
+          "item": "oats",
+          "qty": 1.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "milk",
+          "item": "milk",
+          "qty": 6,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "banana",
+          "item": "banana",
+          "qty": 0.5,
+          "unit": "each"
+        },
+        {
+          "ingredient": "berries",
+          "item": "berries",
+          "qty": 1.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "honey",
+          "item": "honey",
+          "qty": 0.25,
+          "unit": "floz"
+        }
+      ]
+    },
+    "M06": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "eggs",
+          "item": "eggs",
+          "qty": 2,
+          "unit": "each"
+        },
+        {
+          "ingredient": "milk",
+          "item": "milk",
+          "qty": 0.5,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "butter",
+          "item": "butter",
+          "qty": 0.5,
+          "unit": "tbsp"
+        },
+        {
+          "ingredient": "bread",
+          "item": "bread",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "salt",
+          "item": "salt",
+          "qty": 0.125,
+          "unit": "tsp"
+        },
+        {
+          "ingredient": "pepper",
+          "item": "pepper",
+          "qty": 0.0625,
+          "unit": "tsp"
+        }
+      ]
+    },
+    "M07": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "chicken breast",
+          "item": "chicken-breast",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "romaine lettuce",
+          "item": "romaine",
+          "qty": 3,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "parmesan",
+          "item": "parmesan",
+          "qty": 0.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "croutons",
+          "item": "croutons",
+          "qty": 0.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "caesar dressing",
+          "item": "caesar-dressing",
+          "qty": 1,
+          "unit": "floz"
+        }
+      ]
+    },
+    "M16": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "tortilla",
+          "item": "tortillas",
+          "qty": 2,
+          "unit": "each"
+        },
+        {
+          "ingredient": "cheese",
+          "item": "cheese",
+          "qty": 2,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "salsa",
+          "item": "salsa",
+          "qty": 1.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "sour cream",
+          "item": "sour-cream",
+          "qty": 1,
+          "unit": "oz"
+        }
+      ]
+    },
+    "M17": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "tomato soup",
+          "item": "tomato-soup",
+          "qty": 9,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "bread",
+          "item": "bread",
+          "qty": 2,
+          "unit": "each"
+        },
+        {
+          "ingredient": "cheese",
+          "item": "cheese",
+          "qty": 1.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "butter",
+          "item": "butter",
+          "qty": 1,
+          "unit": "tbsp"
+        }
+      ]
+    },
+    "M18": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "turkey",
+          "item": "turkey",
+          "qty": 3,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "lettuce",
+          "item": "lettuce",
+          "qty": 0.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "tomato",
+          "item": "tomato",
+          "qty": 0.25,
+          "unit": "each"
+        },
+        {
+          "ingredient": "bread",
+          "item": "bread",
+          "qty": 2,
+          "unit": "each"
+        },
+        {
+          "ingredient": "mayo",
+          "item": "mayo",
+          "qty": 0.5,
+          "unit": "floz"
+        }
+      ]
+    },
+    "M19": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "chicken breasts",
+          "item": "chicken-breast",
+          "qty": 7,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "carrots",
+          "item": "carrots",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "brussels sprouts",
+          "item": "brussels-sprouts",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "olive oil",
+          "item": "olive-oil",
+          "qty": 0.5,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "herbs",
+          "item": "herbs",
+          "qty": 0.5,
+          "unit": "tsp"
+        }
+      ]
+    },
+    "M20": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "fettuccine",
+          "item": "fettuccine",
+          "qty": 3,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "chicken breast",
+          "item": "chicken-breast",
+          "qty": 5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "broccoli",
+          "item": "broccoli",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "heavy cream",
+          "item": "heavy-cream",
+          "qty": 2,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "parmesan",
+          "item": "parmesan",
+          "qty": 0.75,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "butter",
+          "item": "butter",
+          "qty": 1,
+          "unit": "tbsp"
+        }
+      ]
+    },
+    "M21": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "chicken breast",
+          "item": "chicken-breast",
+          "qty": 6,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "bell peppers",
+          "item": "bell-pepper",
+          "qty": 0.5,
+          "unit": "each"
+        },
+        {
+          "ingredient": "onions",
+          "item": "onion",
+          "qty": 0.5,
+          "unit": "each"
+        },
+        {
+          "ingredient": "fajita seasoning",
+          "item": "fajita-seasoning",
+          "qty": 0.25,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "tortillas",
+          "item": "tortillas",
+          "qty": 2,
+          "unit": "each"
+        },
+        {
+          "ingredient": "sour cream",
+          "item": "sour-cream",
+          "qty": 1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "salsa",
+          "item": "salsa",
+          "qty": 1,
+          "unit": "oz"
+        }
+      ]
+    },
+    "M22": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "pasta",
+          "item": "pasta",
+          "qty": 3,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "chicken breast",
+          "item": "chicken-breast",
+          "qty": 5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "pesto",
+          "item": "pesto",
+          "qty": 1.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "spinach",
+          "item": "spinach",
+          "qty": 1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "cherry tomatoes",
+          "item": "cherry-tomatoes",
+          "qty": 2.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "parmesan",
+          "item": "parmesan",
+          "qty": 0.5,
+          "unit": "oz"
+        }
+      ]
+    },
+    "M23": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "chicken breast",
+          "item": "chicken-breast",
+          "qty": 5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "thai basil",
+          "item": "thai-basil",
+          "qty": 0.1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "chili sauce",
+          "item": "chili-sauce",
+          "qty": 0.5,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "soy sauce",
+          "item": "soy-sauce",
+          "qty": 0.25,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "fish sauce",
+          "item": "fish-sauce",
+          "qty": 0.25,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "rice",
+          "item": "rice",
+          "qty": 2,
+          "unit": "oz"
+        }
+      ]
+    },
+    "M24": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "gnocchi",
+          "item": "gnocchi",
+          "qty": 5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "peas",
+          "item": "peas",
+          "qty": 2,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "pancetta",
+          "item": "pancetta",
+          "qty": 1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "cream",
+          "item": "heavy-cream",
+          "qty": 1,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "parmesan",
+          "item": "parmesan",
+          "qty": 0.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 0.5,
+          "unit": "each"
+        }
+      ]
+    },
+    "M25": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "ravioli",
+          "item": "ravioli",
+          "qty": 5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "italian sausage",
+          "item": "italian-sausage",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "tomato sauce",
+          "item": "tomato-sauce",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 0.5,
+          "unit": "each"
+        },
+        {
+          "ingredient": "basil",
+          "item": "basil",
+          "qty": 0.1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "parmesan",
+          "item": "parmesan",
+          "qty": 0.5,
+          "unit": "oz"
+        }
+      ]
+    },
+    "M26": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "ribs",
+          "item": "ribs",
+          "qty": 12,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "sweet potatoes",
+          "item": "sweet-potatoes",
+          "qty": 0.75,
+          "unit": "each"
+        },
+        {
+          "ingredient": "corn",
+          "item": "corn",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "dry rub seasoning",
+          "item": "dry-rub",
+          "qty": 0.25,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "butter",
+          "item": "butter",
+          "qty": 0.5,
+          "unit": "tbsp"
+        }
+      ]
+    },
+    "M27": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "salmon fillets",
+          "item": "salmon",
+          "qty": 6,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "asparagus",
+          "item": "asparagus",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "couscous",
+          "item": "couscous",
+          "qty": 2,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "lemon",
+          "item": "lemon",
+          "qty": 0.25,
+          "unit": "each"
+        },
+        {
+          "ingredient": "olive oil",
+          "item": "olive-oil",
+          "qty": 0.25,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "butter",
+          "item": "butter",
+          "qty": 0.5,
+          "unit": "tbsp"
+        }
+      ]
+    },
+    "M28": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "pasta",
+          "item": "pasta",
+          "qty": 3,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "shrimp",
+          "item": "shrimp",
+          "qty": 3,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "scallops",
+          "item": "scallops",
+          "qty": 2,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "pesto sauce",
+          "item": "pesto",
+          "qty": 1.5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "heavy cream",
+          "item": "heavy-cream",
+          "qty": 1.5,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "parmesan",
+          "item": "parmesan",
+          "qty": 0.5,
+          "unit": "oz"
+        }
+      ]
+    },
+    "M29": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "whole chicken",
+          "item": "whole-chicken",
+          "qty": 0.25,
+          "unit": "each"
+        },
+        {
+          "ingredient": "brussels sprouts",
+          "item": "brussels-sprouts",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "carrots",
+          "item": "carrots",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "olive oil",
+          "item": "olive-oil",
+          "qty": 0.5,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "herbs",
+          "item": "herbs",
+          "qty": 0.5,
+          "unit": "tsp"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 1,
+          "unit": "each"
+        }
+      ]
+    },
+    "M30": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "filet mignon steaks",
+          "item": "filet-mignon",
+          "qty": 6,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "butternut squash",
+          "item": "butternut-squash",
+          "qty": 6,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "potatoes",
+          "item": "potatoes",
+          "qty": 6,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "olive oil",
+          "item": "olive-oil",
+          "qty": 0.5,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "rosemary",
+          "item": "rosemary",
+          "qty": 0.05,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "butter",
+          "item": "butter",
+          "qty": 1,
+          "unit": "tbsp"
+        }
+      ]
+    },
+    "M31": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "bell peppers",
+          "item": "bell-pepper",
+          "qty": 1,
+          "unit": "each"
+        },
+        {
+          "ingredient": "ground beef",
+          "item": "ground-beef",
+          "qty": 4,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "rice",
+          "item": "rice",
+          "qty": 1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "tomato sauce",
+          "item": "tomato-sauce",
+          "qty": 2,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "cheese",
+          "item": "cheese",
+          "qty": 1,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "onion",
+          "item": "onion",
+          "qty": 0.25,
+          "unit": "each"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 0.5,
+          "unit": "each"
+        }
+      ]
+    },
+    "M33": {
+      "reviewed": false,
+      "ingredients": [
+        {
+          "ingredient": "tortellini",
+          "item": "tortellini",
+          "qty": 5,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "ground beef",
+          "item": "ground-beef",
+          "qty": 3,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "tomato sauce",
+          "item": "tomato-sauce",
+          "qty": 3,
+          "unit": "oz"
+        },
+        {
+          "ingredient": "heavy cream",
+          "item": "heavy-cream",
+          "qty": 1.5,
+          "unit": "floz"
+        },
+        {
+          "ingredient": "garlic",
+          "item": "garlic",
+          "qty": 0.5,
+          "unit": "each"
+        },
+        {
+          "ingredient": "onion",
+          "item": "onion",
+          "qty": 0.25,
+          "unit": "each"
+        }
+      ]
+    }
+  }
+}

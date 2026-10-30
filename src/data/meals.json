@@ -1,0 +1,932 @@
+[
+  {
+    "id": "M01",
+    "type": "Breakfast",
+    "name": "Bagel with Cream Cheese",
+    "description": "Toasted bagel with cream cheese",
+    "instructions": "Toast bagel, spread cream cheese.",
+    "ingredients": [
+      {
+        "name": "bagel",
+        "category": "Other"
+      },
+      {
+        "name": "cream cheese",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M02",
+    "type": "Breakfast",
+    "name": "Breakfast Burrito",
+    "description": "Eggs, cheese, and vegetables wrapped in a tortilla (weekends)",
+    "instructions": "Scramble eggs with veggies, wrap in tortilla with cheese.",
+    "ingredients": [
+      {
+        "name": "eggs",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "tortilla",
+        "category": "Pantry"
+      },
+      {
+        "name": "cheese",
+        "category": "Dairy"
+      },
+      {
+        "name": "bell peppers",
+        "category": "Produce"
+      },
+      {
+        "name": "onions",
+        "category": "Produce"
+      },
+      {
+        "name": "salsa",
+        "category": "Other"
+      }
+    ]
+  },
+  {
+    "id": "M03",
+    "type": "Breakfast",
+    "name": "Breakfast Sandwich",
+    "description": "Egg, cheese, and bacon on an English muffin",
+    "instructions": "Cook bacon and egg, assemble sandwich with cheese.",
+    "ingredients": [
+      {
+        "name": "english muffin",
+        "category": "Other"
+      },
+      {
+        "name": "egg",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "cheese",
+        "category": "Dairy"
+      },
+      {
+        "name": "bacon",
+        "category": "Other"
+      },
+      {
+        "name": "butter",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M04",
+    "type": "Breakfast",
+    "name": "Cereal",
+    "description": "Cold cereal with milk",
+    "instructions": "Pour cereal into bowl, add milk.",
+    "ingredients": [
+      {
+        "name": "cereal",
+        "category": "Other"
+      },
+      {
+        "name": "milk",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M05",
+    "type": "Breakfast",
+    "name": "Oatmeal",
+    "description": "Warm oatmeal with fruit and nuts",
+    "instructions": "Cook oats in milk, top with fruit and honey.",
+    "ingredients": [
+      {
+        "name": "oats",
+        "category": "Other"
+      },
+      {
+        "name": "milk",
+        "category": "Dairy"
+      },
+      {
+        "name": "banana",
+        "category": "Other"
+      },
+      {
+        "name": "berries",
+        "category": "Other"
+      },
+      {
+        "name": "honey",
+        "category": "Other"
+      }
+    ]
+  },
+  {
+    "id": "M06",
+    "type": "Breakfast",
+    "name": "Scrambled Eggs",
+    "description": "Fluffy scrambled eggs with toast",
+    "instructions": "Whisk eggs with milk, cook in butter, serve with toast.",
+    "ingredients": [
+      {
+        "name": "eggs",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "milk",
+        "category": "Dairy"
+      },
+      {
+        "name": "butter",
+        "category": "Dairy"
+      },
+      {
+        "name": "bread",
+        "category": "Pantry"
+      },
+      {
+        "name": "salt",
+        "category": "Pantry"
+      },
+      {
+        "name": "pepper",
+        "category": "Pantry"
+      }
+    ]
+  },
+  {
+    "id": "M07",
+    "type": "Lunch",
+    "name": "Chicken Caesar Salad",
+    "description": "Grilled chicken over romaine with Caesar dressing",
+    "instructions": "Grill chicken, toss lettuce with dressing, top with chicken.",
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "romaine lettuce",
+        "category": "Produce"
+      },
+      {
+        "name": "parmesan",
+        "category": "Dairy"
+      },
+      {
+        "name": "croutons",
+        "category": "Other"
+      },
+      {
+        "name": "caesar dressing",
+        "category": "Other"
+      }
+    ]
+  },
+  {
+    "id": "M08",
+    "type": "Lunch",
+    "name": "Leftover Baked Chicken",
+    "description": "Leftover baked chicken with carrots and Brussels sprouts from previous dinner",
+    "instructions": "Reheat and serve.",
+    "ingredients": [
+      {
+        "name": "leftover chicken",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "carrots",
+        "category": "Produce"
+      },
+      {
+        "name": "brussels sprouts",
+        "category": "Produce"
+      }
+    ],
+    "leftoverOf": "M19"
+  },
+  {
+    "id": "M09",
+    "type": "Lunch",
+    "name": "Leftover Chicken Alfredo",
+    "description": "Leftover chicken broccoli Alfredo pasta from previous dinner",
+    "instructions": "Reheat and enjoy.",
+    "ingredients": [
+      {
+        "name": "leftover pasta",
+        "category": "Pantry"
+      },
+      {
+        "name": "chicken",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "broccoli",
+        "category": "Produce"
+      },
+      {
+        "name": "alfredo sauce",
+        "category": "Pantry"
+      }
+    ],
+    "leftoverOf": "M20"
+  },
+  {
+    "id": "M10",
+    "type": "Lunch",
+    "name": "Leftover Chicken Fajitas",
+    "description": "Leftover chicken fajitas from previous dinner",
+    "instructions": "Reheat and wrap in fresh tortillas.",
+    "ingredients": [
+      {
+        "name": "leftover chicken fajitas",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "tortillas",
+        "category": "Pantry"
+      },
+      {
+        "name": "bell peppers",
+        "category": "Produce"
+      },
+      {
+        "name": "onions",
+        "category": "Produce"
+      }
+    ],
+    "leftoverOf": "M21"
+  },
+  {
+    "id": "M11",
+    "type": "Lunch",
+    "name": "Leftover Ribs",
+    "description": "Leftover ribs with sweet potatoes and corn from previous dinner",
+    "instructions": "Reheat and enjoy.",
+    "ingredients": [
+      {
+        "name": "leftover ribs",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "sweet potatoes",
+        "category": "Produce"
+      },
+      {
+        "name": "corn",
+        "category": "Produce"
+      }
+    ],
+    "leftoverOf": "M26"
+  },
+  {
+    "id": "M12",
+    "type": "Lunch",
+    "name": "Leftover Salmon",
+    "description": "Leftover salmon with asparagus and couscous from previous dinner",
+    "instructions": "Reheat or enjoy cold.",
+    "ingredients": [
+      {
+        "name": "leftover salmon",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "asparagus",
+        "category": "Produce"
+      },
+      {
+        "name": "couscous",
+        "category": "Pantry"
+      }
+    ],
+    "leftoverOf": "M27"
+  },
+  {
+    "id": "M13",
+    "type": "Lunch",
+    "name": "Leftover Seafood Pasta",
+    "description": "Leftover seafood pesto pasta from previous dinner",
+    "instructions": "Reheat and serve.",
+    "ingredients": [
+      {
+        "name": "leftover seafood pasta",
+        "category": "Pantry"
+      },
+      {
+        "name": "pesto",
+        "category": "Pantry"
+      }
+    ],
+    "leftoverOf": "M28"
+  },
+  {
+    "id": "M14",
+    "type": "Lunch",
+    "name": "Leftover Stuffed Peppers",
+    "description": "Leftover stuffed peppers from previous dinner",
+    "instructions": "Reheat and enjoy.",
+    "ingredients": [
+      {
+        "name": "leftover stuffed peppers",
+        "category": "Pantry"
+      }
+    ],
+    "leftoverOf": "M31"
+  },
+  {
+    "id": "M15",
+    "type": "Lunch",
+    "name": "Leftover Tortellini",
+    "description": "Leftover tortellini with ground beef and pink sauce from previous dinner",
+    "instructions": "Reheat and serve.",
+    "ingredients": [
+      {
+        "name": "leftover tortellini",
+        "category": "Pantry"
+      },
+      {
+        "name": "ground beef",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "pink sauce",
+        "category": "Pantry"
+      }
+    ],
+    "leftoverOf": "M33"
+  },
+  {
+    "id": "M16",
+    "type": "Lunch",
+    "name": "Quesadilla",
+    "description": "Cheese quesadilla with salsa",
+    "instructions": "Fold cheese in tortilla, grill until crispy.",
+    "ingredients": [
+      {
+        "name": "tortilla",
+        "category": "Pantry"
+      },
+      {
+        "name": "cheese",
+        "category": "Dairy"
+      },
+      {
+        "name": "salsa",
+        "category": "Other"
+      },
+      {
+        "name": "sour cream",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M17",
+    "type": "Lunch",
+    "name": "Soup and Sandwich",
+    "description": "Tomato soup with grilled cheese sandwich",
+    "instructions": "Heat soup, make grilled cheese sandwich.",
+    "ingredients": [
+      {
+        "name": "tomato soup",
+        "category": "Produce"
+      },
+      {
+        "name": "bread",
+        "category": "Pantry"
+      },
+      {
+        "name": "cheese",
+        "category": "Dairy"
+      },
+      {
+        "name": "butter",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M18",
+    "type": "Lunch",
+    "name": "Turkey Sandwich",
+    "description": "Fresh turkey sandwich with vegetables",
+    "instructions": "Layer turkey and vegetables on bread.",
+    "ingredients": [
+      {
+        "name": "turkey",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "lettuce",
+        "category": "Produce"
+      },
+      {
+        "name": "tomato",
+        "category": "Produce"
+      },
+      {
+        "name": "bread",
+        "category": "Pantry"
+      },
+      {
+        "name": "mayo",
+        "category": "Other"
+      }
+    ]
+  },
+  {
+    "id": "M19",
+    "type": "Dinner",
+    "name": "Baked Chicken with Carrots and Brussels Sprouts",
+    "description": "Simple nutritious dish with roasted chicken and vegetables",
+    "instructions": "Season chicken and vegetables, bake together until golden.",
+    "ingredients": [
+      {
+        "name": "chicken breasts",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "carrots",
+        "category": "Produce"
+      },
+      {
+        "name": "brussels sprouts",
+        "category": "Produce"
+      },
+      {
+        "name": "olive oil",
+        "category": "Pantry"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      },
+      {
+        "name": "herbs",
+        "category": "Pantry"
+      }
+    ]
+  },
+  {
+    "id": "M20",
+    "type": "Dinner",
+    "name": "Chicken Broccoli Alfredo Pasta",
+    "description": "Creamy Alfredo pasta with chicken and broccoli",
+    "instructions": "Cook pasta and broccoli, sauté chicken, toss with Alfredo sauce.",
+    "ingredients": [
+      {
+        "name": "fettuccine",
+        "category": "Other"
+      },
+      {
+        "name": "chicken breast",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "broccoli",
+        "category": "Produce"
+      },
+      {
+        "name": "heavy cream",
+        "category": "Dairy"
+      },
+      {
+        "name": "parmesan",
+        "category": "Dairy"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      },
+      {
+        "name": "butter",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M21",
+    "type": "Dinner",
+    "name": "Chicken Fajitas",
+    "description": "Marinated chicken strips with peppers and onions in warm tortillas",
+    "instructions": "Marinate and cook chicken with peppers and onions, serve in tortillas.",
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "bell peppers",
+        "category": "Produce"
+      },
+      {
+        "name": "onions",
+        "category": "Produce"
+      },
+      {
+        "name": "fajita seasoning",
+        "category": "Pantry"
+      },
+      {
+        "name": "tortillas",
+        "category": "Pantry"
+      },
+      {
+        "name": "sour cream",
+        "category": "Dairy"
+      },
+      {
+        "name": "salsa",
+        "category": "Other"
+      }
+    ]
+  },
+  {
+    "id": "M22",
+    "type": "Dinner",
+    "name": "Chicken Pesto Pasta with Spinach and Tomatoes",
+    "description": "Pesto pasta with chicken, fresh spinach and tomatoes",
+    "instructions": "Cook pasta and chicken, toss with pesto, add fresh spinach and tomatoes.",
+    "ingredients": [
+      {
+        "name": "pasta",
+        "category": "Pantry"
+      },
+      {
+        "name": "chicken breast",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "pesto",
+        "category": "Pantry"
+      },
+      {
+        "name": "spinach",
+        "category": "Produce"
+      },
+      {
+        "name": "cherry tomatoes",
+        "category": "Produce"
+      },
+      {
+        "name": "parmesan",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M23",
+    "type": "Dinner",
+    "name": "Chicken Thai Basil",
+    "description": "Spicy aromatic dish with chicken, Thai basil, and chili sauce",
+    "instructions": "Stir fry chicken with garlic and chilies, add basil, serve over rice.",
+    "ingredients": [
+      {
+        "name": "chicken breast",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "thai basil",
+        "category": "Produce"
+      },
+      {
+        "name": "chili sauce",
+        "category": "Pantry"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      },
+      {
+        "name": "soy sauce",
+        "category": "Pantry"
+      },
+      {
+        "name": "fish sauce",
+        "category": "Pantry"
+      },
+      {
+        "name": "rice",
+        "category": "Pantry"
+      }
+    ]
+  },
+  {
+    "id": "M24",
+    "type": "Dinner",
+    "name": "Gnocchi with Peas and Pancetta",
+    "description": "Soft potato dumplings with peas and Italian bacon",
+    "instructions": "Cook gnocchi, crisp pancetta, toss with peas and cream sauce.",
+    "ingredients": [
+      {
+        "name": "gnocchi",
+        "category": "Pantry"
+      },
+      {
+        "name": "peas",
+        "category": "Other"
+      },
+      {
+        "name": "pancetta",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "cream",
+        "category": "Dairy"
+      },
+      {
+        "name": "parmesan",
+        "category": "Dairy"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      }
+    ]
+  },
+  {
+    "id": "M25",
+    "type": "Dinner",
+    "name": "Italian Sausage and Ravioli",
+    "description": "Hearty pasta dish with sausage in tomato sauce",
+    "instructions": "Cook ravioli, brown sausage, combine with tomato sauce.",
+    "ingredients": [
+      {
+        "name": "ravioli",
+        "category": "Pantry"
+      },
+      {
+        "name": "italian sausage",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "tomato sauce",
+        "category": "Produce"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      },
+      {
+        "name": "basil",
+        "category": "Produce"
+      },
+      {
+        "name": "parmesan",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M26",
+    "type": "Dinner",
+    "name": "Ribs with Sweet Potatoes and Corn",
+    "description": "Classic comfort food with tender ribs, sweet potatoes, and corn",
+    "instructions": "Season ribs with dry rub, bake or grill. Roast sweet potatoes and corn.",
+    "ingredients": [
+      {
+        "name": "ribs",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "sweet potatoes",
+        "category": "Produce"
+      },
+      {
+        "name": "corn",
+        "category": "Produce"
+      },
+      {
+        "name": "dry rub seasoning",
+        "category": "Pantry"
+      },
+      {
+        "name": "butter",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M27",
+    "type": "Dinner",
+    "name": "Salmon with Asparagus and Couscous",
+    "description": "Grilled salmon with steamed asparagus and fluffy couscous",
+    "instructions": "Grill or bake salmon, steam asparagus, prepare couscous.",
+    "ingredients": [
+      {
+        "name": "salmon fillets",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "asparagus",
+        "category": "Produce"
+      },
+      {
+        "name": "couscous",
+        "category": "Pantry"
+      },
+      {
+        "name": "lemon",
+        "category": "Produce"
+      },
+      {
+        "name": "olive oil",
+        "category": "Pantry"
+      },
+      {
+        "name": "butter",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M28",
+    "type": "Dinner",
+    "name": "Seafood Pesto Pasta",
+    "description": "Creamy pesto pasta with mixed seafood",
+    "instructions": "Cook pasta, sauté seafood, toss with creamy pesto sauce.",
+    "ingredients": [
+      {
+        "name": "pasta",
+        "category": "Pantry"
+      },
+      {
+        "name": "shrimp",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "scallops",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "pesto sauce",
+        "category": "Pantry"
+      },
+      {
+        "name": "heavy cream",
+        "category": "Dairy"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      },
+      {
+        "name": "parmesan",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M29",
+    "type": "Dinner",
+    "name": "Spatchcock Chicken with Brussels and Carrots",
+    "description": "Flattened whole roasted chicken with vegetables",
+    "instructions": "Remove chicken backbone, flatten, roast with vegetables.",
+    "ingredients": [
+      {
+        "name": "whole chicken",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "brussels sprouts",
+        "category": "Produce"
+      },
+      {
+        "name": "carrots",
+        "category": "Produce"
+      },
+      {
+        "name": "olive oil",
+        "category": "Pantry"
+      },
+      {
+        "name": "herbs",
+        "category": "Pantry"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      }
+    ]
+  },
+  {
+    "id": "M30",
+    "type": "Dinner",
+    "name": "Steaks with Squash and Potatoes",
+    "description": "Weekend treat of tender filet mignon with roasted vegetables",
+    "instructions": "Season and grill steaks, roast squash and potatoes.",
+    "ingredients": [
+      {
+        "name": "filet mignon steaks",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "butternut squash",
+        "category": "Produce"
+      },
+      {
+        "name": "potatoes",
+        "category": "Produce"
+      },
+      {
+        "name": "olive oil",
+        "category": "Pantry"
+      },
+      {
+        "name": "rosemary",
+        "category": "Other"
+      },
+      {
+        "name": "butter",
+        "category": "Dairy"
+      }
+    ]
+  },
+  {
+    "id": "M31",
+    "type": "Dinner",
+    "name": "Stuffed Peppers",
+    "description": "Bell peppers filled with ground meat, rice, and vegetables",
+    "instructions": "Hollow out peppers, fill with meat and rice mixture, bake with cheese.",
+    "ingredients": [
+      {
+        "name": "bell peppers",
+        "category": "Produce"
+      },
+      {
+        "name": "ground beef",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "rice",
+        "category": "Pantry"
+      },
+      {
+        "name": "tomato sauce",
+        "category": "Produce"
+      },
+      {
+        "name": "cheese",
+        "category": "Dairy"
+      },
+      {
+        "name": "onion",
+        "category": "Produce"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      }
+    ]
+  },
+  {
+    "id": "M32",
+    "type": "Dinner",
+    "name": "Takeout/Delivery Night",
+    "description": "Order from your favorite local restaurant",
+    "instructions": "Order delivery from a local restaurant or use a meal delivery service.",
+    "ingredients": [
+      {
+        "name": "various",
+        "category": "Other"
+      }
+    ],
+    "noGroceries": true
+  },
+  {
+    "id": "M33",
+    "type": "Dinner",
+    "name": "Tortellini with Ground Beef and Pink Sauce",
+    "description": "Hearty pasta dish with creamy tomato sauce",
+    "instructions": "Cook tortellini. Brown beef, add tomato sauce and cream for pink sauce.",
+    "ingredients": [
+      {
+        "name": "tortellini",
+        "category": "Pantry"
+      },
+      {
+        "name": "ground beef",
+        "category": "Meat & Seafood"
+      },
+      {
+        "name": "tomato sauce",
+        "category": "Produce"
+      },
+      {
+        "name": "heavy cream",
+        "category": "Dairy"
+      },
+      {
+        "name": "garlic",
+        "category": "Produce"
+      },
+      {
+        "name": "onion",
+        "category": "Produce"
+      }
+    ]
+  }
+]
