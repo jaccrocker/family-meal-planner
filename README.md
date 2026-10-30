@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Family Meal Planner
 
-## Getting Started
+Pick the week's meals and say who is eating. Family Meal Planner works out exact grocery quantities for your household, merges shared ingredients across meals, rounds up to real pack sizes, and hands the list to your Instacart family cart. You check out in Instacart; the planner never places or pays for an order.
 
-First, run the development server:
+Built for the Meta Global AI Developer Hackathon (Indie track, Build for Your World).
 
-```bash
+## Try it
+
+```
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. With no keys set, the app runs in demo mode: a sample family of four (2 adults, one kid 4 to 10, one kid 11 to 18) and a planned week. Nothing to sign in to.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The model reads meals; plain code does the math; adapters hand off the list.
 
-## Learn More
+| Piece | What it does | Where |
+|---|---|---|
+| Meal library | 33 family meals (6 breakfasts, 12 lunches, 15 dinners) with ingredients and per serving amounts | `src/data/meals.json`, `src/data/amounts.json` |
+| Pack catalog | 73 grocery items with store section and pack size | `src/data/catalog.json` |
+| Quantity engine | Weighs each age band, scales per serving amounts, converts units, merges across meals, rounds up to whole packs, keeps staples home, and records a trace for every line | `src/lib/engine` |
+| Meal parser | Breaks a meal typed outside the library into ingredients per serving with Muse Spark, validated against a schema; asks a short question when a meal is ambiguous | `src/lib/parser.ts` |
+| Instacart adapter | Builds one shopping list page per week through the Instacart Developer Platform; a copy the list fallback works with no key | `src/lib/instacart.ts` |
+| Household store | Household, second adult and saved week, keyed by Google account id | `src/lib/store.ts` |
 
-To learn more about Next.js, take a look at the following resources:
+### The quantity math
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Servings per meal = adults × 1.0 + kids 4 to 10 × 0.5 + kids 11 to 18 × 0.85 (all three multipliers are editable). Each ingredient's need is its per serving amount times those servings, summed over every meal that uses it, then rounded up to whole packs. The same week always produces the same cart; `npm test` covers the engine.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Leftover lunches add no groceries of their own; each adds a lunch's servings to the dinner it comes from. Takeout night adds nothing. Salt, pepper, olive oil, butter, garlic and dried herbs start as pantry staples and stay out of the cart until unticked.
 
-## Deploy on Vercel
+### Google sign in
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Sign in uses Auth.js with Google, asking only for openid, email and profile. The app keeps the Google account id, name and email; no passwords of its own and no access to Gmail, Calendar or Drive. The first person to sign in owns the household and can add a second adult by Google email.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Configuration
+
+Copy `.env.example` to `.env.local` and fill in what you need. Every setting is optional.
+
+| Setting | Turns on |
+|---|---|
+| `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` | Google sign in and saved households |
+| `MODEL_API_KEY` | Muse Spark for typed meals (Meta Model API, `muse-spark-1.3`) |
+| `INSTACART_API_KEY`, `INSTACART_ENV` | Live Instacart shopping list links |
+
+Without `MODEL_API_KEY`, typed meals replay sample parser answers in `src/data/parser-fixtures.json` (tacos, chicken tikka masala, shrimp stir fry). Those samples were written by hand to match the parser's schema; they are not recorded model output.
+
+## Prior work
+
+This is a new public codebase written during the hackathon. It shares its name and some ideas with the author's private family meal planner project, and the 33 preloaded meals and their ingredient lists come from that project's seed data (imported with `npm run import-meals`). Per serving amounts and pack sizes were drafted for this project and reviewed by hand.
+
+## License
+
+MIT
