@@ -5,14 +5,16 @@ import { useMemo, useState } from "react";
 import { usePlanner } from "@/components/PlannerProvider";
 import { LIBRARY, LIBRARY_BY_ID, LISTED_INGREDIENTS } from "@/lib/engine/library";
 import { DAYS, type Day, type Meal, type MealType } from "@/lib/engine/types";
-import type { PlannerState } from "@/lib/planner";
+import { firstOpenDay, nextOpenDay, type PlannerState } from "@/lib/planner";
 
 const TYPES: MealType[] = ["Breakfast", "Lunch", "Dinner"];
 
 export default function MealsPage() {
   const { state, update, cart } = usePlanner();
-  const [day, setDay] = useState<Day>("Mon");
   const [tab, setTab] = useState<MealType>("Dinner");
+  // The day meals go to: the one picked or advanced to, else the first day still open for this tab.
+  const [picked, setPicked] = useState<Day | null>(null);
+  const day = picked ?? firstOpenDay(state.plan, tab);
   const [query, setQuery] = useState("");
 
   const meals = useMemo(() => {
@@ -23,11 +25,15 @@ export default function MealsPage() {
 
   const entryAt = (d: Day, t: MealType) => state.plan.find((p) => p.day === d && p.mealType === t);
 
-  const place = (meal: Meal, d: Day = day) =>
-    update((s) => ({
-      ...s,
-      plan: [...s.plan.filter((p) => !(p.day === d && p.mealType === meal.type)), { day: d, mealType: meal.type, mealId: meal.id }],
-    }));
+  // Add to the target day, then move on to the next day without this meal type.
+  const place = (meal: Meal, d: Day = day) => {
+    const plan = [
+      ...state.plan.filter((p) => !(p.day === d && p.mealType === meal.type)),
+      { day: d, mealType: meal.type, mealId: meal.id },
+    ];
+    update((s) => ({ ...s, plan }));
+    setPicked(nextOpenDay(plan, d, meal.type));
+  };
 
   const remove = (d: Day, t: MealType) =>
     update((s) => ({ ...s, plan: s.plan.filter((p) => !(p.day === d && p.mealType === t)) }));
@@ -60,12 +66,12 @@ export default function MealsPage() {
       <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
         <section className="card p-4 sm:p-5">
           <h2 className="font-display text-xl font-semibold">Week plan</h2>
-          <p className="text-sm text-muted">Pick a day, then add meals from the library.</p>
+          <p className="text-sm text-muted">Pick a day, then add meals from the library. Days can stay empty.</p>
           <div className="mt-3 space-y-2">
             {DAYS.map((d) => (
               <div
                 key={d}
-                onClick={() => setDay(d)}
+                onClick={() => setPicked(d)}
                 className={`cursor-pointer rounded-xl border p-3 ${d === day ? "border-brand bg-brand-soft/50" : "border-line-2"}`}
               >
                 <div className="flex items-center justify-between">
@@ -125,7 +131,10 @@ export default function MealsPage() {
             {library.map((m) => (
               <li key={m.id} className="flex items-start justify-between gap-3 rounded-xl border border-line-2 p-3">
                 <div>
-                  <div className="font-semibold">{m.name}</div>
+                  <div className="font-semibold">
+                    {m.name}
+                    {planned.has(m.id) ? <span className="ml-2 text-xs font-normal text-muted">Planned</span> : null}
+                  </div>
                   <div className="text-sm text-muted">
                     {m.leftoverOf
                       ? `Adds servings to ${LIBRARY_BY_ID.get(m.leftoverOf)?.name}`
@@ -138,7 +147,7 @@ export default function MealsPage() {
                   onClick={() => place(m)}
                   className={`btn h-8 shrink-0 px-3 text-sm ${planned.has(m.id) ? "btn-quiet" : "btn-primary"}`}
                 >
-                  {planned.has(m.id) ? "Add again" : `Add to ${day}`}
+                  Add to {day}
                 </button>
               </li>
             ))}

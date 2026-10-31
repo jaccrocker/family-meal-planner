@@ -2,7 +2,7 @@ import { z } from "zod";
 import { DEMO_HOUSEHOLD, DEMO_PLAN } from "@/lib/demo";
 import { computeCart } from "@/lib/engine/engine";
 import { CATALOG_BY_ID, LIBRARY_BY_ID } from "@/lib/engine/library";
-import { DAYS, type CartResult, type CatalogItem, type Meal } from "@/lib/engine/types";
+import { DAYS, type CartResult, type CatalogItem, type Day, type Meal, type MealType } from "@/lib/engine/types";
 import { UNITS } from "@/lib/engine/units";
 
 /** Everything a week needs, in a shape that can be stored as JSON. */
@@ -112,4 +112,25 @@ export function nextWeekLabel(today = new Date()): string {
   const daysToMonday = ((8 - d.getDay()) % 7) || 7;
   d.setDate(d.getDate() + daysToMonday);
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+type PlanEntry = PlannerState["plan"][number];
+
+/**
+ * The first day after `from` (wrapping through the week) with no meal of this
+ * type. Returns `from` when every other day already has one. Days may stay
+ * empty; nothing requires a full week.
+ */
+export function nextOpenDay(plan: PlanEntry[], from: Day, type: MealType): Day {
+  const start = DAYS.indexOf(from);
+  for (let i = 1; i < DAYS.length; i++) {
+    const d = DAYS[(start + i) % DAYS.length];
+    if (!plan.some((p) => p.day === d && p.mealType === type)) return d;
+  }
+  return from;
+}
+
+/** The first day of the week with no meal of this type, or Monday when all are filled. */
+export function firstOpenDay(plan: PlanEntry[], type: MealType): Day {
+  return DAYS.find((d) => !plan.some((p) => p.day === d && p.mealType === type)) ?? DAYS[0];
 }

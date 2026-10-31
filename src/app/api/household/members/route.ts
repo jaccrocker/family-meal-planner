@@ -5,7 +5,9 @@ import { addMember, findHousehold, removeMember } from "@/lib/store";
 
 const Body = z.object({ email: z.string().email() });
 
-/** The owner adds or removes a second adult by Google email. */
+/** The owner adds or removes other adults by Google email, up to MAX_MEMBERS. */
+const MAX_MEMBERS = 10;
+
 async function owner() {
   const session = await auth();
   const sub = session?.user?.id;
@@ -20,7 +22,11 @@ export async function POST(req: Request) {
   if (!record) return NextResponse.json({ error: "Only the household owner can add members" }, { status: 403 });
   const body = Body.safeParse(await req.json());
   if (!body.success) return NextResponse.json({ error: "Enter a valid email" }, { status: 400 });
-  addMember(record.id, body.data.email);
+  const email = body.data.email.trim().toLowerCase();
+  if (email === record.ownerEmail) return NextResponse.json({ error: "That is your own account" }, { status: 400 });
+  if (!record.members.includes(email) && record.members.length >= MAX_MEMBERS)
+    return NextResponse.json({ error: `A household can share with up to ${MAX_MEMBERS} other adults` }, { status: 400 });
+  addMember(record.id, email);
   return NextResponse.json({ ok: true });
 }
 
