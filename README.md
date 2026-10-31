@@ -6,6 +6,8 @@ Built for the Meta Global AI Developer Hackathon (Indie track, Build for Your Wo
 
 ## Try it
 
+Needs Node 22 or later.
+
 ```
 npm install
 npm run dev
@@ -52,10 +54,16 @@ Without `MODEL_API_KEY`, typed meals replay sample parser answers in `src/data/p
 
 This is a new public codebase written during the hackathon. It shares its name and some ideas with the author's private family meal planner project, and the 33 preloaded meals and their ingredient lists come from that project's seed data (imported with `npm run import-meals`). Per serving amounts and pack sizes were drafted for this project and reviewed by hand.
 
-## License
-
-MIT
-
 ## Homelab test deploy
 
 The `deploy/` folder and `.github/workflows/deploy.yml` follow the homelab app factory pattern. Each push to `main` builds `ghcr.io/jaccrocker/family-meal-planner:latest` on a GitHub hosted runner. VM 110 runs it from `deploy/compose-service.yml` behind NPM, the Cloudflare tunnel and Cloudflare Access at `meals.example.com`, and Watchtower pulls each new image. Runtime settings are listed in `deploy/runtime.env.example`; saved households live in a SQLite file on the `/data` volume.
+
+## Install notes
+
+No dependency needs an install script. better-sqlite3 ships prebuilt binaries for macOS, Linux and Windows, and esbuild, fsevents and unrs-resolver run without their postinstall steps, so `package.json` declines all four under `allowScripts` and npm 12 installs without prompting. On older npm, `npm ci --ignore-scripts` gives the same result; CI and the Docker build use it.
+
+`npm audit` reports moderate findings in development tools only (ESLint's minimatch and the exceljs workbook importer). The app's runtime dependencies have none (`npm audit --omit=dev`), and the remaining fixes need breaking major upgrades of ESLint and exceljs, so they wait until after the hackathon.
+
+## License
+
+MIT
