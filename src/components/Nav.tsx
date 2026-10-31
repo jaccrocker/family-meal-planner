@@ -7,6 +7,7 @@ import { usePlanner } from "./PlannerProvider";
 const STEPS = [
   { href: "/", label: "Set up" },
   { href: "/meals", label: "Meals" },
+  { href: "/approve", label: "Approve" },
   { href: "/review", label: "Review" },
   { href: "/shop", label: "Shop" },
 ];
@@ -16,6 +17,15 @@ export function Nav() {
   const { mode, cart } = usePlanner();
   const active = (href: string) =>
     href === "/" ? path === "/" : path.startsWith(href) || (href === "/review" && path.startsWith("/trace"));
+
+  // Reviewers arrive from an email link and see only their page, not the planner's steps.
+  if (path.startsWith("/r/")) {
+    return (
+      <header className="border-b border-line bg-surface">
+        <div className="mx-auto max-w-6xl px-4 py-3 font-display text-lg font-bold text-brand sm:px-6">Family Meal Planner</div>
+      </header>
+    );
+  }
 
   return (
     <header className="border-b border-line bg-surface">

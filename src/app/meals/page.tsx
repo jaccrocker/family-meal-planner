@@ -58,8 +58,8 @@ export default function MealsPage() {
             {counts[0] ? `, ${counts[0]} breakfasts` : ""}; {cart.servings.toFixed(2)} servings each
           </p>
         </div>
-        <Link href="/review" className="btn btn-primary">
-          Review cart ({cart.lines.length})
+        <Link href="/approve" className="btn btn-primary">
+          Next: get approval
         </Link>
       </div>
 
