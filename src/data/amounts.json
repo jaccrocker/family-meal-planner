@@ -1,9 +1,9 @@
 {
-  "status": "draft",
-  "note": "Per serving amounts for one adult portion. Drafted for review; the 15 dinners need Jac's check before Sunday's feature freeze. Quantities at runtime come only from the engine.",
+  "status": "reviewed",
+  "note": "Per serving amounts for one adult portion. Drafted for this project and approved by Jac on 10/30/26. Quantities at runtime come only from the engine.",
   "meals": {
     "M01": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "bagel",
@@ -20,7 +20,7 @@
       ]
     },
     "M02": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "eggs",
@@ -61,7 +61,7 @@
       ]
     },
     "M03": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "english muffin",
@@ -96,7 +96,7 @@
       ]
     },
     "M04": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "cereal",
@@ -113,7 +113,7 @@
       ]
     },
     "M05": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "oats",
@@ -148,7 +148,7 @@
       ]
     },
     "M06": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "eggs",
@@ -189,7 +189,7 @@
       ]
     },
     "M07": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "chicken breast",
@@ -224,7 +224,7 @@
       ]
     },
     "M16": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "tortilla",
@@ -253,7 +253,7 @@
       ]
     },
     "M17": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "tomato soup",
@@ -282,7 +282,7 @@
       ]
     },
     "M18": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "turkey",
@@ -317,7 +317,7 @@
       ]
     },
     "M19": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "chicken breasts",
@@ -358,7 +358,7 @@
       ]
     },
     "M20": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "fettuccine",
@@ -405,7 +405,7 @@
       ]
     },
     "M21": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "chicken breast",
@@ -452,7 +452,7 @@
       ]
     },
     "M22": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "pasta",
@@ -493,7 +493,7 @@
       ]
     },
     "M23": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "chicken breast",
@@ -540,7 +540,7 @@
       ]
     },
     "M24": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "gnocchi",
@@ -581,7 +581,7 @@
       ]
     },
     "M25": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "ravioli",
@@ -622,7 +622,7 @@
       ]
     },
     "M26": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "ribs",
@@ -657,7 +657,7 @@
       ]
     },
     "M27": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "salmon fillets",
@@ -698,7 +698,7 @@
       ]
     },
     "M28": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "pasta",
@@ -745,7 +745,7 @@
       ]
     },
     "M29": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "whole chicken",
@@ -786,7 +786,7 @@
       ]
     },
     "M30": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "filet mignon steaks",
@@ -827,7 +827,7 @@
       ]
     },
     "M31": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "bell peppers",
@@ -874,7 +874,7 @@
       ]
     },
     "M33": {
-      "reviewed": false,
+      "reviewed": true,
       "ingredients": [
         {
           "ingredient": "tortellini",
