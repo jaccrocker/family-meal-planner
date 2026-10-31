@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { CalendarCard } from "@/components/integrations/CalendarCard";
 import { usePlanner } from "@/components/PlannerProvider";
 import { reviewEmail, type PlanLine } from "@/lib/review/email";
 import { mealsFor } from "@/lib/planner";
@@ -54,7 +55,7 @@ const TONE: Record<Status, string> = {
 };
 
 export default function ApprovePage() {
-  const { mode, state, update, weekOf, user } = usePlanner();
+  const { mode, state, update, weekOf, user, features } = usePlanner();
   const [data, setData] = useState<Data | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -286,6 +287,8 @@ export default function ApprovePage() {
           {error ? <p className="mt-2 text-sm text-warn">{error}</p> : null}
         </section>
       ) : null}
+
+      {mode === "account" && features.calendar ? <CalendarCard /> : null}
 
       <section className="card p-5 sm:p-6">
         <h2 className="font-display text-xl font-semibold">The email</h2>

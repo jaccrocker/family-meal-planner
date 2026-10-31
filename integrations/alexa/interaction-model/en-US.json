@@ -1,0 +1,275 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "family meal planner",
+      "types": [
+        {
+          "name": "MEAL",
+          "values": [
+            {
+              "name": {
+                "value": "Bagel with Cream Cheese"
+              }
+            },
+            {
+              "name": {
+                "value": "Baked Chicken with Carrots and Brussels Sprouts"
+              }
+            },
+            {
+              "name": {
+                "value": "Breakfast Burrito"
+              }
+            },
+            {
+              "name": {
+                "value": "Breakfast Sandwich"
+              }
+            },
+            {
+              "name": {
+                "value": "Cereal"
+              }
+            },
+            {
+              "name": {
+                "value": "Chicken Broccoli Alfredo Pasta"
+              }
+            },
+            {
+              "name": {
+                "value": "Chicken Caesar Salad"
+              }
+            },
+            {
+              "name": {
+                "value": "Chicken Fajitas"
+              }
+            },
+            {
+              "name": {
+                "value": "Chicken Pesto Pasta with Spinach and Tomatoes"
+              }
+            },
+            {
+              "name": {
+                "value": "Chicken Thai Basil"
+              }
+            },
+            {
+              "name": {
+                "value": "Gnocchi with Peas and Pancetta"
+              }
+            },
+            {
+              "name": {
+                "value": "Italian Sausage and Ravioli"
+              }
+            },
+            {
+              "name": {
+                "value": "Oatmeal"
+              }
+            },
+            {
+              "name": {
+                "value": "Quesadilla"
+              }
+            },
+            {
+              "name": {
+                "value": "Ribs with Sweet Potatoes and Corn"
+              }
+            },
+            {
+              "name": {
+                "value": "Salmon with Asparagus and Couscous"
+              }
+            },
+            {
+              "name": {
+                "value": "Scrambled Eggs"
+              }
+            },
+            {
+              "name": {
+                "value": "Seafood Pesto Pasta"
+              }
+            },
+            {
+              "name": {
+                "value": "Soup and Sandwich"
+              }
+            },
+            {
+              "name": {
+                "value": "Spatchcock Chicken with Brussels and Carrots"
+              }
+            },
+            {
+              "name": {
+                "value": "Steaks with Squash and Potatoes"
+              }
+            },
+            {
+              "name": {
+                "value": "Stuffed Peppers"
+              }
+            },
+            {
+              "name": {
+                "value": "Takeout/Delivery Night"
+              }
+            },
+            {
+              "name": {
+                "value": "Tortellini with Ground Beef and Pink Sauce"
+              }
+            },
+            {
+              "name": {
+                "value": "Turkey Sandwich"
+              }
+            }
+          ]
+        },
+        {
+          "name": "MEAL_TYPE",
+          "values": [
+            {
+              "name": {
+                "value": "dinner",
+                "synonyms": [
+                  "supper"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "lunch"
+              }
+            },
+            {
+              "name": {
+                "value": "breakfast"
+              }
+            }
+          ]
+        }
+      ],
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AddMealIntent",
+          "slots": [
+            {
+              "name": "meal",
+              "type": "MEAL"
+            },
+            {
+              "name": "day",
+              "type": "AMAZON.DayOfWeek"
+            },
+            {
+              "name": "mealType",
+              "type": "MEAL_TYPE"
+            }
+          ],
+          "samples": [
+            "add {meal}",
+            "add {meal} on {day}",
+            "add {meal} for {day}",
+            "add {meal} for {mealType} on {day}",
+            "add {meal} for {day} {mealType}",
+            "put {meal} on {day}",
+            "change {day} {mealType} to {meal}",
+            "change {day} to {meal}",
+            "make {day} {mealType} {meal}",
+            "plan {meal} for {day}"
+          ]
+        },
+        {
+          "name": "MoveMealIntent",
+          "slots": [
+            {
+              "name": "fromDay",
+              "type": "AMAZON.DayOfWeek"
+            },
+            {
+              "name": "toDay",
+              "type": "AMAZON.DayOfWeek"
+            },
+            {
+              "name": "mealType",
+              "type": "MEAL_TYPE"
+            }
+          ],
+          "samples": [
+            "move {fromDay} to {toDay}",
+            "move {fromDay} {mealType} to {toDay}",
+            "move {mealType} from {fromDay} to {toDay}",
+            "swap {fromDay} and {toDay}"
+          ]
+        },
+        {
+          "name": "RemoveMealIntent",
+          "slots": [
+            {
+              "name": "day",
+              "type": "AMAZON.DayOfWeek"
+            },
+            {
+              "name": "mealType",
+              "type": "MEAL_TYPE"
+            }
+          ],
+          "samples": [
+            "clear {day}",
+            "clear {day} {mealType}",
+            "remove {mealType} on {day}",
+            "remove {day} {mealType}"
+          ]
+        },
+        {
+          "name": "WhatsPlannedIntent",
+          "slots": [
+            {
+              "name": "day",
+              "type": "AMAZON.DayOfWeek"
+            },
+            {
+              "name": "mealType",
+              "type": "MEAL_TYPE"
+            }
+          ],
+          "samples": [
+            "what's for {mealType}",
+            "what's for {mealType} on {day}",
+            "what's planned on {day}",
+            "what's the plan",
+            "read the plan"
+          ]
+        }
+      ]
+    }
+  }
+}

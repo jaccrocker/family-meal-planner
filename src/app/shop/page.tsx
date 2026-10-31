@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { SkylightPhrases } from "@/components/integrations/SkylightPhrases";
 import { usePlanner } from "@/components/PlannerProvider";
 import type { ShoppingListRequest } from "@/lib/instacart";
 
@@ -14,7 +15,7 @@ interface Result {
 }
 
 export default function ShopPage() {
-  const { state, cart, mode, weekOf } = usePlanner();
+  const { state, cart, mode, weekOf, features } = usePlanner();
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const [copied, setCopied] = useState(false);
@@ -119,6 +120,8 @@ export default function ShopPage() {
           </div>
         </div>
       </section>
+
+      {features.skylight ? <SkylightPhrases lines={cart.lines} /> : null}
 
       <section className="card p-5 sm:p-6">
         <h2 className="font-display text-lg font-semibold">This week&apos;s list</h2>

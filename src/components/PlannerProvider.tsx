@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { CartResult } from "@/lib/engine/types";
+import type { Features } from "@/lib/features";
 import { DEMO_STATE, EMPTY_STATE, PlannerStateSchema, cartFor, nextWeekLabel, type PlannerState } from "@/lib/planner";
 
 export interface SessionUser {
@@ -26,6 +27,7 @@ interface PlannerContext {
   mode: Mode;
   user: SessionUser | null;
   googleConfigured: boolean;
+  features: Features;
   membership: Membership | null;
   loading: boolean;
   weekOf: string;
@@ -59,11 +61,16 @@ function writeLocal(state: PlannerState | null) {
 export function PlannerProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<SessionUser | null>(null);
   const [googleConfigured, setGoogleConfigured] = useState(false);
+  const [features, setFeatures] = useState<Features>({ calendar: false, alexa: false, skylight: false });
   const [state, setState] = useState<PlannerState>(DEMO_STATE);
   const [mode, setMode] = useState<Mode>("none");
   const [membership, setMembership] = useState<Membership | null>(null);
   const [loading, setLoading] = useState(true);
   const loaded = useRef(false);
+  // The server's version of the household this tab last saw; see saveState.
+  const version = useRef<string | undefined>(undefined);
+  // Set when the state change came from the server, so it is not saved straight back.
+  const fromServer = useRef(false);
   const [weekOf, setWeekOf] = useState("");
 
   const refreshMembership = useCallback(async () => {
@@ -71,7 +78,7 @@ export function PlannerProvider({ children }: { children: React.ReactNode }) {
     if (!res.ok) return;
     const record = await res.json();
     setMembership({ isOwner: record.isOwner, ownerEmail: record.ownerEmail, members: record.members });
-    return record;
+    return record as { state: unknown; version: string };
   }, []);
 
   // Load: the account's household when signed in, else any saved demo week.
@@ -81,16 +88,22 @@ export function PlannerProvider({ children }: { children: React.ReactNode }) {
       const me = (await fetch("/api/me").then((r) => r.json()).catch(() => ({}))) as {
         user?: SessionUser | null;
         googleConfigured?: boolean;
+        features?: Features;
       };
       if (cancelled) return;
       setWeekOf(nextWeekLabel());
       setGoogleConfigured(Boolean(me.googleConfigured));
+      if (me.features) setFeatures(me.features);
       if (me.user) {
         setUser(me.user);
         setMode("account");
         setState(EMPTY_STATE);
         const record = await refreshMembership();
-        if (!cancelled && record) setState(PlannerStateSchema.parse(record.state));
+        if (!cancelled && record) {
+          version.current = record.version;
+          fromServer.current = true;
+          setState(PlannerStateSchema.parse(record.state));
+        }
       } else {
         // Signed out visitors always run the demo: the saved demo week, or the sample one.
         setState(readLocal() ?? DEMO_STATE);
@@ -109,19 +122,48 @@ export function PlannerProvider({ children }: { children: React.ReactNode }) {
   // Save shortly after each change.
   useEffect(() => {
     if (!loaded.current) return;
-    const t = setTimeout(() => {
+    if (fromServer.current) {
+      fromServer.current = false;
+      return;
+    }
+    const t = setTimeout(async () => {
       if (mode === "account") {
-        fetch("/api/household", {
+        const res = await fetch("/api/household", {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...(version.current ? { "x-base-version": version.current } : {}) },
           body: JSON.stringify(state),
         });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok) version.current = json.version;
+        else if (res.status === 409 && json.record) {
+          // Someone else (another adult, or a voice command) changed the plan first: show theirs.
+          version.current = json.record.version;
+          fromServer.current = true;
+          setState(PlannerStateSchema.parse(json.record.state));
+        }
       } else if (mode === "demo") {
         writeLocal(state);
       }
     }, 400);
     return () => clearTimeout(t);
   }, [state, mode]);
+
+  // Pick up changes made elsewhere (another adult, a voice command) while this tab is open and idle.
+  useEffect(() => {
+    if (mode !== "account") return;
+    const t = setInterval(async () => {
+      if (document.visibilityState !== "visible") return;
+      const res = await fetch("/api/household");
+      if (!res.ok) return;
+      const record = await res.json();
+      if (record.version && record.version !== version.current) {
+        version.current = record.version;
+        fromServer.current = true;
+        setState(PlannerStateSchema.parse(record.state));
+      }
+    }, 20_000);
+    return () => clearInterval(t);
+  }, [mode]);
 
   const update = useCallback((fn: (s: PlannerState) => PlannerState) => {
     setState((s) => fn(s));
@@ -143,6 +185,7 @@ export function PlannerProvider({ children }: { children: React.ReactNode }) {
     mode,
     user,
     googleConfigured,
+    features,
     membership,
     loading,
     weekOf,

@@ -134,3 +134,12 @@ export function nextOpenDay(plan: PlanEntry[], from: Day, type: MealType): Day {
 export function firstOpenDay(plan: PlanEntry[], type: MealType): Day {
   return DAYS.find((d) => !plan.some((p) => p.day === d && p.mealType === type)) ?? DAYS[0];
 }
+
+/** Monday of the week after today as YYYY-MM-DD, the same week nextWeekLabel names. */
+export function nextMondayISO(today = new Date()): string {
+  const d = new Date(today);
+  const daysToMonday = ((8 - d.getDay()) % 7) || 7;
+  d.setDate(d.getDate() + daysToMonday);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}

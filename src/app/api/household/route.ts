@@ -25,6 +25,9 @@ export async function PUT(req: Request) {
   if (!record) return NextResponse.json({ error: "No household" }, { status: 404 });
   const parsed = PlannerStateSchema.safeParse(await req.json());
   if (!parsed.success) return NextResponse.json({ error: parsed.error.message }, { status: 400 });
-  saveState(record.id, parsed.data);
-  return NextResponse.json({ ok: true });
+  // A tab that loaded an older version gets the newer household back instead of overwriting it.
+  const base = req.headers.get("x-base-version") ?? undefined;
+  const version = saveState(record.id, parsed.data, base);
+  if (!version) return NextResponse.json({ conflict: true, record: findHousehold(me.sub, me.email) }, { status: 409 });
+  return NextResponse.json({ ok: true, version });
 }

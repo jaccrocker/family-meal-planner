@@ -142,3 +142,15 @@ describe("review loop", () => {
     expect(res).toEqual({ error: "This plan was replaced by a newer one." });
   });
 });
+
+describe("household saves", () => {
+  it("refuses a save based on an older version", async () => {
+    const store = await import("@/lib/store");
+    const planner = await import("@/lib/planner");
+    const h = store.createHousehold("sub-version", "v@example.test", planner.DEMO_STATE);
+    const v2 = store.saveState(h.id, planner.EMPTY_STATE, h.version);
+    expect(v2).toBeDefined();
+    expect(store.saveState(h.id, planner.DEMO_STATE, h.version)).toBeUndefined();
+    expect(store.saveState(h.id, planner.DEMO_STATE, v2)).toBeDefined();
+  });
+});
