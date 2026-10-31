@@ -1,12 +1,12 @@
 # Service block for meals: merge under `services:` in /opt/apps/docker-compose.yml on VM 110.
-# HOST_PORT: take the next free port from the live compose before merging, then validate with
+# HOST_PORT (now APP_PORT): taken the next free port from the live compose before merging, then validate with
 #   sg docker -c "cd /opt/apps && docker compose config -q"
   meals:
     image: ghcr.io/jaccrocker/family-meal-planner:latest
     container_name: meals
     ports:
-      # Bound to the VM's LAN address only; add HOST_PORT to the origin lockdown PORTS list.
-      - "APP_HOST:HOST_PORT:3000"
+      # Bound to the VM's LAN address only; APP_PORT is in the origin lockdown PORTS list.
+      - "APP_HOST:APP_PORT:3000"
     env_file:
       - .env.meals
     volumes:

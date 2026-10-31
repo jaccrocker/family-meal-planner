@@ -11,7 +11,7 @@ echo "Running smoke tests..."
 
 # Upstream health check (container's published port on VM 110)
 echo -n "Upstream health (VM110:${HOST_PORT}${HEALTH_ENDPOINT})... "
-status=$(ssh "$VM110" "curl -sS -o /dev/null -w '%{http_code}' http://127.0.0.1:${HOST_PORT}${HEALTH_ENDPOINT}" 2>/dev/null || true)
+status=$(ssh "$VM110" "curl -sS -o /dev/null -w '%{http_code}' http://APP_HOST:${HOST_PORT}${HEALTH_ENDPOINT}" 2>/dev/null || true)
 if [[ "$status" == "200" ]]; then
   echo "OK"
 else

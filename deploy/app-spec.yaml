@@ -20,21 +20,21 @@ run:
   compose_file: "/opt/apps/docker-compose.yml"
   env_file: "/opt/apps/.env.meals"
   data_volume: "/opt/apps/data/meals:/data"
-  host_port: HOST_PORT   # next free port in the live compose, set at deploy time
+  host_port: APP_PORT   # next free port in the live compose, set at deploy time
   container_port: 3000
   watchtower: true
   health_endpoint: "/api/health"
 
 healthchecks:
   upstream:
-    - "http://127.0.0.1:HOST_PORT/api/health"   # run on VM 110
+    - "http://APP_HOST:APP_PORT/api/health"  # run on VM 110 (port is bound to the LAN address)
   public:
     - "https://meals.example.com"                # 302 to Cloudflare Access when unauthenticated
     - "https://meals.example.com/api/health"     # 200 with service token headers
 
 npm:
   forward_host: "APP_HOST"
-  forward_port: HOST_PORT
+  forward_port: APP_PORT
   access_list_id: 3          # Tunnel Only
   websocket_support: true
   block_exploits: true
