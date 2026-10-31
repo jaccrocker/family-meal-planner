@@ -126,7 +126,7 @@ function AccountCard() {
         {loading ? null : membership && !membership.isOwner ? (
           <p className="w-full text-sm text-muted">You share the household of {membership.ownerEmail}.</p>
         ) : (
-          <SecondAdult />
+          <OtherAdults />
         )}
       </section>
     );
@@ -164,12 +164,17 @@ function AccountCard() {
   );
 }
 
-function SecondAdult() {
-  const { membership, refreshMembership } = usePlanner();
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
+/** Up to this many other adults can share the household, each with their own Google account. */
+const MAX_OTHER_ADULTS = 10;
 
-  async function call(method: "POST" | "DELETE", value: string) {
+function OtherAdults() {
+  const { membership, refreshMembership } = usePlanner();
+  const [rows, setRows] = useState<string[]>([""]);
+  const [error, setError] = useState<string | null>(null);
+  const members = membership?.members ?? [];
+  const room = MAX_OTHER_ADULTS - members.length;
+
+  async function call(method: "POST" | "DELETE", value: string, row?: number) {
     setError(null);
     const res = await fetch("/api/household/members", {
       method,
@@ -178,17 +183,19 @@ function SecondAdult() {
     });
     if (!res.ok) setError((await res.json()).error ?? "Something went wrong");
     else {
-      setEmail("");
+      if (row !== undefined) setRows((r) => (r.length > 1 ? r.filter((_, i) => i !== row) : [""]));
       await refreshMembership();
     }
   }
 
   return (
     <div className="w-full border-t border-line-2 pt-4">
-      <div className="font-semibold">Second adult</div>
-      <p className="text-sm text-muted">They sign in with their own Google account and see the same plan.</p>
+      <div className="font-semibold">Other adults</div>
+      <p className="text-sm text-muted">
+        They sign in with their own Google account and see the same plan. Add up to {MAX_OTHER_ADULTS}.
+      </p>
       <ul className="mt-2 space-y-1 text-sm">
-        {membership?.members.map((m) => (
+        {members.map((m) => (
           <li key={m} className="flex items-center gap-3">
             {m}
             <button onClick={() => call("DELETE", m)} className="text-muted underline">
@@ -197,23 +204,41 @@ function SecondAdult() {
           </li>
         ))}
       </ul>
-      <form
-        className="mt-2 flex flex-wrap gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          call("POST", email);
-        }}
-      >
-        <input
-          type="email"
-          required
-          placeholder="Their Google email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="h-9 min-w-56 flex-1 rounded-lg border border-line bg-surface px-3 text-sm"
-        />
-        <button className="btn btn-quiet h-9 text-sm">Add</button>
-      </form>
+      {room > 0
+        ? rows.slice(0, room).map((value, i) => (
+            <form
+              key={i}
+              className="mt-2 flex flex-wrap gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                call("POST", value, i);
+              }}
+            >
+              <input
+                type="email"
+                required
+                placeholder="Their Google email"
+                aria-label={`Adult ${members.length + i + 2} Google email`}
+                value={value}
+                onChange={(e) => setRows((r) => r.map((x, j) => (j === i ? e.target.value : x)))}
+                className="h-9 min-w-56 flex-1 rounded-lg border border-line bg-surface px-3 text-sm"
+              />
+              <button className="btn btn-quiet h-9 text-sm">Add</button>
+            </form>
+          ))
+        : null}
+      {room > rows.length ? (
+        <button
+          type="button"
+          onClick={() => setRows((r) => [...r, ""])}
+          className="btn btn-quiet mt-2 h-9 w-9 px-0"
+          aria-label="Add another adult"
+          title="Add another adult"
+        >
+          +
+        </button>
+      ) : null}
+      {room <= 0 ? <p className="mt-2 text-sm text-muted">That is the most adults a household can share.</p> : null}
       {error ? <p className="mt-1 text-sm text-warn">{error}</p> : null}
     </div>
   );
