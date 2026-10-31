@@ -1,5 +1,4 @@
 import type { CartLine } from "@/lib/engine/types";
-import { round } from "@/lib/engine/units";
 
 /**
  * Instacart Developer Platform: one shopping list page per week.
@@ -14,7 +13,6 @@ const HOSTS = {
 
 export interface InstacartLineItem {
   name: string;
-  display_text: string;
   line_item_measurements: { quantity: number; unit: string }[];
   filters?: { brand_filters?: string[]; health_filters?: string[] };
 }
@@ -28,23 +26,33 @@ export interface ShoppingListRequest {
   landing_page_configuration?: { partner_linkback_url: string };
 }
 
-const INSTACART_UNIT: Partial<Record<CartLine["unit"], string>> = {
+const INSTACART_UNIT: Record<CartLine["unit"], string> = {
   oz: "ounce",
   lb: "pound",
+  g: "gram",
+  kg: "kilogram",
   floz: "fl oz",
+  tsp: "teaspoon",
+  tbsp: "tablespoon",
+  cup: "cup",
+  ml: "milliliter",
+  l: "liter",
   each: "each",
 };
 
 export function lineItem(line: CartLine): InstacartLineItem {
-  const measurements: { quantity: number; unit: string }[] = [];
-  if (line.pack.unit === "each" && line.pack.size === 1) {
-    measurements.push({ quantity: line.packs, unit: "each" });
-  } else {
-    measurements.push({ quantity: line.packs, unit: "package" });
-    const unit = INSTACART_UNIT[line.unit];
-    if (unit) measurements.push({ quantity: round(line.packs * line.pack.size), unit });
-  }
-  return { name: line.name, display_text: line.displayText, line_item_measurements: measurements };
+  // The selected retailer's pack can differ from our estimate. Send the need
+  // in ingredient units first; a pack count handles products missing weight
+  // metadata. Counted multipacks need whole item counts, never fractional each.
+  return {
+    name: line.name,
+    line_item_measurements: line.unit === "each"
+      ? [{ quantity: line.packs * line.pack.size, unit: "each" }]
+      : [
+          { quantity: line.needed, unit: INSTACART_UNIT[line.unit] },
+          { quantity: line.packs, unit: "package" },
+        ],
+  };
 }
 
 export function buildShoppingList(
@@ -57,7 +65,7 @@ export function buildShoppingList(
     expires_in: 7,
     instructions: [
       "Turn on Shop with family cart before adding these items.",
-      "Quantities are already scaled for the household and rounded to whole packs.",
+      "Quantities are scaled for the household. Review the selected products and quantities; store pack sizes can differ from the planner's estimates.",
     ],
     line_items: lines.map(lineItem),
     ...(opts.linkback ? { landing_page_configuration: { partner_linkback_url: opts.linkback } } : {}),
