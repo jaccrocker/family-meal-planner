@@ -1,0 +1,68 @@
+{
+  "tacos": {
+    "meal": "Tacos",
+    "question": "Beef, chicken or fish tacos?",
+    "options": ["Beef", "Chicken", "Fish"],
+    "ingredients": []
+  },
+  "tacos | beef": {
+    "meal": "Beef Tacos",
+    "ingredients": [
+      { "name": "ground beef", "qty": 4, "unit": "oz", "category": "Meat & Seafood", "staple": false },
+      { "name": "taco shells", "qty": 3, "unit": "each", "category": "Pantry", "staple": false },
+      { "name": "taco seasoning", "qty": 0.25, "unit": "oz", "category": "Pantry", "staple": false },
+      { "name": "shredded cheese", "qty": 1, "unit": "oz", "category": "Dairy & Eggs", "staple": false },
+      { "name": "lettuce", "qty": 0.5, "unit": "oz", "category": "Produce", "staple": false },
+      { "name": "tomatoes", "qty": 0.25, "unit": "each", "category": "Produce", "staple": false },
+      { "name": "sour cream", "qty": 1, "unit": "oz", "category": "Dairy & Eggs", "staple": false },
+      { "name": "salsa", "qty": 1, "unit": "oz", "category": "Pantry", "staple": false }
+    ]
+  },
+  "tacos | chicken": {
+    "meal": "Chicken Tacos",
+    "ingredients": [
+      { "name": "chicken thighs", "qty": 5, "unit": "oz", "category": "Meat & Seafood", "staple": false },
+      { "name": "flour tortillas", "qty": 2, "unit": "each", "category": "Bakery", "staple": false },
+      { "name": "taco seasoning", "qty": 0.25, "unit": "oz", "category": "Pantry", "staple": false },
+      { "name": "shredded cheese", "qty": 1, "unit": "oz", "category": "Dairy & Eggs", "staple": false },
+      { "name": "onions", "qty": 0.25, "unit": "each", "category": "Produce", "staple": false },
+      { "name": "cilantro", "qty": 0.1, "unit": "oz", "category": "Produce", "staple": false },
+      { "name": "limes", "qty": 0.25, "unit": "each", "category": "Produce", "staple": false },
+      { "name": "salsa", "qty": 1, "unit": "oz", "category": "Pantry", "staple": false }
+    ]
+  },
+  "tacos | fish": {
+    "meal": "Fish Tacos",
+    "ingredients": [
+      { "name": "cod fillets", "qty": 5, "unit": "oz", "category": "Meat & Seafood", "staple": false },
+      { "name": "corn tortillas", "qty": 3, "unit": "each", "category": "Bakery", "staple": false },
+      { "name": "cabbage slaw mix", "qty": 1.5, "unit": "oz", "category": "Produce", "staple": false },
+      { "name": "limes", "qty": 0.25, "unit": "each", "category": "Produce", "staple": false },
+      { "name": "sour cream", "qty": 1, "unit": "oz", "category": "Dairy & Eggs", "staple": false },
+      { "name": "olive oil", "qty": 0.5, "unit": "tbsp", "category": "Pantry", "staple": true }
+    ]
+  },
+  "chicken tikka masala": {
+    "meal": "Chicken Tikka Masala",
+    "ingredients": [
+      { "name": "chicken thighs", "qty": 6, "unit": "oz", "category": "Meat & Seafood", "staple": false },
+      { "name": "tikka masala simmer sauce", "qty": 4, "unit": "oz", "category": "Pantry", "staple": false },
+      { "name": "plain yogurt", "qty": 1, "unit": "oz", "category": "Dairy & Eggs", "staple": false },
+      { "name": "basmati rice", "qty": 2, "unit": "oz", "category": "Pantry", "staple": false },
+      { "name": "naan", "qty": 1, "unit": "each", "category": "Bakery", "staple": false },
+      { "name": "onions", "qty": 0.25, "unit": "each", "category": "Produce", "staple": false },
+      { "name": "garlic", "qty": 1, "unit": "each", "category": "Produce", "staple": true }
+    ]
+  },
+  "shrimp stir fry": {
+    "meal": "Shrimp Stir Fry",
+    "ingredients": [
+      { "name": "raw shrimp", "qty": 5, "unit": "oz", "category": "Meat & Seafood", "staple": false },
+      { "name": "stir fry vegetables", "qty": 4, "unit": "oz", "category": "Frozen", "staple": false },
+      { "name": "soy sauce", "qty": 0.5, "unit": "tbsp", "category": "Pantry", "staple": false },
+      { "name": "jasmine rice", "qty": 2, "unit": "oz", "category": "Pantry", "staple": false },
+      { "name": "garlic", "qty": 1, "unit": "each", "category": "Produce", "staple": true },
+      { "name": "olive oil", "qty": 0.5, "unit": "tbsp", "category": "Pantry", "staple": true }
+    ]
+  }
+}
