@@ -138,16 +138,26 @@ function toRecord(row: Row, sub: string): HouseholdRecord {
   };
 }
 
-/** The signed in person's household: one they own, or one that added their email. */
+/**
+ * The signed in person's household: one they own, or one that added their email.
+ * A household they own wins, unless it is still blank (no meals planned and no
+ * other adults) and someone else's household lists them. That covers an adult
+ * who signed in before the owner added them, so they are not stuck in an empty
+ * household of their own.
+ */
 export function findHousehold(sub: string, email: string): HouseholdRecord | undefined {
   const d = open();
   const own = d.prepare("select * from households where owner_sub = ?").get(sub) as Row | undefined;
-  if (own) return toRecord(own, sub);
   const joined = d
     .prepare(
-      "select h.* from households h join members m on m.household_id = h.id where m.email = ? limit 1",
+      "select h.* from households h join members m on m.household_id = h.id where m.email = ? and h.owner_sub != ? limit 1",
     )
-    .get(email.toLowerCase()) as Row | undefined;
+    .get(email.toLowerCase(), sub) as Row | undefined;
+  if (own) {
+    const ownRecord = toRecord(own, sub);
+    const blank = ownRecord.state.plan.length === 0 && ownRecord.members.length === 0;
+    if (!(blank && joined)) return ownRecord;
+  }
   return joined ? toRecord(joined, sub) : undefined;
 }
 

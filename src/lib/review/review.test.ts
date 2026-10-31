@@ -143,6 +143,29 @@ describe("review loop", () => {
   });
 });
 
+describe("household membership", () => {
+  it("moves an adult who signed in early into the household that added them", async () => {
+    const store = await import("@/lib/store");
+    const planner = await import("@/lib/planner");
+    // The adult signs in first and gets a blank household of their own.
+    store.createHousehold("sub-early", "early@example.test", planner.EMPTY_STATE);
+    const owner = store.createHousehold("sub-owner-m", "owner-m@example.test", planner.DEMO_STATE);
+    store.addMember(owner.id, "Early@Example.test");
+    const seen = store.findHousehold("sub-early", "early@example.test")!;
+    expect(seen.id).toBe(owner.id);
+    expect(seen.isOwner).toBe(false);
+  });
+
+  it("keeps a household the person has started planning in", async () => {
+    const store = await import("@/lib/store");
+    const planner = await import("@/lib/planner");
+    const mine = store.createHousehold("sub-busy", "busy@example.test", planner.DEMO_STATE);
+    const other = store.createHousehold("sub-other-m", "other-m@example.test", planner.DEMO_STATE);
+    store.addMember(other.id, "busy@example.test");
+    expect(store.findHousehold("sub-busy", "busy@example.test")!.id).toBe(mine.id);
+  });
+});
+
 describe("household saves", () => {
   it("refuses a save based on an older version", async () => {
     const store = await import("@/lib/store");
