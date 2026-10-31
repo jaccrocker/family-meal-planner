@@ -55,3 +55,7 @@ This is a new public codebase written during the hackathon. It shares its name a
 ## License
 
 MIT
+
+## Homelab test deploy
+
+The `deploy/` folder and `.github/workflows/deploy.yml` follow the homelab app factory pattern. Each push to `main` builds `ghcr.io/jaccrocker/family-meal-planner:latest` on a GitHub hosted runner. VM 110 runs it from `deploy/compose-service.yml` behind NPM, the Cloudflare tunnel and Cloudflare Access at `meals.example.com`, and Watchtower pulls each new image. Runtime settings are listed in `deploy/runtime.env.example`; saved households live in a SQLite file on the `/data` volume.

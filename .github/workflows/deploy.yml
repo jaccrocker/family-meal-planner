@@ -1,0 +1,76 @@
+name: Deploy to Homelab
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: meals-prod
+  cancel-in-progress: true
+
+jobs:
+  build-and-push:
+    # GitHub-hosted runner. Use [self-hosted, homelab] (CT 111) only for jobs that must reach the LAN.
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      REPO_NAME: ${{ github.event.repository.name }}
+      REPO_OWNER: ${{ github.repository_owner }}
+      REPO_FULL: ${{ github.repository }}
+      COMMIT_SHA: ${{ github.sha }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+
+      - name: Log in to GHCR
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag current latest as rollback
+        env:
+          FULL_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+        run: |
+          docker pull "$FULL_IMAGE:latest" 2>/dev/null && \
+          docker tag "$FULL_IMAGE:latest" "$FULL_IMAGE:rollback" && \
+          docker push "$FULL_IMAGE:rollback" || \
+          echo "No existing latest image to tag as rollback (first deploy)"
+
+      - name: Build and push
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:sha-${{ github.sha }}
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          PO_TOKEN: ${{ secrets.PUSHOVER_API_TOKEN }}
+          PO_USER: ${{ secrets.PUSHOVER_USER_KEY }}
+        run: |
+          if [ -n "$PO_USER" ] && [ -n "$PO_TOKEN" ]; then
+            curl -s -F "token=$PO_TOKEN" \
+                 -F "user=$PO_USER" \
+                 -F "title=Deploy Failed: $REPO_NAME" \
+                 -F "message=Build failed for $REPO_FULL on commit ${COMMIT_SHA:0:7}" \
+                 -F "priority=1" \
+                 https://api.pushover.net/1/messages.json
+          fi
+
+# After this workflow pushes :latest to GHCR, Watchtower on VM 110 (APP_HOST)
+# polls the registry (~60s) and auto-pulls/restarts the container. No deploy step here.

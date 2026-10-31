@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Standalone server bundle for the homelab Docker image.
+  output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

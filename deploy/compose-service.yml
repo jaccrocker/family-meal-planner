@@ -1,0 +1,23 @@
+# Service block for meals: merge under `services:` in /opt/apps/docker-compose.yml on VM 110.
+# HOST_PORT: take the next free port from the live compose before merging, then validate with
+#   sg docker -c "cd /opt/apps && docker compose config -q"
+  meals:
+    image: ghcr.io/jaccrocker/family-meal-planner:latest
+    container_name: meals
+    ports:
+      # Bound to the VM's LAN address only; add HOST_PORT to the origin lockdown PORTS list.
+      - "APP_HOST:HOST_PORT:3000"
+    env_file:
+      - .env.meals
+    volumes:
+      # Saved households (SQLite). Survives image updates.
+      - /opt/apps/data/meals:/data
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

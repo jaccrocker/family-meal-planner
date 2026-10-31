@@ -1,0 +1,52 @@
+app:
+  name: "meals"
+  display_name: "Family Meal Planner"
+  subdomain: "meals"
+  domain: "meals.example.com"
+  type: "node"
+  framework: "nextjs"
+  repo: "https://github.com/jaccrocker/family-meal-planner.git"
+
+build:
+  # GitHub-hosted runner; nothing in the build needs the LAN.
+  runner_labels:
+    - ubuntu-24.04
+  image: "ghcr.io/jaccrocker/family-meal-planner"
+  registry: ghcr.io
+
+run:
+  host: "APP_HOST"
+  host_vmid: 110
+  compose_file: "/opt/apps/docker-compose.yml"
+  env_file: "/opt/apps/.env.meals"
+  data_volume: "/opt/apps/data/meals:/data"
+  host_port: HOST_PORT   # next free port in the live compose, set at deploy time
+  container_port: 3000
+  watchtower: true
+  health_endpoint: "/api/health"
+
+healthchecks:
+  upstream:
+    - "http://127.0.0.1:HOST_PORT/api/health"   # run on VM 110
+  public:
+    - "https://meals.example.com"                # 302 to Cloudflare Access when unauthenticated
+    - "https://meals.example.com/api/health"     # 200 with service token headers
+
+npm:
+  forward_host: "APP_HOST"
+  forward_port: HOST_PORT
+  access_list_id: 3          # Tunnel Only
+  websocket_support: true
+  block_exploits: true
+  hsts_enabled: true
+  ssl_forced: false          # TLS ends at Cloudflare; tunnel to NPM is plain HTTP
+
+security:
+  cloudflare_access: true    # created before the NPM host; allow owner@example.com
+
+secrets:
+  onepassword_vault: Homelab
+  item_title: "meals -- Homelab Deployment"
+
+github:
+  repo: "jaccrocker/family-meal-planner"

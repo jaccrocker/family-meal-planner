@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Keeps SHA-pinned actions current. Without this, pinning by SHA freezes the
+  # action at the version it was pinned at, including its security fixes.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns: ["*"]
