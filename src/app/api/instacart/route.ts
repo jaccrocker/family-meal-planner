@@ -25,8 +25,10 @@ export async function POST(req: Request) {
   }
   try {
     const url = await createShoppingList(request);
+    console.log(`instacart: list created, ${cart.lines.length} lines`);
     return NextResponse.json({ mode: "live", url, request, text });
   } catch (e) {
+    console.error(`instacart: ${(e as Error).message}`);
     return NextResponse.json({ mode: "error", error: (e as Error).message, request, text }, { status: 502 });
   }
 }

@@ -223,6 +223,7 @@ function TypedMeal({ day, onAdded }: { day: Day; onAdded: (m: Meal) => void }) {
           {busy ? "Reading…" : `Add to ${day}`}
         </button>
       </form>
+      {busy ? <p className="mt-2 text-sm text-muted">Muse Spark is breaking this down, about 20 seconds.</p> : null}
       {question ? (
         <div className="mt-3 rounded-lg bg-brand-soft p-3 text-sm">
           <div className="font-semibold text-brand-dark">{question.question}</div>

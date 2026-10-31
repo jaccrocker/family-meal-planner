@@ -3,7 +3,7 @@ import { z } from "zod";
 import fixtures from "@/data/parser-fixtures.json";
 import { CATALOG_BY_ID, matchCatalog } from "@/lib/engine/library";
 import type { CatalogItem, Category, Meal, MealType, Unit } from "@/lib/engine/types";
-import { UNITS, family } from "@/lib/engine/units";
+import { UNITS, convert, family } from "@/lib/engine/units";
 
 /**
  * Turns a meal typed outside the library into ingredients per adult serving.
@@ -26,6 +26,8 @@ export const ParsedMealSchema = z.object({
         unit: z.enum(UNITS as [Unit, ...Unit[]]),
         category: z.enum(CATEGORIES),
         staple: z.boolean().default(false),
+        /** Typical retail package, for example feta 6 oz or canned tomatoes 14.5 oz. */
+        pack: z.object({ size: z.number().positive(), unit: z.enum(UNITS as [Unit, ...Unit[]]) }).optional(),
       }),
     )
     .max(25),
@@ -34,10 +36,11 @@ export type ParsedMeal = z.infer<typeof ParsedMealSchema>;
 
 const SYSTEM = `You break a family meal into grocery ingredients for ONE adult serving.
 Reply with JSON only, matching:
-{"meal": string, "question"?: string, "options"?: string[], "ingredients": [{"name": string, "qty": number, "unit": one of ${UNITS.join(", ")}, "category": one of ${CATEGORIES.join(", ")}, "staple": boolean}]}
+{"meal": string, "question"?: string, "options"?: string[], "ingredients": [{"name": string, "qty": number, "unit": one of ${UNITS.join(", ")}, "category": one of ${CATEGORIES.join(", ")}, "staple": boolean, "pack"?: {"size": number, "unit": one of ${UNITS.join(", ")}}}]}
 Rules:
 - Use plain grocery names a shopper would search for ("chicken thighs", not "protein").
 - Weigh meat, seafood, pasta, rice and cheese in oz; count produce like onions or peppers as each; liquids in floz or tbsp.
+- Set "pack" to the typical store package for that ingredient in the same kind of unit (feta 6 oz, canned diced tomatoes 14.5 oz, pita 6 each, eggs 12 each).
 - Mark salt, pepper, oil, butter, garlic and dried herbs as staple true.
 - If the meal is ambiguous in a way that changes the groceries (for example tacos could be beef or chicken), set "question" to one short question, give 2 to 4 "options", and return an empty ingredients list.
 - No nutrition, diet or medical advice.`;
@@ -110,15 +113,35 @@ function slug(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-/** Natural pack for an ingredient no catalog item matches: one of its own unit. */
-function adHocItem(name: string, unit: Unit, category: Category): CatalogItem {
+/** Fallback pack when the model gives none: a typical store size, not 1 oz. */
+function defaultPack(unit: Unit, category: Category): { size: number; unit: Unit } {
+  const f = family(unit);
+  if (f === "count") return { size: 1, unit: "each" };
+  if (f === "volume") return { size: 16, unit: "floz" };
+  return { size: category === "Dairy & Eggs" ? 8 : 16, unit: "oz" };
+}
+
+/** Pack for an ingredient no catalog item matches: the model's typical package, else a category default. */
+function adHocItem(
+  name: string,
+  unit: Unit,
+  category: Category,
+  modelPack?: { size: number; unit: Unit },
+): CatalogItem {
   const base: Record<string, Unit> = { weight: "oz", volume: "floz", count: "each" };
-  const packUnit = base[family(unit)];
+  const usable = modelPack && family(modelPack.unit) === family(unit) ? modelPack : undefined;
+  const pack = usable
+    ? { size: Math.round(convert(usable.size, usable.unit, base[family(unit)]) * 100) / 100, unit: base[family(unit)] }
+    : defaultPack(unit, category);
   return {
     id: `custom:${slug(name)}`,
     name,
     category,
-    pack: { size: 1, unit: packUnit, label: packUnit === "each" ? "each" : `1 ${packUnit === "floz" ? "fl oz" : packUnit}` },
+    pack: {
+      size: pack.size,
+      unit: pack.unit,
+      label: pack.unit === "each" && pack.size === 1 ? "each" : `${pack.size} ${pack.unit === "floz" ? "fl oz" : pack.unit === "each" ? "count" : pack.unit}`,
+    },
     aliases: [],
   };
 }
@@ -134,7 +157,7 @@ export function toMeal(
     let item = matchCatalog(ing.name);
     if (item && family(item.pack.unit) !== family(ing.unit)) item = undefined;
     if (!item) {
-      item = adHocItem(ing.name, ing.unit, ing.category);
+      item = adHocItem(ing.name, ing.unit, ing.category, ing.pack);
       items.push(item);
     }
     if (ing.staple && !CATALOG_BY_ID.get(item.id)?.staple) staples.push(item.id);
