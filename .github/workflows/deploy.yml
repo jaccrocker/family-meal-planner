@@ -16,6 +16,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
 
     env:
       REPO_NAME: ${{ github.event.repository.name }}
@@ -47,6 +49,7 @@ jobs:
           echo "No existing latest image to tag as rollback (first deploy)"
 
       - name: Build and push
+        id: build
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           context: .
@@ -72,5 +75,73 @@ jobs:
                  https://api.pushover.net/1/messages.json
           fi
 
-# After this workflow pushes :latest to GHCR, Watchtower on VM 110 (APP_HOST)
-# polls the registry (~60s) and auto-pulls/restarts the container. No deploy step here.
+
+  rollout:
+    # Rolls the new image onto VM 110 as soon as it is pushed, then proves the
+    # running container is this build and healthy. Runs on the CT 111 runner
+    # because VM 110 is only reachable on the LAN. Off until the repository
+    # variable HOMELAB_ROLLOUT is "true", so a missing runner never leaves a
+    # deploy queued; Watchtower stays as the fallback either way.
+    needs: build-and-push
+    if: vars.HOMELAB_ROLLOUT == 'true'
+    runs-on: [self-hosted, homelab]
+    timeout-minutes: 10
+    env:
+      VM110: jaccrocker@APP_HOST
+      HOST_PORT: "APP_PORT"
+      IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
+      DIGEST: ${{ needs.build-and-push.outputs.digest }}
+      COMMIT_SHA: ${{ github.sha }}
+      REPO_NAME: ${{ github.event.repository.name }}
+
+    steps:
+      - name: Pull and restart meals on VM 110
+        run: |
+          ssh -o BatchMode=yes -o ConnectTimeout=10 "$VM110" \
+            "sg docker -c 'cd /opt/apps && docker compose pull meals && docker compose up -d meals'"
+
+      - name: Confirm the running container is this build and healthy
+        run: |
+          # The script runs on VM 110. It checks the image digest the meals
+          # container runs, then waits on the container's own healthcheck
+          # (the origin lockdown blocks direct HTTP to the proxied port).
+          ssh -o BatchMode=yes -o ConnectTimeout=10 "$VM110" bash -s -- "$DIGEST" <<'EOF'
+          set -eu
+          digest="$1"
+          image=$(sg docker -c "docker inspect --format '{{.Image}}' meals")
+          repo_digests=$(sg docker -c "docker image inspect --format '{{range .RepoDigests}}{{.}} {{end}}' $image")
+          echo "Running: $repo_digests"
+          echo "Built:   $digest"
+          case " $repo_digests" in
+            *"@$digest "*) echo "meals runs this build" ;;
+            *) echo "meals is not running the image this workflow built"; exit 1 ;;
+          esac
+          for i in $(seq 1 24); do
+            health=$(sg docker -c "docker inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' meals")
+            case "$health" in
+              healthy|none) echo "health: $health"; exit 0 ;;
+            esac
+            sleep 5
+          done
+          echo "meals did not report healthy within 2 minutes (last: $health)"
+          exit 1
+          EOF
+
+      - name: Notify
+        if: always()
+        env:
+          PO_TOKEN: ${{ secrets.PUSHOVER_API_TOKEN }}
+          PO_USER: ${{ secrets.PUSHOVER_USER_KEY }}
+          OUTCOME: ${{ job.status }}
+        run: |
+          [ -n "$PO_USER" ] && [ -n "$PO_TOKEN" ] || exit 0
+          if [ "$OUTCOME" = "success" ]; then
+            title="Deployed: $REPO_NAME"; msg="meals.example.com is running ${COMMIT_SHA:0:7}"; prio=0
+          else
+            title="Rollout failed: $REPO_NAME"; msg="meals.example.com did not update to ${COMMIT_SHA:0:7}; check the Deploy run"; prio=1
+          fi
+          curl -s -F "token=$PO_TOKEN" -F "user=$PO_USER" -F "title=$title" \
+               -F "message=$msg" -F "priority=$prio" https://api.pushover.net/1/messages.json >/dev/null
+
+# Without HOMELAB_ROLLOUT, Watchtower on VM 110 polls GHCR (~60s) and updates the
+# container on its own; the rollout job above makes that immediate and verified.
