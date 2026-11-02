@@ -15,7 +15,7 @@ Verified on 10/30/26. The workflow reaches a shoppable Instacart development lis
 | Keyless shopping | Local Shop returns preview and Copy the list changes to Copied. |
 | Instacart | Original adapter returned a development URL but incorrect product quantities. Final adapter request returns 200 and renders all 19 expected ingredients at Ralphs. |
 | Sandbox cart | Add 19 items to cart reaches the development Ralphs cart. Reconciled all 19 cart product names against the matched shopping-list products, with 19 quantity rows, zero duplicates and zero unmatched products. Chicken remains one pack, tortillas two packs and salmon three portions. Stopped before checkout. |
-| Linked dashboards | Instacart partner 12798 dashboard is accessible and shows development credentials. Meta dashboard matches team 1061970739848906 and project 2920368941635481. Inspected readiness only, without displaying credential values. |
+| Linked dashboards | Instacart and Meta developer dashboards show development credentials for this project. Inspected readiness only, without displaying credential values. |
 | Consumer family account | Existing consumer sign-in resolves successfully. Account settings exposes Family Account management and family-cart information. Read-only inspection; no invitations, membership changes or live cart additions. |
 | Count reconciliation | Demo engine produces 19 unique ingredient names. Final request has those same 19 names in order, no duplicates, no omitted ingredients. Instacart shows Add 19 items to cart and all 19 full-list entries. |
 | Final quantities | Chicken 56.95 oz selects one approximately 3.98 lb pack; tortillas 20 each selects two 10-count packs; salmon 20.1 oz with three-pack fallback selects three portions; sour cream 6.7 oz selects one 14 oz tub. |
@@ -36,10 +36,4 @@ An independent review identified the fractional-count verification gap and recom
 3. Generate a request with `buildShoppingList(cartFor(DEMO_STATE).lines, { title: "Test week" })`. Reconcile every name and count against the engine before sending.
 4. Submit only to the Instacart development server with the existing server-side key. Open the returned URL; wait for all product matching to finish. Check all 19 identities and representative quantities, not just HTTP success.
 
-Final sandbox list (expires after seven days): https://customers.dev.instacart.tools/store/shopping_lists/24949593
-
-References: [shopping-list measurements](https://docs.instacart.com/developer_platform_api/guide/concepts/shopping_list), [supported units](https://docs.instacart.com/developer_platform_api/api/units_of_measurement).
-
-## Remaining boundaries
-
-No Instacart account was created and no checkout or purchase was attempted. Items were added only to the development cart. The consumer account uses its existing signed-in session; its family settings were inspected without changes. Shared-cart operation across two adults and concurrent edits remain untested. No infrastructure or credentials were changed. The adapter fix is verified on the test branch and has not yet been released to meals.example.com.
+The sandbox list used for this check expired after seven days and is not linked here.

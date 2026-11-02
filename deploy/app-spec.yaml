@@ -42,7 +42,7 @@ npm:
   ssl_forced: false          # TLS ends at Cloudflare; tunnel to NPM is plain HTTP
 
 security:
-  cloudflare_access: true    # created before the NPM host; allow owner@example.com
+  cloudflare_access: true    # created before the NPM host; allow the household owner
 
 secrets:
   onepassword_vault: Homelab
