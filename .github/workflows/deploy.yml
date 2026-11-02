@@ -81,14 +81,15 @@ jobs:
     # running container is this build and healthy. Runs on the CT 111 runner
     # because VM 110 is only reachable on the LAN. Off until the repository
     # variable HOMELAB_ROLLOUT is "true", so a missing runner never leaves a
-    # deploy queued; Watchtower stays as the fallback either way.
+    # deploy queued; Watchtower stays as the fallback either way. The SSH target
+    # comes from the HOMELAB_SSH_TARGET repository variable.
     needs: build-and-push
     if: vars.HOMELAB_ROLLOUT == 'true'
     runs-on: [self-hosted, homelab]
     timeout-minutes: 10
     env:
-      VM110: jaccrocker@APP_HOST
-      HOST_PORT: "APP_PORT"
+      # Repository variable, e.g. user@host, kept out of the repo.
+      VM110: ${{ vars.HOMELAB_SSH_TARGET }}
       IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
       DIGEST: ${{ needs.build-and-push.outputs.digest }}
       COMMIT_SHA: ${{ github.sha }}
@@ -97,6 +98,7 @@ jobs:
     steps:
       - name: Pull and restart meals on VM 110
         run: |
+          [ -n "$VM110" ] || { echo "Set the HOMELAB_SSH_TARGET repository variable"; exit 1; }
           ssh -o BatchMode=yes -o ConnectTimeout=10 "$VM110" \
             "sg docker -c 'cd /opt/apps && docker compose pull meals && docker compose up -d meals'"
 

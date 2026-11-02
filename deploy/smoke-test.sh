@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Smoke tests for meals on VM 110 (APP_HOST).
+# Smoke tests for meals on VM 110. Set APP_HOST (the VM's LAN address) and
+# HOST_PORT in the environment; they are kept out of the repo.
 HOST_PORT="${HOST_PORT:?set HOST_PORT to the published port on VM 110}"
 HEALTH_ENDPOINT="/api/health"
 APP_DOMAIN="meals.example.com"
-VM110="jaccrocker@APP_HOST"
+APP_HOST="${APP_HOST:?set APP_HOST}"
+VM110="${VM110:-jaccrocker@$APP_HOST}"
 
 echo "Running smoke tests..."
 
 # Upstream health check (container's published port on VM 110)
 echo -n "Upstream health (VM110:${HOST_PORT}${HEALTH_ENDPOINT})... "
-status=$(ssh "$VM110" "curl -sS -o /dev/null -w '%{http_code}' http://APP_HOST:${HOST_PORT}${HEALTH_ENDPOINT}" 2>/dev/null || true)
+status=$(ssh "$VM110" "curl -sS -o /dev/null -w '%{http_code}' http://${APP_HOST}:${HOST_PORT}${HEALTH_ENDPOINT}" 2>/dev/null || true)
 if [[ "$status" == "200" ]]; then
   echo "OK"
 else
