@@ -1,9 +1,15 @@
 name: Deploy to Homelab
 
+# Deploys only after CI passes on main, and builds the exact commit CI tested.
 on:
-  push:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
+
+env:
+  SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
 
 concurrency:
   group: meals-prod
@@ -11,6 +17,7 @@ concurrency:
 
 jobs:
   build-and-push:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     # GitHub-hosted runner. Use [self-hosted, homelab] (CT 111) only for jobs that must reach the LAN.
     runs-on: ubuntu-24.04
     permissions:
@@ -23,11 +30,13 @@ jobs:
       REPO_NAME: ${{ github.event.repository.name }}
       REPO_OWNER: ${{ github.repository_owner }}
       REPO_FULL: ${{ github.repository }}
-      COMMIT_SHA: ${{ github.sha }}
+      COMMIT_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ env.SHA }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
@@ -58,7 +67,7 @@ jobs:
           platforms: linux/amd64
           tags: |
             ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:sha-${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:sha-${{ env.SHA }}
 
       - name: Notify on failure
         if: failure()
@@ -92,7 +101,7 @@ jobs:
       VM110: ${{ vars.HOMELAB_SSH_TARGET }}
       IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}
       DIGEST: ${{ needs.build-and-push.outputs.digest }}
-      COMMIT_SHA: ${{ github.sha }}
+      COMMIT_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
       REPO_NAME: ${{ github.event.repository.name }}
 
     steps:
