@@ -17,7 +17,14 @@ concurrency:
 
 jobs:
   build-and-push:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    # Only a passing CI run from a push to main in this repository; CI also runs on
+    # pull requests, and a fork's branch can be named main.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
     # GitHub-hosted runner. Use [self-hosted, homelab] (CT 111) only for jobs that must reach the LAN.
     runs-on: ubuntu-24.04
     permissions:
@@ -147,9 +154,9 @@ jobs:
         run: |
           [ -n "$PO_USER" ] && [ -n "$PO_TOKEN" ] || exit 0
           if [ "$OUTCOME" = "success" ]; then
-            title="Deployed: $REPO_NAME"; msg="meals.example.com is running ${COMMIT_SHA:0:7}"; prio=0
+            title="Deployed: $REPO_NAME"; msg="$REPO_NAME is running ${COMMIT_SHA:0:7}"; prio=0
           else
-            title="Rollout failed: $REPO_NAME"; msg="meals.example.com did not update to ${COMMIT_SHA:0:7}; check the Deploy run"; prio=1
+            title="Rollout failed: $REPO_NAME"; msg="$REPO_NAME did not update to ${COMMIT_SHA:0:7}; check the Deploy run"; prio=1
           fi
           curl -s -F "token=$PO_TOKEN" -F "user=$PO_USER" -F "title=$title" \
                -F "message=$msg" -F "priority=$prio" https://api.pushover.net/1/messages.json >/dev/null
