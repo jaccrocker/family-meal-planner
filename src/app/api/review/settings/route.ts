@@ -9,7 +9,12 @@ const Body = z.object({
   reviewers: z.array(z.object({ email: z.string().email(), required: z.boolean() })).max(11),
 });
 
-/** Saves the reminder timing and which reviewers are required or optional. */
+/**
+ * Saves the reminder timing and which reviewers are required or optional. Returns 401 when nobody is
+ * signed in. The body is `{ reminderMinutes, reminders, reviewers }`: 5 to 1440 minutes, 0 to 5
+ * reminders, and up to 11 `{ email, required }` entries. An invalid body is a 400 with the validation
+ * message. Reviewer emails that are not in the household are ignored. Returns `{ ok: true }`.
+ */
 export async function PUT(req: Request) {
   const me = await signedInHousehold();
   if (!me) return NextResponse.json({ error: "Not signed in" }, { status: 401 });

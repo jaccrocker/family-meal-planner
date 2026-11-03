@@ -10,7 +10,12 @@ const Body = z.object({
 
 /**
  * Breaks a typed meal into ingredients per serving. Returns either a question
- * when the meal is ambiguous, or a meal the engine can use.
+ * when the meal is ambiguous, or a meal the engine can use. Needs no sign in.
+ *
+ * The body is `{ meal, type?, answer? }`: `meal` is 2 to 120 characters, `type` is Breakfast, Lunch or
+ * Dinner (default Dinner), and `answer` (up to 60 characters) replies to an earlier question. Returns
+ * 400 for an unusable body, `{ question, options }` when the meal is ambiguous, and the parsed meal
+ * otherwise. Failures return 422 when the parser is unavailable and 502 for any other error.
  */
 export async function POST(req: Request) {
   const body = Body.safeParse(await req.json());

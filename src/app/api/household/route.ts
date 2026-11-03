@@ -10,7 +10,10 @@ async function who() {
   return sub && email ? { sub, email } : undefined;
 }
 
-/** Loads the signed in person's household, creating one on first sign in. */
+/**
+ * Loads the signed in person's household, creating one on first sign in. Returns 401 when nobody is
+ * signed in and the household record otherwise.
+ */
 export async function GET() {
   const me = await who();
   if (!me) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
