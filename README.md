@@ -19,6 +19,7 @@ Demo video (3 minutes): VIDEO_LINK
 - [Configuration](#configuration)
 - [Prior work](#prior-work)
 - [Homelab test deploy](#homelab-test-deploy)
+- [Run the published image](#run-the-published-image)
 - [Install notes](#install-notes)
 
 ## Why it exists
@@ -258,6 +259,17 @@ flowchart LR
 ```
 
 The `deploy/` folder and `.github/workflows/deploy.yml` follow the homelab app factory pattern. Each push to `main` builds `ghcr.io/jaccrocker/family-meal-planner:latest` on a GitHub hosted runner. The app host runs it from `deploy/compose-service.yml` behind Nginx Proxy Manager, the Cloudflare tunnel and Cloudflare Access at `meals.example.com`, and a rollout job on the homelab runner pulls each new image as soon as it is built and confirms the running container is that build; Watchtower is the fallback. Host addresses come from repository settings, not the repository itself. Runtime settings are listed in `deploy/runtime.env.example`; saved households live in a SQLite file on the `/data` volume.
+
+## Run the published image
+
+Tagged releases publish a container image with build provenance. Runtime settings are listed in `deploy/runtime.env.example`; saved households live in a SQLite file on the `/data` volume.
+
+```bash
+docker run -p 3000:3000 -v fmp-data:/data --env-file runtime.env \
+  ghcr.io/jaccrocker/family-meal-planner-public:0.1.0
+```
+
+Releases and the changelog are on the [Releases page](https://github.com/jaccrocker/family-meal-planner/releases); maintainers follow the steps in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Install notes
 
