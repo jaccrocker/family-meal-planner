@@ -1,10 +1,12 @@
 import React from 'react';
-import {AbsoluteFill,Audio,OffthreadVideo,Sequence,interpolate,spring,staticFile,useCurrentFrame,useVideoConfig} from 'remotion';
+import {AbsoluteFill,Audio,Freeze,OffthreadVideo,Sequence,interpolate,spring,staticFile,useCurrentFrame,useVideoConfig} from 'remotion';
 import {ArrowUpRight,BellRing,BrainCircuit,CalendarClock,Calculator,CheckCircle2,ChevronLeft,ChevronRight,createLucideIcon,Lock,MailCheck,ShieldCheck,ShoppingCart,Smartphone,Sparkles,Users,UtensilsCrossed} from 'lucide-react';
 import telemetry from '../public/clips/telemetry.json';
 import editMap from '../public/clips/edit-map.json';
 import focusPoints from '../public/clips/focus-points.json';
 import {scenes} from '../scenes.mjs';
+import {detailVisibility} from '../alternative-camera.mjs';
+import privacy from '../alternative-privacy.json';
 
 const ink='#f8f6ee',muted='#b5c5b9',green='#c6efb0',gold='#edc186';
 const clamp={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
@@ -30,7 +32,17 @@ const captions=[
   {from:175,to:180,icon:Sparkles,kicker:'FAMILY MEAL PLANNER',text:'Plan the meals, and the groceries take care of themselves.'},
 ];
 
-function Camera({id,seconds,mobile=false}:{id:string;seconds:number;mobile?:boolean}){
+function MessageOnly({id,frame}:{id:string;frame:number}){
+  const crop=privacy.emailCrop;const scale=900/crop.height;
+  const video=<OffthreadVideo muted src={staticFile(`clips/${id}.mp4`)} style={{position:'absolute',left:-crop.x,top:-crop.y,width:1440,height:900}}/>;
+  return <div style={{position:'absolute',inset:0,background:'#f4f5f2'}}>
+    <div style={{position:'absolute',left:(1440-crop.width*scale)/2,top:0,width:crop.width,height:crop.height,overflow:'hidden',transform:`scale(${scale})`,transformOrigin:'top left'}}>
+      {frame<privacy.emailReadyFrame?<Freeze frame={privacy.emailReadyFrame}>{video}</Freeze>:video}
+    </div>
+  </div>;
+}
+
+function Camera({id,seconds,mobile=false,alternative=false}:{id:string;seconds:number;mobile?:boolean;alternative?:boolean}){
   const frame=useCurrentFrame();const {fps}=useVideoConfig();
   const points=telemetry.filter(e=>e.scene===id);
   let zoom=1,x=50,y=45,weight=0;
@@ -44,6 +56,7 @@ function Camera({id,seconds,mobile=false}:{id:string;seconds:number;mobile?:bool
       if(id==='scene2-setup'&&e.xPercent===50&&Math.abs(e.yPercent-59)<1){x=focusPoints.servings.xPercent;y=focusPoints.servings.yPercent;}
     }
   }
+  if(alternative)zoom=id==='scene4b-gmail'?1:1+(zoom-1)*detailVisibility(frame,fps,points);
   if(mobile)zoom=1;
   const width=mobile?390:1440,height=mobile?844:900;
   const tx=Math.max(width-width*zoom,Math.min(0,width*.5-width*x/100*zoom));
@@ -51,12 +64,14 @@ function Camera({id,seconds,mobile=false}:{id:string;seconds:number;mobile?:bool
   const opacity=interpolate(frame,[0,7,seconds*fps-7,seconds*fps],[0,1,1,0],clamp);
   return <div style={{position:'absolute',inset:0,overflow:'hidden',opacity,background:'#f4f5f2'}}>
     <div style={{width,height,transformOrigin:'0 0',transform:`translate(${tx}px, ${ty}px) scale(${zoom})`}}>
-      <OffthreadVideo muted src={staticFile(`clips/${id}.mp4`)} style={{width,height,display:'block'}}/>
+      {alternative&&id==='scene4b-gmail'&&frame<privacy.emailEndMs/1000*fps+2
+        ?<MessageOnly id={id} frame={frame}/>
+        :<OffthreadVideo muted src={staticFile(`clips/${id}.mp4`)} style={{width,height,display:'block'}}/>}
     </div>
   </div>;
 }
 
-function Browser({id,seconds,profile}:{id:string;seconds:number;profile:string}){
+function Browser({id,seconds,profile,alternative=false}:{id:string;seconds:number;profile:string;alternative?:boolean}){
   const frame=useCurrentFrame();
   const parts=editMap.find(e=>e.scene===id)?.parts??[];
   const url=[...parts].reverse().find(p=>p.fromMs<=frame/30*1000)?.host??(profile==='reviewer'?'mail.google.com':'meals.example.com');
@@ -67,7 +82,7 @@ function Browser({id,seconds,profile}:{id:string;seconds:number;profile:string})
       <div style={{position:'absolute',left:'27%',width:'46%',height:28,borderRadius:7,background:'#f9faf7',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center',gap:7}}><Lock size={11}/>{url}</div>
       <div style={{marginLeft:'auto',fontSize:11,letterSpacing:1.3}}>FAMILY MEAL PLANNER</div>
     </div>
-    <div style={{position:'relative',width:1248,height:780}}><div style={{position:'absolute',width:1440,height:900,transform:'scale(0.8666666667)',transformOrigin:'top left'}}><Camera id={id} seconds={seconds}/></div></div>
+    <div style={{position:'relative',width:1248,height:780}}><div style={{position:'absolute',width:1440,height:900,transform:'scale(0.8666666667)',transformOrigin:'top left'}}><Camera id={id} seconds={seconds} alternative={alternative}/></div></div>
   </div>;
 }
 
@@ -88,18 +103,19 @@ function Phone({id,seconds}:{id:string;seconds:number}){
   </>;
 }
 
-function Caption({caption}:{caption:typeof captions[number]}){
+function Caption({caption,alternative=false}:{caption:typeof captions[number];alternative?:boolean}){
   const frame=useCurrentFrame();const {fps}=useVideoConfig();const Icon=caption.icon;
   const progress=spring({fps,frame,config:{damping:20,stiffness:110}});
   const length=(caption.to-caption.from)*fps;
   const opacity=interpolate(frame,[0,8,length-9,length],[0,1,1,0],clamp);
-  return <div style={{position:'absolute',left:170,right:170,bottom:42,opacity,transform:`translateY(${(1-progress)*42}px)`,borderRadius:22,background:'linear-gradient(120deg,#17291ff5,#203a2df2)',backdropFilter:'blur(22px)',border:'1px solid #d5e7cc40',boxShadow:'0 12px 50px #0007',padding:'25px 34px',display:'flex',alignItems:'center',gap:25}}>
+  return <div style={{position:'absolute',left:170,right:170,bottom:42,opacity,transform:`translateY(${(1-progress)*42}px)`,borderRadius:22,background:'linear-gradient(120deg,#17291ff5,#203a2df2)',backdropFilter:alternative?undefined:'blur(22px)',border:'1px solid #d5e7cc40',boxShadow:'0 12px 50px #0007',padding:'25px 34px',display:'flex',alignItems:'center',gap:25}}>
     <div style={{width:68,height:68,borderRadius:19,background:'#b7e79c16',border:'1px solid #c7ecb22b',display:'flex',justifyContent:'center',alignItems:'center',flexShrink:0}}><Icon size={34} strokeWidth={1.6} color={green}/></div>
     <div><div style={{fontSize:15,fontWeight:700,letterSpacing:2.5,color:green,marginBottom:9}}>{caption.kicker}</div><div style={{fontSize:29,fontWeight:500,lineHeight:1.25,letterSpacing:-.45,color:ink,maxWidth:1300}}>{caption.text}</div></div>
   </div>;
 }
 
-export function FamilyMealPlannerDemo(){
+type DemoProps={alternative?:boolean;musicSrc?:string;musicCredit?:string};
+export function FamilyMealPlannerDemo({alternative=false,musicSrc='audio/ambient-bg.mp3',musicCredit=''}:DemoProps={}){
   const frame=useCurrentFrame();const current=scenes.find(s=>frame>=s.from&&frame<s.from+s.seconds*30)??scenes[0];
   const reviewer=current.profile==='reviewer';
   return <AbsoluteFill style={{fontFamily:'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',background:'#14251d',color:ink}}>
@@ -108,12 +124,13 @@ export function FamilyMealPlannerDemo(){
     <div style={{position:'absolute',left:70,bottom:20,fontSize:11,letterSpacing:2.2,color:muted}}>IDEAS → MEALS → APPROVAL → GROCERIES</div>
     <div style={{position:'absolute',right:70,bottom:20,fontSize:11,color:muted,fontVariantNumeric:'tabular-nums'}}>{String(Math.floor(frame/1800)).padStart(2,'0')}:{String(Math.floor(frame/30)%60).padStart(2,'0')} / 03:00</div>
     {scenes.map(scene=><Sequence key={scene.id} from={scene.from} durationInFrames={scene.seconds*30} name={scene.title}>
-      {scene.profile==='mobile'?<Phone id={scene.id} seconds={scene.seconds}/>:<Browser id={scene.id} seconds={scene.seconds} profile={scene.profile}/>}
+      {scene.profile==='mobile'?<Phone id={scene.id} seconds={scene.seconds}/>:<Browser id={scene.id} seconds={scene.seconds} profile={scene.profile} alternative={alternative}/>}
     </Sequence>)}
     <div key={current.id} style={{position:'absolute',left:70,top:71,width:130}}><div style={{fontSize:47,fontWeight:300,color:gold,letterSpacing:-3}}>{current.step}<span style={{fontSize:18,letterSpacing:0,color:'#7f9c88'}}> /08</span></div><div style={{fontSize:16,lineHeight:1.45,color:muted,marginTop:10}}>{current.title}</div></div>
     <div style={{position:'absolute',right:66,top:20,display:'flex',alignItems:'center',gap:9,border:'1px solid #c8dfb93b',background:reviewer?'#4b3c2cf0':'#284031f0',padding:'9px 15px',borderRadius:30,fontSize:13,color:reviewer?gold:green}}>{reviewer?<MailCheck size={15}/>:<Users size={15}/>} {reviewer?'Partner Inbox (Reviewer)':'Household Planner'}<ArrowUpRight size={13}/></div>
-    {captions.map(c=><Sequence key={c.from} from={c.from*30} durationInFrames={(c.to-c.from)*30} name={c.kicker}><Caption caption={c}/></Sequence>)}
+    {captions.map(c=><Sequence key={c.from} from={c.from*30} durationInFrames={(c.to-c.from)*30} name={c.kicker}><Caption caption={c} alternative={alternative}/></Sequence>)}
     <div style={{position:'absolute',bottom:0,left:0,height:4,width:`${frame/5399*100}%`,background:`linear-gradient(90deg,${green},${gold})`}}/>
-    <Audio src={staticFile('audio/ambient-bg.mp3')} volume={0.35}/>
+    {musicSrc?<Audio src={staticFile(musicSrc)} volume={0.35}/>:null}
+    {alternative&&musicCredit&&frame>=5250?<div style={{position:'absolute',right:240,top:46,fontSize:11,color:muted}}>{musicCredit}</div>:null}
   </AbsoluteFill>;
 }

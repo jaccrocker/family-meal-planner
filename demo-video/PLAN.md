@@ -25,3 +25,14 @@ Source findings: numbered nav links retain client state. Account state uses vers
 - Run `bash demo-video/build-video.sh --render-only` to repeat the render, `--finalize-only` to encode an existing Remotion render, or `--resume` to preserve completed recordings without another household reset or email send.
 - The app TypeScript configuration excludes the independent demo project, whose own package manifest and compiler configuration keep video dependencies separate from the application.
 - User selected the local README preview for the private repository. Existing root package.json and package-lock.json edits are user-owned and remain outside this change.
+
+## Alternative requested on November 2, 2026
+
+- Keep the original movie and all existing text overlays. Save a separate alternative using the file-versioning skill in this folder.
+- Show only the workflow's relevant email. The alternative omits the inbox list and crops the reading pane; source-frame 105 is held over the hidden mailbox-opening action. The audited source clip is pinned by SHA-256, with a two-frame transition guard.
+- Zoom out before every interaction, hold a full view through the click and response, then return to detail. Five demo tests pass, including the camera invariant for every recorded event and file-version rollover.
+- Three 30-second, versioned audiovisual music samples are complete and reconciled against the three distinct licensed sources. Music options and credits are in Meal Planning Music Options 20261102a.md. User selected Life of Riley by Kevin MacLeod.
+- Full alternative rendered successfully as Family Meal Planner Alternative 20261102a.mp4: 180 seconds, 5,400 frames, 1920x1080, 30 fps, stereo audio exactly 180 seconds at -9.2 dB relative to the normalized bed (35% volume), 43,251,101 bytes. Full decode, email-only framing, click context and original checksum gates passed. Metadata: reports/alternative-verification.json.
+- A silent 13-second privacy preview is complete at Family Meal Planner Alternative Preview 20261102a.mp4. Original movie checksum remains unchanged.
+- Final visual QA found and corrected a Chrome backdrop-paint tile on the email scene's caption background. The alternative keeps the same glass tint but disables backdrop filtering. Only frames 2610 to 2999 were re-rendered, then combined with version a's remaining scenes and unchanged music.
+- Final delivery is Family Meal Planner Alternative 20261102b.mp4 (41,578,173 bytes), with matching versioned music-credit report. It passes 1920x1080, 30 fps, 5,400 frames, video/audio/container exactly 180 seconds, yuv420p, full decode, five demo tests, typecheck and lint. Email-only and full-context click frames were visually checked. Original movie and alternative version a are both preserved. Final metadata: reports/alternative-verification.json.

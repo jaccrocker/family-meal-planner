@@ -32,3 +32,13 @@ Each completed scene writes a raw-recording checkpoint. Final clip and telemetry
 Store reconciliation compares every requested ingredient with its selected product row and product ID, then checks the unique product count against the cart. In the captured week, 27 ingredient lines resolve to 26 unique products because fresh basil and Thai basil share one sandbox product. No ingredient line is missing; the shopper still reviews the matched varieties before checkout.
 
 Remotion references: [local rendering](https://www.remotion.dev/docs/render), [frame-safe video](https://www.remotion.dev/docs/offthreadvideo).
+
+## Alternative version
+
+The alternative keeps every existing lower-third caption and uses the verified saved clips. It never shows the mailbox list, search field, account controls or Gmail navigation. Its opening email image is the actual approval message, held until the recorded message is open; the live message is cropped to that reading pane. The email clip's SHA-256 in `alternative-privacy.json` binds this privacy audit to the exact recording. A changed email clip requires another audit.
+
+Every interaction pulls back to the full interface before the click and holds through the response, then eases back to detail. Dense sequences of clicks remain wide. This behavior is covered for every telemetry event by `alternative.test.mjs`.
+
+Jac selected Life of Riley after reviewing three versioned 30-second samples. Run `node demo-video/build-alternative.mjs life-of-riley` to render a new alternative, using the local licensed source in `public/audio/alternatives/`. The script refuses to start without a named music choice. It saves `Family Meal Planner Alternative YYYYMMDDa.mp4`, advances same-day letters, writes a matching report with music credits, and checks that the original movie is unchanged. The date for this request is November 2, 2026.
+
+`prepare-music-samples.mjs` creates matched-loudness audiovisual auditions and their credit sheet. All three options are CC BY 4.0; composer pages and download URLs are in `music-options.mjs`. Keep the selected credit and license link in the published video description. Music source files, samples, previews and finished videos remain local.
