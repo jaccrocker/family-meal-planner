@@ -10,6 +10,7 @@ export const DEMO_HOUSEHOLD: Household = {
   staples: DEFAULT_STAPLES,
 };
 
+/** The sample week of meals for demo mode, using library meal ids. */
 export const DEMO_PLAN: PlanEntry[] = [
   { day: "Mon", mealType: "Dinner", mealId: "M21" }, // Chicken Fajitas
   { day: "Tue", mealType: "Lunch", mealId: "M10" }, // Leftover Chicken Fajitas

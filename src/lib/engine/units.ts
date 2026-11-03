@@ -17,14 +17,20 @@ const TABLE: Record<Unit, { family: Family; factor: number }> = {
   each: { family: "count", factor: 1 },
 };
 
+/** The family a unit belongs to: weight, volume or count. */
 export function family(unit: Unit): Family {
   return TABLE[unit].family;
 }
 
+/** True when both units are in the same family. */
 export function canConvert(from: Unit, to: Unit): boolean {
   return TABLE[from].family === TABLE[to].family;
 }
 
+/**
+ * Converts a quantity between units of the same family.
+ * @throws Error when the units are in different families.
+ */
 export function convert(qty: number, from: Unit, to: Unit): number {
   if (!canConvert(from, to)) {
     throw new Error(`Cannot convert ${from} to ${to}`);
@@ -52,10 +58,12 @@ const LABEL: Record<Unit, string> = {
   each: "",
 };
 
+/** Formats a quantity for display, rounded to two places. Ounces of 16 or more show as pounds, and count has no unit label. */
 export function formatQty(qty: number, unit: Unit): string {
   if (unit === "oz" && qty >= 16) return `${round(qty / 16)} lb`;
   const label = LABEL[unit];
   return label ? `${round(qty)} ${label}` : `${round(qty)}`;
 }
 
+/** Every supported unit. */
 export const UNITS = Object.keys(TABLE) as Unit[];

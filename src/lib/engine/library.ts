@@ -18,7 +18,9 @@ interface AmountsFile {
   meals: Record<string, { reviewed: boolean; ingredients: IngredientAmount[] }>;
 }
 
+/** Every catalog item, loaded from the data file. */
 export const CATALOG: CatalogItem[] = catalogJson as CatalogItem[];
+/** Catalog items keyed by item id. */
 export const CATALOG_BY_ID = new Map(CATALOG.map((c) => [c.id, c]));
 
 const amounts = amountsJson as unknown as AmountsFile;
@@ -34,6 +36,7 @@ export const LIBRARY: Meal[] = (mealsJson as RawMeal[]).map((m) => ({
   ...(m.noGroceries ? { noGroceries: true } : {}),
 }));
 
+/** Library meals keyed by meal id. */
 export const LIBRARY_BY_ID = new Map(LIBRARY.map((m) => [m.id, m]));
 
 /** Ingredient names as the spreadsheet lists them, for display. */
@@ -41,8 +44,10 @@ export const LISTED_INGREDIENTS = new Map(
   (mealsJson as RawMeal[]).map((m) => [m.id, m.ingredients.map((i) => i.name)]),
 );
 
+/** The status text recorded in the per serving amounts data file. */
 export const AMOUNTS_STATUS = amounts.status;
 
+/** Ids of catalog items marked as staples, the default pantry for a new household. */
 export const DEFAULT_STAPLES = CATALOG.filter((c) => c.staple).map((c) => c.id);
 
 const ALIAS = new Map<string, string>();

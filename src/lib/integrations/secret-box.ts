@@ -11,6 +11,10 @@ function key(): Buffer {
   return createHash("sha256").update(raw).digest();
 }
 
+/**
+ * Encrypts text with a random IV and returns "iv.tag.ciphertext", each part base64url.
+ * @throws Error when INTEGRATIONS_ENCRYPTION_KEY is missing or shorter than 32 characters.
+ */
 export function seal(plain: string): string {
   const iv = randomBytes(12);
   const c = createCipheriv("aes-256-gcm", key(), iv);
@@ -18,6 +22,10 @@ export function seal(plain: string): string {
   return [iv, c.getAuthTag(), body].map((b) => b.toString("base64url")).join(".");
 }
 
+/**
+ * Decrypts a value produced by seal.
+ * @throws Error when the key is missing or the value was altered or sealed with another key.
+ */
 export function open(sealed: string): string {
   const [iv, tag, body] = sealed.split(".").map((s) => Buffer.from(s, "base64url"));
   const d = createDecipheriv("aes-256-gcm", key(), iv);

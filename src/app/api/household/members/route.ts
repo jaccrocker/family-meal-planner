@@ -17,6 +17,11 @@ async function owner() {
   return record?.isOwner ? record : undefined;
 }
 
+/**
+ * Adds another adult to the household by Google email. Owner only (403 otherwise). The body is
+ * `{ email }`; the address is trimmed and lowercased before saving. Returns 400 for an invalid
+ * email, the owner's own address, or a new member beyond the limit, and `{ ok: true }` on success.
+ */
 export async function POST(req: Request) {
   const record = await owner();
   if (!record) return NextResponse.json({ error: "Only the household owner can add members" }, { status: 403 });
@@ -30,6 +35,10 @@ export async function POST(req: Request) {
   return NextResponse.json({ ok: true });
 }
 
+/**
+ * Removes an adult from the household by email. Owner only (403 otherwise). The body is `{ email }`;
+ * returns 400 for an invalid email and `{ ok: true }` otherwise.
+ */
 export async function DELETE(req: Request) {
   const record = await owner();
   if (!record) return NextResponse.json({ error: "Only the household owner can remove members" }, { status: 403 });

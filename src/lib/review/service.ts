@@ -5,18 +5,22 @@ import { database, type HouseholdRecord } from "@/lib/store";
 import { describeChanges, reviewEmail, statusEmail, type PlanLine, type ResponseKind } from "./email";
 import { sendMail } from "./mailer";
 
+/** State of one reviewer's request. Both approved and auto_approved count as approval. */
 export type RequestStatus = "pending" | "approved" | "changes" | "auto_approved";
 
+/** Reminder timing for a household: minutes between emails and how many reminders follow the first email. */
 export interface ReviewSettings {
   reminderMinutes: number;
   reminders: number;
 }
 
+/** A household person and whether their approval is required. */
 export interface ReviewerSetting {
   email: string;
   required: boolean;
 }
 
+/** One reviewer's request on a review, with their answer and any proposed plan. */
 export interface RequestView {
   id: number;
   email: string;
@@ -30,6 +34,7 @@ export interface RequestView {
   proposedPlan: PlanLine[] | null;
 }
 
+/** A review of a week's plan with its requests. */
 export interface ReviewView {
   id: number;
   weekOf: string;
@@ -45,6 +50,7 @@ export interface ReviewView {
   ready: boolean;
 }
 
+/** Settings used when a household has not saved its own. */
 export const DEFAULT_SETTINGS: ReviewSettings = { reminderMinutes: 60, reminders: 2 };
 
 const hash = (token: string) => createHash("sha256").update(token).digest("hex");
@@ -59,6 +65,7 @@ export function householdPeople(record: HouseholdRecord): string[] {
   return [...new Set([record.ownerEmail, ...record.members].map((e) => e.toLowerCase()))];
 }
 
+/** The household's review settings, or DEFAULT_SETTINGS when none are saved. */
 export function getSettings(householdId: number): ReviewSettings {
   const row = database()
     .prepare("select reminder_minutes, reminders from review_settings where household_id = ?")
@@ -66,6 +73,7 @@ export function getSettings(householdId: number): ReviewSettings {
   return row ? { reminderMinutes: row.reminder_minutes, reminders: row.reminders } : DEFAULT_SETTINGS;
 }
 
+/** Saves the household's review settings, replacing any earlier ones. */
 export function saveSettings(householdId: number, s: ReviewSettings): void {
   database()
     .prepare(
@@ -75,6 +83,7 @@ export function saveSettings(householdId: number, s: ReviewSettings): void {
     .run(householdId, s.reminderMinutes, s.reminders);
 }
 
+/** Everyone who can review with their required flag. People without a saved flag are required. */
 export function getReviewers(record: HouseholdRecord): ReviewerSetting[] {
   const rows = database()
     .prepare("select email, required from reviewers where household_id = ?")
@@ -83,6 +92,7 @@ export function getReviewers(record: HouseholdRecord): ReviewerSetting[] {
   return householdPeople(record).map((email) => ({ email, required: flags.get(email) ?? true }));
 }
 
+/** Sets whether a person's approval is required, stored by lower case email. */
 export function setReviewerRequired(householdId: number, email: string, required: boolean): void {
   database()
     .prepare(
@@ -206,6 +216,7 @@ export async function startReview(
   return currentReview(record.id)!;
 }
 
+/** What a reviewer link resolves to: the review, that reviewer's request and the household id. */
 export interface TokenLookup {
   review: ReviewView;
   request: RequestView;

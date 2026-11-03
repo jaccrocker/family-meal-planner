@@ -18,6 +18,13 @@ export async function GET() {
   return NextResponse.json(record);
 }
 
+/**
+ * Saves the signed in person's planner state. Requires sign in (401). The body is the full planner
+ * state, checked against the planner schema (400 with the validation message). Returns 404 when the
+ * person has no household yet. An optional `x-base-version` header names the version the browser
+ * last saw; if the server has moved on, nothing is saved and the reply is 409 with `conflict` and
+ * the current household record. Otherwise returns `{ ok, version }` with the new version.
+ */
 export async function PUT(req: Request) {
   const me = await who();
   if (!me) return NextResponse.json({ error: "Not signed in" }, { status: 401 });

@@ -1,3 +1,4 @@
+/** Measurement units: weight (oz, lb, g, kg), volume (floz, tsp, tbsp, cup, ml, l) and count (each). */
 export type Unit =
   | "oz"
   | "lb"
@@ -11,11 +12,15 @@ export type Unit =
   | "l"
   | "each";
 
+/** The meal slots of a day. */
 export type MealType = "Breakfast" | "Lunch" | "Dinner";
 
+/** Days of the planning week, Monday first. */
 export const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+/** A day of the planning week. */
 export type Day = (typeof DAYS)[number];
 
+/** Grocery store section for an item. */
 export type Category =
   | "Produce"
   | "Meat & Seafood"
@@ -25,6 +30,7 @@ export type Category =
   | "Pantry"
   | "Other";
 
+/** Order in which sections appear on the cart. */
 export const CATEGORY_ORDER: Category[] = [
   "Produce",
   "Meat & Seafood",
@@ -35,12 +41,14 @@ export const CATEGORY_ORDER: Category[] = [
   "Other",
 ];
 
+/** A store package: its size in the given unit and a label to display, such as "16 oz". */
 export interface Pack {
   size: number;
   unit: Unit;
   label: string;
 }
 
+/** A purchasable grocery item. Aliases are other names used to match ingredient text; staple marks a default pantry staple. */
 export interface CatalogItem {
   id: string;
   name: string;
@@ -58,6 +66,7 @@ export interface IngredientAmount {
   unit: Unit;
 }
 
+/** A meal and its ingredients, each for one adult portion. */
 export interface Meal {
   id: string;
   type: MealType;
@@ -72,12 +81,14 @@ export interface Meal {
   custom?: boolean;
 }
 
+/** Portion size for each age band, relative to one adult. */
 export interface Multipliers {
   adult: number;
   kid4to10: number;
   kid11to18: number;
 }
 
+/** Head counts by age band with their portion multipliers and pantry staples. */
 export interface Household {
   adults: number;
   kids4to10: number;
@@ -87,6 +98,7 @@ export interface Household {
   staples: string[];
 }
 
+/** One meal planned for a day and meal type. */
 export interface PlanEntry {
   day: Day;
   mealType: MealType;
@@ -95,6 +107,7 @@ export interface PlanEntry {
   servingsOverride?: number;
 }
 
+/** One meal's contribution to a cart line, kept so the amount can be explained. */
 export interface TraceStep {
   day: Day;
   mealType: MealType;
@@ -109,6 +122,7 @@ export interface TraceStep {
   amount: number;
 }
 
+/** One item to buy with the amount needed, the packs to buy and how that amount was reached. */
 export interface CartLine {
   item: string;
   name: string;
@@ -126,6 +140,7 @@ export interface CartLine {
   trace: TraceStep[];
 }
 
+/** The computed cart for a plan. */
 export interface CartResult {
   servings: number;
   lines: CartLine[];

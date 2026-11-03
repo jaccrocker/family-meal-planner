@@ -8,6 +8,7 @@ export interface PlanLine {
   name: string;
 }
 
+/** A message with a subject and matching plain text and HTML bodies. */
 export interface Email {
   subject: string;
   text: string;
@@ -77,6 +78,7 @@ const button = (href: string, label: string, primary: boolean) =>
     primary ? "background:#0f6e56;color:#ffffff" : "background:#ffffff;color:#0f6e56;border:1px solid #0f6e56"
   }">${label}</a>`;
 
+/** Inputs for the plan review email. */
 export interface ReviewEmailInput {
   creatorName: string;
   weekOf: string;
@@ -109,8 +111,10 @@ ${planHtml(i.plan)}
   return { subject, text, html };
 }
 
+/** How a reviewer answered: approved, proposed changes, or was approved automatically after not answering. */
 export type ResponseKind = "approved" | "changes" | "auto_approved";
 
+/** Inputs for the status email sent to the plan's creator. */
 export interface StatusEmailInput {
   reviewer: string;
   kind: ResponseKind;

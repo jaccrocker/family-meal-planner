@@ -11,12 +11,14 @@ const HOSTS = {
   production: "https://connect.instacart.com",
 } as const;
 
+/** One product line in a shopping list request, with its quantities in Instacart's unit names. */
 export interface InstacartLineItem {
   name: string;
   line_item_measurements: { quantity: number; unit: string }[];
   filters?: { brand_filters?: string[]; health_filters?: string[] };
 }
 
+/** Request body for Instacart's products_link endpoint; expires_in is in days. */
 export interface ShoppingListRequest {
   title: string;
   link_type: "shopping_list";
@@ -40,6 +42,10 @@ const INSTACART_UNIT: Record<CartLine["unit"], string> = {
   each: "each",
 };
 
+/**
+ * Converts a cart line to an Instacart line item. Counted items (unit each) send a whole
+ * item count; everything else sends the needed amount plus the pack count.
+ */
 export function lineItem(line: CartLine): InstacartLineItem {
   // The selected retailer's pack can differ from our estimate. Send the need
   // in ingredient units first; a pack count handles products missing weight
@@ -55,6 +61,10 @@ export function lineItem(line: CartLine): InstacartLineItem {
   };
 }
 
+/**
+ * Builds the shopping list request for a week's cart lines. The linkback URL is
+ * included only when given.
+ */
 export function buildShoppingList(
   lines: CartLine[],
   opts: { title: string; linkback?: string },
@@ -72,10 +82,16 @@ export function buildShoppingList(
   };
 }
 
+/** True when INSTACART_API_KEY is set, so the live list can be created. */
 export function instacartConfigured(): boolean {
   return Boolean(process.env.INSTACART_API_KEY);
 }
 
+/**
+ * Creates the shopping list on Instacart and returns the page URL to open. Uses the
+ * production host only when INSTACART_ENV is "production".
+ * @throws Error when Instacart returns a failure status or no products_link_url.
+ */
 export async function createShoppingList(body: ShoppingListRequest): Promise<string> {
   const env = process.env.INSTACART_ENV === "production" ? "production" : "development";
   const res = await fetch(`${HOSTS[env]}/idp/v1/products/products_link`, {
