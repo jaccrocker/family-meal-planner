@@ -5,6 +5,9 @@ import type { CartResult } from "@/lib/engine/types";
 import type { Features } from "@/lib/features";
 import { DEMO_STATE, EMPTY_STATE, PlannerStateSchema, cartFor, nextWeekLabel, type PlannerState } from "@/lib/planner";
 
+/**
+ * The signed in person, as returned by /api/me.
+ */
 export interface SessionUser {
   name: string;
   email: string;
@@ -58,6 +61,13 @@ function writeLocal(state: PlannerState | null) {
   }
 }
 
+/**
+ * Holds the planner state for the whole app and shares it through context. Signed in visitors
+ * load their household from the server; everyone else gets the demo week, kept in this browser's
+ * localStorage. Changes save about 400ms later, to /api/household with the last seen version
+ * (adopting the server's copy on a conflict) or to localStorage in demo mode. While signed in
+ * and the tab is visible, it also checks the server every 20 seconds for changes made elsewhere.
+ */
 export function PlannerProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<SessionUser | null>(null);
   const [googleConfigured, setGoogleConfigured] = useState(false);
@@ -197,6 +207,9 @@ export function PlannerProvider({ children }: { children: React.ReactNode }) {
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
+/**
+ * Reads the planner context. Throws when used outside PlannerProvider.
+ */
 export function usePlanner(): PlannerContext {
   const ctx = useContext(Ctx);
   if (!ctx) throw new Error("usePlanner must be used inside PlannerProvider");

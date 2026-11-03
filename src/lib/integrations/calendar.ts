@@ -14,17 +14,20 @@ export interface MealSlot {
   name: string;
 }
 
+/** Start and end of a meal slot as HH:MM local times. */
 export interface SlotTimes {
   start: string;
   end: string;
 }
 
+/** Default meal times used when none are given. */
 export const DEFAULT_TIMES: Record<MealType, SlotTimes> = {
   Breakfast: { start: "08:00", end: "08:30" },
   Lunch: { start: "12:00", end: "12:30" },
   Dinner: { start: "18:00", end: "19:00" },
 };
 
+/** A calendar event in Google Calendar's shape, tagged through private extended properties. */
 export interface CalendarEvent {
   id?: string;
   summary: string;
@@ -41,10 +44,15 @@ export function dateFor(weekStart: string, day: Day): string {
   return dt.toISOString().slice(0, 10);
 }
 
+/** A stable key for one household's meal slot in a given week, stored on the event to match it later. */
 export function slotKey(householdId: number, weekStart: string, day: Day, mealType: MealType): string {
   return `${householdId}:${weekStart}:${day}:${mealType}`;
 }
 
+/**
+ * Builds the calendar event for one planned meal, using the slot's times in the given
+ * time zone and tagging it with the household, slot key and meal id.
+ */
 export function eventFor(
   householdId: number,
   weekStart: string,
@@ -68,6 +76,7 @@ export function eventFor(
   };
 }
 
+/** Events to create, update and remove to bring the calendar in line with the plan. */
 export interface SyncPlan {
   create: CalendarEvent[];
   update: CalendarEvent[];

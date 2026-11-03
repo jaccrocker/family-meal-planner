@@ -12,6 +12,11 @@ const STEPS = [
   { href: "/shop", label: "Shop" },
 ];
 
+/**
+ * Site header. Shows only the app name on the landing page and on reviewer pages (/r/...).
+ * Elsewhere it adds the numbered steps with the current one highlighted, the cart line count
+ * beside Review, and a Demo mode badge when the planner is in demo mode.
+ */
 export function Nav() {
   const path = usePathname();
   const { mode, cart } = usePlanner();

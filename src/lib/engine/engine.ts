@@ -30,6 +30,7 @@ export function weightedServings(h: Household): number {
   );
 }
 
+/** Whole packs to buy for a need: at least one when anything is needed, none otherwise, tolerating float noise. */
 export function packsFor(needed: number, packSize: number): number {
   if (needed <= 0) return 0;
   return Math.max(1, Math.ceil(needed / packSize - EPSILON));
@@ -42,6 +43,7 @@ interface CookJob {
   viaLeftover?: string;
 }
 
+/** Inputs for computing a cart. */
 export interface ComputeInput {
   plan: PlanEntry[];
   household: Household;
@@ -51,6 +53,12 @@ export interface ComputeInput {
   exclude?: string[];
 }
 
+/**
+ * Computes the grocery cart for a plan. Leftover meals add servings to their source dinner,
+ * no-grocery meals and unknown meals add nothing, and staples and excluded items stay out of
+ * the cart. Order does not matter: the same plan in any order gives the same result.
+ * @throws Error when a meal uses an item that is not in the catalog.
+ */
 export function computeCart(input: ComputeInput): CartResult {
   const { household, meals, catalog } = input;
   // Same plan in any order gives the same cart, notes and float sums.
