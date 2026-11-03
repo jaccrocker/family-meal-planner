@@ -35,3 +35,30 @@ test('store reconciliation counts shared product IDs and rejects omitted ingredi
     await page.locator('article').last().evaluate(node=>node.remove());await assert.rejects(()=>storeProof(page,expected),/Every ingredient needs/);
   }finally{await browser.close();}
 });
+
+test('confidential capture aliases names, including late content, and masks an address from its first character',async()=>{
+  const browser=await chromium.launch({headless:true});const context=await browser.newContext();await installHelpers(context);const page=await context.newPage();
+  try{
+    await page.goto('data:text/html,<body><div id="name">Jac Crocker</div><input data-demo-private><div id="late"></div><iframe title="Email preview" sandbox srcdoc="<p>Jac Crocker planned meals</p>"></iframe></body>');
+    await page.waitForFunction(()=>document.querySelector('#name').textContent==='Jac C');
+    await page.locator('input').pressSequentially('j');
+    assert.equal(await page.locator('input').evaluate(n=>getComputedStyle(n).filter),'blur(7px)');
+    await page.evaluate(()=>document.querySelector('#late').textContent='Jac Crocker planned meals');
+    await page.waitForFunction(()=>document.querySelector('#late').textContent==='Jac C planned meals');
+    // Rewrite sandboxed preview HTML before it can display the original name.
+    await page.waitForFunction(()=>document.querySelector('iframe').getAttribute('srcdoc').includes('Jac C planned meals'));
+    const frame=page.frames()[1];await frame.waitForSelector('p');
+    assert.equal(await frame.locator('p').innerText(),'Jac C planned meals');
+  }finally{await browser.close();}
+});
+
+test('privacy installs on a Trusted Types protected email document',async()=>{
+  const browser=await chromium.launch({headless:true});const page=await browser.newPage();
+  try{
+    await page.goto('data:text/html,'+encodeURIComponent(`<meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'"><p>Jac Crocker</p><p>demo-account-2@example.com</p>`));
+    await page.evaluate((await import('./helpers.mjs')).privacyAndCursor);
+    assert.equal(await page.locator('p').first().innerText(),'Jac C');
+    assert.equal(await page.locator('.demo-private').evaluate(n=>getComputedStyle(n).filter),'blur(7px)');
+    assert.equal(await page.locator('#demo-cursor svg').count(),1);
+  }finally{await browser.close();}
+});

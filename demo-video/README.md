@@ -42,3 +42,15 @@ Every interaction pulls back to the full interface before the click and holds th
 Jac selected Life of Riley after reviewing three versioned 30-second samples. Run `node demo-video/build-alternative.mjs life-of-riley` to render a new alternative, using the local licensed source in `public/audio/alternatives/`. The script refuses to start without a named music choice. It saves `Family Meal Planner Alternative YYYYMMDDa.mp4`, advances same-day letters, writes a matching report with music credits, and checks that the original movie is unchanged. The date for this request is November 2, 2026.
 
 `prepare-music-samples.mjs` creates matched-loudness audiovisual auditions and their credit sheet. All three options are CC BY 4.0; composer pages and download URLs are in `music-options.mjs`. Keep the selected credit and license link in the published video description. Music source files, samples, previews and finished videos remain local.
+
+## Confidential recreation
+
+`reset-blank-plan.mjs --solo` starts the authorized demo with one adult and no collaborators. `DEMO_CAPTURE_ID=confidential-20261102 node demo-video/record-clips.mjs --confidential` records a separate source set, adds the blurred collaborator on camera, shows the actual sent message, approves the received message, and opens the returned approval notification in the planner's mailbox. Saved mail sessions are local exports from each account's existing Chrome profile. Mailbox navigation and lists are excluded from the scene ranges and final reading-pane crop.
+
+The capture helper replaces the displayed full name with Jac C, including sandboxed email previews. It marks the address input private before typing starts. It does not change the Google profile or rewrite actual email delivery.
+
+Run `node demo-video/verify-confidential.mjs confidential-20261102` before rendering. This independently checks the ten expected clip IDs, media timing, clip hashes, collaborator addition, sent/received emails, live approval, cart reconciliation and wide framing at every interaction. An OCR census samples every second and five times per second in setup/email scenes; only counts and leak locations are retained.
+
+Run `node demo-video/build-alternative.mjs life-of-riley confidential-20261102` to render the separate capture with the accepted captions, music and camera treatment. Existing movies and default source clips remain available.
+
+Confidential recordings always use the approved local README preview for the source shot. For an already verified capture that used a GitHub page, run `node demo-video/finalize-confidential.mjs '<absolute path to the verified video>'`. It replaces the README segment with a locally rendered preview, renders only the last ten seconds, retains the first 170 seconds and soundtrack, and saves the next version. It independently verifies exact media timing, a full decode, original-video preservation and unchanged soundtrack bytes.
