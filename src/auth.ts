@@ -13,6 +13,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   session: { strategy: "jwt" },
   callbacks: {
+    // Key the session by the Google account id; without an adapter Auth.js
+    // would otherwise issue a new random id on every sign in.
+    jwt({ token, account }) {
+      if (account?.provider === "google") token.sub = account.providerAccountId;
+      return token;
+    },
     session({ session, token }) {
       if (token.sub) session.user.id = token.sub;
       return session;

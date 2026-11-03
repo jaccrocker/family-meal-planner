@@ -138,6 +138,27 @@ function toRecord(row: Row, sub: string): HouseholdRecord {
   };
 }
 
+const GOOGLE_ID = /^\d+$/;
+const LEGACY_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+
+/**
+ * Sessions were once keyed by a random id that changed on every sign in. On the
+ * first sign in with a Google id, the newest household that an old random id
+ * owns for the same email moves to the Google id, so the saved week carries over.
+ */
+function adoptLegacyHousehold(sub: string, email: string): void {
+  if (!GOOGLE_ID.test(sub)) return;
+  const d = open();
+  d.transaction(() => {
+    if (d.prepare("select 1 from households where owner_sub = ?").get(sub)) return;
+    const rows = d
+      .prepare("select id, owner_sub from households where owner_email = ? order by updated_at desc")
+      .all(email.toLowerCase()) as { id: number; owner_sub: string }[];
+    const legacy = rows.find((r) => LEGACY_ID.test(r.owner_sub));
+    if (legacy) d.prepare("update households set owner_sub = ? where id = ?").run(sub, legacy.id);
+  })();
+}
+
 /**
  * The signed in person's household: one they own, or one that added their email.
  * A household they own wins, unless it is still blank (no meals planned and no
@@ -147,6 +168,7 @@ function toRecord(row: Row, sub: string): HouseholdRecord {
  */
 export function findHousehold(sub: string, email: string): HouseholdRecord | undefined {
   const d = open();
+  adoptLegacyHousehold(sub, email);
   const own = d.prepare("select * from households where owner_sub = ?").get(sub) as Row | undefined;
   const joined = d
     .prepare(
