@@ -4,7 +4,12 @@ import { transport } from "@/lib/review/mailer";
 import { currentReview, getReviewers, getSettings, startReview } from "@/lib/review/service";
 import { signedInHousehold } from "@/lib/review/session";
 
-/** The household's current review, its settings and who would be asked. */
+/**
+ * The household's current review, its settings and who would be asked. Returns 401 when nobody is
+ * signed in. Otherwise returns `{ me, review, settings, reviewers, transport }`: the caller's email,
+ * the open review (or null), the reminder settings, the other household adults who would be asked,
+ * and the mail transport in use.
+ */
 export async function GET() {
   const me = await signedInHousehold();
   if (!me) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
@@ -19,7 +24,11 @@ export async function GET() {
 
 const Start = z.object({ weekOf: z.string().max(20) });
 
-/** Sends the saved plan to every other household adult for review. */
+/**
+ * Sends the saved plan to every other household adult for review. Returns 401 when nobody is signed
+ * in. The body is `{ weekOf }` (up to 20 characters); returns 400 when it is missing or the plan is
+ * empty. Otherwise returns `{ review }`.
+ */
 export async function POST(req: Request) {
   const me = await signedInHousehold();
   if (!me) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
