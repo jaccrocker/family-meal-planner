@@ -53,3 +53,7 @@ __pycache__/
 Submission Kit*
 setup-demo.sh
 
+
+# Demo video artifacts and profiles
+demo-video/
+
