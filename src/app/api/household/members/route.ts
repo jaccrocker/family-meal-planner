@@ -5,7 +5,9 @@ import { addMember, findHousehold, removeMember } from "@/lib/store";
 
 const Body = z.object({ email: z.string().email() });
 
-/** The owner adds or removes other adults by Google email, up to MAX_MEMBERS. */
+/**
+ * Most other adults one household can share with. Adding a new member beyond this is refused.
+ */
 const MAX_MEMBERS = 10;
 
 async function owner() {

@@ -7,7 +7,12 @@ import { signedInHousehold } from "@/lib/review/session";
 
 const Body = z.object({ weekStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), dryRun: z.boolean() });
 
-/** Previews (dryRun) or writes the saved week's meals to the family calendar. */
+/**
+ * Previews (dryRun) or writes the saved week's meals to the family calendar. Returns 404 when the
+ * calendar feature is switched off and 401 when nobody is signed in. The body is
+ * `{ weekStart: "YYYY-MM-DD", dryRun: boolean }`; anything else is a 400. Returns the sync result on
+ * success, or 502 with the error message when building the plan or writing to the calendar fails.
+ */
 export async function POST(req: Request) {
   if (!features().calendar) return NextResponse.json({ error: "Calendar is switched off" }, { status: 404 });
   const me = await signedInHousehold();
