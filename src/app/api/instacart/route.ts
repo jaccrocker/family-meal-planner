@@ -5,7 +5,13 @@ import { PlannerStateSchema, cartFor } from "@/lib/planner";
 /**
  * Builds the week's Instacart shopping list page on the server, where the API
  * key stays. Without a key it returns the request it would send plus the
- * keyless fallback text. It never checks out.
+ * keyless fallback text. It never checks out. Needs no sign in.
+ *
+ * The body is `{ state, weekOf?, demo? }`, where `state` is the planner state. Returns 400 when the
+ * state fails the planner schema (with the validation message) or the cart is empty. With `demo` set,
+ * or no API key configured, returns `{ mode: "demo", request, text }`. Otherwise creates the list
+ * and returns `{ mode: "live", url, request, text }`, or 502 with `{ mode: "error", error, request,
+ * text }` when Instacart fails.
  */
 export async function POST(req: Request) {
   const body = await req.json();

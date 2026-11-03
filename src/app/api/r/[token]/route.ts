@@ -7,8 +7,9 @@ import { lookupToken, respond } from "@/lib/review/service";
 import { householdState } from "@/lib/store";
 
 /**
- * A reviewer's link. The token in the address is the only credential: it is
- * random, stored hashed, and stops working once a newer plan goes out.
+ * The household's meals a reviewer may swap in: leftovers left out, sorted by name. Returns an empty
+ * list when the household has no saved state. The token in a reviewer's link is the only credential:
+ * it is random, stored hashed, and stops working once a newer plan goes out.
  */
 function options(householdId: number) {
   const state = householdState(householdId);
