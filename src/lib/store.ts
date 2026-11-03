@@ -106,6 +106,7 @@ function open(): Database.Database {
   return db;
 }
 
+/** A household as loaded for one signed in person, with their owner flag. */
 export interface HouseholdRecord {
   id: number;
   ownerEmail: string;
@@ -193,6 +194,7 @@ function stamp(): string {
   return s;
 }
 
+/** Creates a household owned by the given account and returns it. The owner email is stored lower case. */
 export function createHousehold(sub: string, email: string, state: PlannerState): HouseholdRecord {
   open()
     .prepare("insert into households (owner_sub, owner_email, state, updated_at) values (?, ?, ?, ?)")
@@ -215,12 +217,14 @@ export function saveState(id: number, state: PlannerState, baseVersion?: string)
   return res.changes === 1 ? v : undefined;
 }
 
+/** Adds an adult's email (trimmed, lower case) to the household. Does nothing if already a member. */
 export function addMember(id: number, email: string): void {
   open()
     .prepare("insert or ignore into members (household_id, email) values (?, ?)")
     .run(id, email.trim().toLowerCase());
 }
 
+/** Removes an email from the household's members. Does nothing if it is not a member. */
 export function removeMember(id: number, email: string): void {
   open().prepare("delete from members where household_id = ? and email = ?").run(id, email.toLowerCase());
 }

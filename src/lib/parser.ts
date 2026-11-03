@@ -13,6 +13,7 @@ import { UNITS, convert, family } from "@/lib/engine/units";
 
 const CATEGORIES = ["Produce", "Meat & Seafood", "Dairy & Eggs", "Bakery", "Frozen", "Pantry", "Other"] as const;
 
+/** Validated shape of the model's answer: a meal name, ingredients per adult serving, or a clarifying question with options. */
 export const ParsedMealSchema = z.object({
   meal: z.string().min(1),
   /** Set when the meal is ambiguous, for example beef or chicken tacos. */
@@ -32,6 +33,7 @@ export const ParsedMealSchema = z.object({
     )
     .max(25),
 });
+/** A parsed meal as validated by ParsedMealSchema. */
 export type ParsedMeal = z.infer<typeof ParsedMealSchema>;
 
 const SYSTEM = `You break a family meal into grocery ingredients for ONE adult serving.
@@ -52,6 +54,7 @@ function key(meal: string, answer?: string): string {
   return answer ? `${k} | ${answer.trim().toLowerCase()}` : k;
 }
 
+/** True when MODEL_API_KEY is set, so typed meals can be sent to the model. */
 export function hasModelKey(): boolean {
   return Boolean(process.env.MODEL_API_KEY);
 }
@@ -62,10 +65,18 @@ export function fixtureFor(meal: string, answer?: string): ParsedMeal | undefine
   return raw ? ParsedMealSchema.parse(raw) : undefined;
 }
 
+/** Meal names that demo mode can answer from recorded fixtures, without clarifying-answer variants. */
 export const FIXTURE_MEALS = Object.keys(fixtures as FixtureMap).filter((k) => !k.includes("|"));
 
 const cache = new Map<string, ParsedMeal>();
 
+/**
+ * Parses a typed meal into ingredients per adult serving. Checks the in-memory cache
+ * and recorded fixtures first, then asks the model, retrying once if its reply fails
+ * the schema. The optional answer is the household's reply to an earlier question.
+ * @throws ParseUnavailable when the meal is not cached or recorded and no model key is set.
+ * @throws Error when the model's reply does not match the schema after two attempts.
+ */
 export async function parseMeal(meal: string, answer?: string): Promise<ParsedMeal> {
   const k = key(meal, answer);
   const hit = cache.get(k) ?? fixtureFor(meal, answer);
@@ -107,6 +118,7 @@ export async function parseMeal(meal: string, answer?: string): Promise<ParsedMe
   throw new Error(`The model's answer for "${meal}" did not match the schema.`);
 }
 
+/** Raised when a typed meal cannot be parsed because no model key is configured. */
 export class ParseUnavailable extends Error {}
 
 function slug(s: string): string {

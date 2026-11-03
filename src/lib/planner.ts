@@ -11,6 +11,7 @@ const unit = z.enum(UNITS as [string, ...string[]]);
 const mealType = z.enum(["Breakfast", "Lunch", "Dinner"]);
 const category = z.enum(["Produce", "Meat & Seafood", "Dairy & Eggs", "Bakery", "Frozen", "Pantry", "Other"]);
 
+/** Validation schema for a household's saved state, with size limits on every list. */
 export const PlannerStateSchema = z.object({
   household: z.object({
     adults: z.number().int().min(0).max(20),
@@ -68,8 +69,10 @@ export const PlannerStateSchema = z.object({
     .max(200),
 });
 
+/** A household's saved state as validated by PlannerStateSchema. */
 export type PlannerState = z.infer<typeof PlannerStateSchema>;
 
+/** The sample household with the demo week planned. */
 export const DEMO_STATE: PlannerState = {
   household: DEMO_HOUSEHOLD,
   plan: DEMO_PLAN,
@@ -78,24 +81,28 @@ export const DEMO_STATE: PlannerState = {
   customItems: [],
 };
 
+/** A starting state for a new household: two adults and an empty plan. */
 export const EMPTY_STATE: PlannerState = {
   ...DEMO_STATE,
   household: { ...DEMO_HOUSEHOLD, adults: 2, kids4to10: 0, kids11to18: 0 },
   plan: [],
 };
 
+/** The library meals plus the household's custom meals, keyed by meal id. */
 export function mealsFor(state: PlannerState): Map<string, Meal> {
   const meals = new Map(LIBRARY_BY_ID);
   for (const m of state.customMeals) meals.set(m.id, m as Meal);
   return meals;
 }
 
+/** The catalog items plus the household's custom items, keyed by item id. */
 export function catalogFor(state: PlannerState): Map<string, CatalogItem> {
   const catalog = new Map(CATALOG_BY_ID);
   for (const c of state.customItems) catalog.set(c.id, c as CatalogItem);
   return catalog;
 }
 
+/** Computes the grocery cart for the state's plan using its meals, items and exclusions. */
 export function cartFor(state: PlannerState): CartResult {
   return computeCart({
     plan: state.plan as Parameters<typeof computeCart>[0]["plan"],

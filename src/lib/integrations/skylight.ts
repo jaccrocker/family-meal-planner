@@ -27,6 +27,10 @@ export function speakable(line: Pick<CartLine, "name" | "packs" | "pack">): stri
   return `${count} ${name}`;
 }
 
+/**
+ * One Alexa phrase per cart line, asking Skylight to add the item to the named list
+ * (default "grocery list").
+ */
 export function skylightPhrases(lines: CartLine[], listName = "grocery list"): SkylightPhrase[] {
   const list = listName.trim().toLowerCase() || "grocery list";
   return lines.map((l) => {

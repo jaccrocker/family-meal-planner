@@ -19,6 +19,12 @@ function options(householdId: number) {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
+/**
+ * Shows a reviewer the plan they were asked to review. No sign in: the token in the path is the
+ * credential. Returns 404 for an unknown token. Otherwise returns the review (week, creator, plan,
+ * status), this reviewer's request (email, status, comment, required) and the household's meals
+ * available as swaps, sorted by name and leaving out leftovers.
+ */
 export async function GET(_req: Request, ctx: { params: Promise<{ token: string }> }) {
   const { token } = await ctx.params;
   const found = lookupToken(token);
@@ -41,6 +47,13 @@ const Body = z.discriminatedUnion("kind", [
   }),
 ]);
 
+/**
+ * Records a reviewer's answer. No sign in: the token in the path is the credential. The body is
+ * either `{ kind: "approved" }` or `{ kind: "changes", comment, plan }` with up to 21 plan lines.
+ * Meal names are taken from the household's own meals, and plan lines with an unknown meal id are
+ * dropped. Returns 404 for an unknown token, 400 for an unreadable body, 409 when the answer is
+ * refused (for example the plan was replaced by a newer one), and `{ ok, status }` on success.
+ */
 export async function POST(req: Request, ctx: { params: Promise<{ token: string }> }) {
   const { token } = await ctx.params;
   const found = lookupToken(token);
