@@ -17,6 +17,7 @@ Demo video (3 minutes): VIDEO_LINK
 - [Technical architecture](#technical-architecture)
 - [How it works](#how-it-works)
 - [Configuration](#configuration)
+- [Roadmap](#roadmap)
 - [Prior work](#prior-work)
 - [Homelab test deploy](#homelab-test-deploy)
 - [Run the published image](#run-the-published-image)
@@ -239,6 +240,51 @@ Copy `.env.example` to `.env.local` and fill in what you need. Every setting is 
 | `EMAIL_TRANSPORT`, `EMAIL_FROM`, `EMAIL_ALLOWLIST`, `APP_URL` | Real approval emails (`log` records them only; `smtp` or `resend` sends them; the allowlist limits who gets real mail) |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` or `RESEND_API_KEY` | The email provider for `smtp` or `resend` |
 | `FEATURE_CALENDAR`, `FEATURE_ALEXA`, `FEATURE_SKYLIGHT` | The switched off integrations above |
+
+## Roadmap
+
+Everything below is envisioned, not shipped. The first group is already prototyped in the code and switched off; the rest depends on time, partner access and, for the iPhone app, Meta's support.
+
+### Next: finish what is built
+
+| Enhancement | What it adds | Status |
+|---|---|---|
+| Google Calendar | Writes the approved week to a shared family calendar, one event per meal, and updates it when the plan changes | Built behind `FEATURE_CALENDAR`; needs a calendar scope added to sign in, with a clear consent screen, and a production Google review |
+| Skylight frame | Shows tonight's dinner on the kitchen Skylight display through its calendar feed, so the plan is visible where the family already looks | Built behind `FEATURE_SKYLIGHT`; depends on the Calendar integration |
+| Alexa | Answers "what is for dinner?" from the approved plan | Skill in `integrations/alexa` behind `FEATURE_ALEXA`; needs account linking and skill certification |
+
+### Later: more places to plan and shop
+
+- **Other grocers and carts.** Add Walmart, Kroger and Amazon Fresh adapters beside Instacart, using the same cart lines, so a family shops where it already does. Checkout stays with the retailer.
+- **Pantry memory.** Remember what was bought and what was left over, so staples and leftovers carry from one week to the next instead of being re-ticked by hand.
+- **Dietary needs and budgets.** Per-person allergies and preferences, flagged on library and typed meals, plus a weekly budget estimate from catalog pack prices.
+- **Reminders and lists.** Send the finished list to Apple Reminders or Google Tasks, and nudge the household the day before a planned shop.
+- **Smart home and messaging.** Dinner-time cues through Google Home and a plan summary by text message to adults who prefer it over email.
+- **Meal history.** A record of what the family actually cooked, used to suggest rotations and to bring back the meals people asked for again.
+
+### A native iPhone app, if Meta supported the build with credits
+
+The web app already works on a phone, but a native iPhone app is where this fits into a family's day: at the store, in the kitchen, and on the lock screen. It is the largest item here, and it is realistic only with sustained model access, so it is explicitly conditional on Meta providing Meta Model API credits for development and testing.
+
+What the credits would pay for:
+
+- **Muse Spark usage while building.** Typed meals, follow-up questions and ingredient suggestions all call the model, and a native app multiplies that traffic across development, TestFlight and prompt tuning.
+- **On-device and in-store flows.** Photograph a recipe card, a fridge shelf or a pantry and have Muse Spark turn it into structured ingredients, using the same schema and quantity engine as today.
+- **Evaluation.** A larger test set of typed meals across cuisines and household sizes, to measure how often ingredients, units and pack suggestions come back right before shipping to families.
+
+What the app would add on the phone:
+
+| Capability | Why it matters |
+|---|---|
+| Native SwiftUI app sharing the existing API, schema and quantity engine | One source of truth for the math; the model still never touches the cart |
+| Push notifications for approval requests and reminders | Adults answer from the lock screen instead of finding an email |
+| Widgets and Live Activities for tonight's dinner and the shopping list | The plan is visible without opening the app |
+| Siri and App Intents ("add chili to Thursday") | Plan by voice while cooking |
+| Offline shopping list with store aisle order | The list works in a store with poor signal |
+| Share sheet and photo input | Send a recipe from Safari or a photo of a card straight into the week |
+| Family sharing and Sign in with Apple | Matches how iPhone households already share |
+
+The same guard rails would carry over: validated JSON from the model, one short question when a meal is ambiguous, and checkout always in the retailer's own app.
 
 ## Prior work
 
