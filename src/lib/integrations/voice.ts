@@ -11,6 +11,7 @@ export type VoiceCommand =
   | { action: "remove"; day: string; mealType?: string }
   | { action: "whats"; day?: string; mealType?: string };
 
+/** Outcome of a voice command: the resulting state, what Alexa says, and whether the plan changed. */
 export interface VoiceResult {
   state: PlannerState;
   speech: string;
@@ -25,10 +26,12 @@ const DAY_NAMES: Record<Day, string> = {
   Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday", Sat: "Saturday", Sun: "Sunday",
 };
 
+/** Maps a spoken weekday (full or short name, any case) to a Day, or undefined if unrecognized. */
 export function parseDay(word?: string): Day | undefined {
   return word ? DAY_WORDS[word.trim().toLowerCase()] : undefined;
 }
 
+/** Maps a spoken meal word (for example breakfast, lunch, supper) to a MealType, or undefined. */
 export function parseMealType(word?: string): MealType | undefined {
   const w = word?.trim().toLowerCase();
   if (!w) return undefined;
@@ -64,6 +67,12 @@ function nameOf(state: PlannerState, id: string): string {
   return mealsFor(state).get(id)?.name ?? "that meal";
 }
 
+/**
+ * Applies a voice command to the plan. Add replaces any meal in that slot; move swaps
+ * with a meal already on the target day; remove clears a slot; whats reads the plan back.
+ * Meal type defaults to dinner for move, remove and whats. Unclear commands leave the
+ * state unchanged and return a question or an apology to speak.
+ */
 export function applyVoice(state: PlannerState, cmd: VoiceCommand): VoiceResult {
   const keep = (speech: string): VoiceResult => ({ state, speech, changed: false });
   const type = parseMealType("mealType" in cmd ? cmd.mealType : undefined);

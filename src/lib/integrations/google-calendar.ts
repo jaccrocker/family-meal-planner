@@ -15,11 +15,15 @@ export const SCOPES = [
   "email",
 ];
 
+/** Name of the family calendar to sync to, from CALENDAR_NAME. */
 export const calendarName = () => process.env.CALENDAR_NAME ?? "Home";
+/** Time zone for written events, from CALENDAR_TZ. */
 export const calendarTimeZone = () => process.env.CALENDAR_TZ ?? "America/Los_Angeles";
 const base = () => (process.env.APP_URL ?? process.env.AUTH_URL ?? "http://localhost:3000").replace(/\/$/, "");
+/** The OAuth callback URL, built from APP_URL or AUTH_URL. */
 export const redirectUri = () => `${base()}/api/calendar/callback`;
 
+/** The Google consent URL that requests offline access, with the given value passed back as state. */
 export function authUrl(state: string): string {
   const q = new URLSearchParams({
     client_id: process.env.AUTH_GOOGLE_ID ?? "",
@@ -69,6 +73,7 @@ async function findCalendar(token: string): Promise<{ id: string; summary: strin
   return list.items.find((c) => c.summary.trim().toLowerCase() === calendarName().toLowerCase());
 }
 
+/** A household's stored calendar connection. calendarId is null until the family calendar is found. */
 export interface CalendarLink {
   googleEmail: string;
   calendarId: string | null;
@@ -77,6 +82,7 @@ export interface CalendarLink {
   lastSyncAt: string | null;
 }
 
+/** The household's calendar connection, or undefined when none exists. The refresh token is not returned. */
 export function getLink(householdId: number): CalendarLink | undefined {
   const r = database().prepare("select * from calendar_links where household_id = ?").get(householdId) as
     | { google_email: string; calendar_id: string | null; calendar_name: string | null; connected_at: string; last_sync_at: string | null }
@@ -110,6 +116,7 @@ export async function connect(householdId: number, code: string): Promise<Calend
   return getLink(householdId)!;
 }
 
+/** Deletes the household's calendar connection and its stored token. */
 export function disconnect(householdId: number): void {
   database().prepare("delete from calendar_links where household_id = ?").run(householdId);
 }
@@ -130,6 +137,7 @@ async function accessToken(householdId: number): Promise<{ token: string; calend
   return { token: t.access_token, calendarId };
 }
 
+/** Outcome of a sync: event labels grouped by the action taken or planned, and whether changes were applied. */
 export interface SyncResult {
   calendarName: string | null;
   plan: { create: string[]; update: string[]; remove: string[] };

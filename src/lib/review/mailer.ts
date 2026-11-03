@@ -12,6 +12,7 @@ import type { Email } from "./email";
  */
 export type Transport = "log" | "smtp" | "resend";
 
+/** The active transport from EMAIL_TRANSPORT; anything other than smtp or resend means log. */
 export function transport(): Transport {
   const t = process.env.EMAIL_TRANSPORT;
   return t === "smtp" || t === "resend" ? t : "log";

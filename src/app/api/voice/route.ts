@@ -24,6 +24,13 @@ const Body = z.discriminatedUnion("action", [
   z.object({ action: z.literal("whats"), day: Slot, mealType: Slot }),
 ]);
 
+/**
+ * Applies one voice command (add, move, remove or whats) to the plan of the household owned by
+ * VOICE_HOUSEHOLD_EMAIL. Returns 404 when the voice feature is off, 401 without the bearer token,
+ * 400 for an unreadable command, and 404 when the household is not found. The feature-off and 401
+ * replies carry `{ error }`; every other reply carries `{ speech }`. A change is saved with up to
+ * two tries; if the plan keeps changing underneath, the reply is 409.
+ */
 export async function POST(req: Request) {
   if (!features().alexa) return NextResponse.json({ error: "Voice is switched off" }, { status: 404 });
   if (!authorized(req)) return NextResponse.json({ error: "Not allowed" }, { status: 401 });
