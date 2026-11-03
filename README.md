@@ -36,7 +36,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. With no keys set, the app runs in demo mode: a sample family of four (2 adults, one kid 4 to 10, one kid 11 to 18) and a planned week. Nothing to sign in to, and nothing is ordered or emailed.
+Open http://localhost:3000 for an overview of what the app does, then choose Try the demo. With no keys set, the app runs in demo mode: a sample family of four (2 adults, one kid 4 to 10, one kid 11 to 18) and a planned week. Nothing to sign in to, and nothing is ordered or emailed.
 
 A two minute walk through for judges:
 

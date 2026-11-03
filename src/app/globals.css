@@ -95,3 +95,12 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* iOS Safari zooms into any field under 16px when it gets focus. */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}

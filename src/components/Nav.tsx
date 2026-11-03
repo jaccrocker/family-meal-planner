@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { usePlanner } from "./PlannerProvider";
 
 const STEPS = [
-  { href: "/", label: "Set up" },
+  { href: "/setup", label: "Set up" },
   { href: "/meals", label: "Meals" },
   { href: "/approve", label: "Approve" },
   { href: "/review", label: "Review" },
@@ -15,11 +15,19 @@ const STEPS = [
 export function Nav() {
   const path = usePathname();
   const { mode, cart } = usePlanner();
-  const active = (href: string) =>
-    href === "/" ? path === "/" : path.startsWith(href) || (href === "/review" && path.startsWith("/trace"));
+  const active = (href: string) => path.startsWith(href) || (href === "/review" && path.startsWith("/trace"));
 
   // Reviewers arrive from an email link and see only their page, not the planner's steps.
   if (path.startsWith("/r/")) {
+    return (
+      <header className="border-b border-line bg-surface">
+        <div className="mx-auto max-w-6xl px-4 py-3 font-display text-lg font-bold text-brand sm:px-6">Family Meal Planner</div>
+      </header>
+    );
+  }
+
+  // The landing page shows only the name; the steps start at Set up.
+  if (path === "/") {
     return (
       <header className="border-b border-line bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-3 font-display text-lg font-bold text-brand sm:px-6">Family Meal Planner</div>
@@ -33,7 +41,8 @@ export function Nav() {
         <Link href="/" className="font-display text-lg font-bold text-brand">
           Family Meal Planner
         </Link>
-        <nav className="flex flex-1 gap-1 overflow-x-auto text-sm">
+        {/* On phones the steps take their own row below the name. */}
+        <nav className="order-last flex basis-full gap-1 overflow-x-auto text-sm sm:order-none sm:flex-1 sm:basis-auto">
           {STEPS.map((s, i) => (
             <Link
               key={s.href}

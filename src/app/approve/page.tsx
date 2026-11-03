@@ -181,7 +181,7 @@ export default function ApprovePage() {
           </div>
           {reviewers.length === 0 ? (
             <p className="mt-2 text-sm text-muted">
-              Add other adults in <Link href="/" className="font-semibold text-brand underline">Set up</Link> to ask them
+              Add other adults in <Link href="/setup" className="font-semibold text-brand underline">Set up</Link> to ask them
               to approve.
             </p>
           ) : (
@@ -228,7 +228,7 @@ export default function ApprovePage() {
                         ) : null}
                         {req.comment ? <p className="mt-1">&ldquo;{req.comment}&rdquo;</p> : null}
                         {req.proposedPlan ? (
-                          <button onClick={() => takeChanges(req)} className="btn btn-quiet mt-2 h-8 px-3 text-sm">
+                          <button onClick={() => takeChanges(req)} className="btn btn-quiet mt-2 h-11 sm:h-8 px-3 text-sm">
                             Use these changes
                           </button>
                         ) : null}

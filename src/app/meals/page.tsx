@@ -125,7 +125,7 @@ export default function MealsPage() {
             placeholder="Search meals"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="mt-3 h-9 w-full rounded-lg border border-line bg-surface px-3 text-sm"
+            className="mt-3 h-11 sm:h-9 w-full rounded-lg border border-line bg-surface px-3 text-sm"
           />
           <ul className="mt-3 max-h-[560px] space-y-2 overflow-y-auto pr-1">
             {library.map((m) => (
@@ -145,7 +145,7 @@ export default function MealsPage() {
                 </div>
                 <button
                   onClick={() => place(m)}
-                  className={`btn h-8 shrink-0 px-3 text-sm ${planned.has(m.id) ? "btn-quiet" : "btn-primary"}`}
+                  className={`btn h-11 sm:h-8 shrink-0 px-3 text-sm ${planned.has(m.id) ? "btn-quiet" : "btn-primary"}`}
                 >
                   Add to {day}
                 </button>
@@ -217,18 +217,18 @@ function TypedMeal({ day, onAdded }: { day: Day; onAdded: (m: Meal) => void }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Tacos"
-          className="h-9 min-w-40 flex-1 rounded-lg border border-line bg-surface px-3 text-sm"
+          className="h-11 sm:h-9 min-w-40 flex-1 rounded-lg border border-line bg-surface px-3 text-sm"
         />
         <select
           value={type}
           onChange={(e) => setType(e.target.value as MealType)}
-          className="h-9 rounded-lg border border-line bg-surface px-2 text-sm"
+          className="h-11 sm:h-9 rounded-lg border border-line bg-surface px-2 text-sm"
         >
           {TYPES.map((t) => (
             <option key={t}>{t}</option>
           ))}
         </select>
-        <button disabled={busy || name.trim().length < 2} className="btn btn-quiet h-9 text-sm">
+        <button disabled={busy || name.trim().length < 2} className="btn btn-quiet h-11 sm:h-9 text-sm">
           {busy ? "Reading…" : `Add to ${day}`}
         </button>
       </form>
@@ -238,7 +238,7 @@ function TypedMeal({ day, onAdded }: { day: Day; onAdded: (m: Meal) => void }) {
           <div className="font-semibold text-brand-dark">{question.question}</div>
           <div className="mt-2 flex flex-wrap gap-2">
             {question.options.map((o) => (
-              <button key={o} disabled={busy} onClick={() => submit(o)} className="btn btn-quiet h-8 px-3 text-sm">
+              <button key={o} disabled={busy} onClick={() => submit(o)} className="btn btn-quiet h-11 sm:h-8 px-3 text-sm">
                 {o}
               </button>
             ))}

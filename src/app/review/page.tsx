@@ -113,11 +113,11 @@ function Line({ line, onHave }: { line: CartLine; onHave: () => void }) {
           </div>
         ) : null}
       </div>
-      <div className="flex shrink-0 gap-2">
-        <Link href={`/trace?item=${encodeURIComponent(line.item)}`} className="btn btn-quiet h-8 px-3 text-sm">
+      <div className="flex w-full gap-2 sm:w-auto sm:shrink-0">
+        <Link href={`/trace?item=${encodeURIComponent(line.item)}`} className="btn btn-quiet h-11 sm:h-8 px-3 text-sm">
           Why
         </Link>
-        <button onClick={onHave} className="btn btn-quiet h-8 px-3 text-sm">
+        <button onClick={onHave} className="btn btn-quiet h-11 sm:h-8 px-3 text-sm">
           Have it
         </button>
       </div>
