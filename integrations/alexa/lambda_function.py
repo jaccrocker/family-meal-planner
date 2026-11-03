@@ -1,7 +1,6 @@
 """Private Alexa skill for Family Meal Planner: add, move, clear and read back meals.
 
-Borrows the plain lambda_handler and respond() shape from alexa-home-control's
-house assistant. Speech comes back from the planner's /api/voice endpoint;
+Speech comes back from the planner's /api/voice endpoint;
 the skill itself holds no meal logic. Nothing about the household is logged.
 
 Config, from env vars or the Alexa hosted S3 object Config/meal-planner.json

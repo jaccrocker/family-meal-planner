@@ -1,6 +1,6 @@
 {
   "status": "reviewed",
-  "note": "Per serving amounts for one adult portion. Drafted for this project and approved by Jac on 10/30/26. Quantities at runtime come only from the engine.",
+  "note": "Per serving amounts for one adult portion. Drafted for this project and reviewed on 10/30/26. Quantities at runtime come only from the engine.",
   "meals": {
     "M01": {
       "reviewed": true,

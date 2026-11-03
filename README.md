@@ -177,7 +177,7 @@ flowchart TB
 | App | Next.js with TypeScript, standalone server output | Pages and API in one deployable container |
 | Sign in | Auth.js with Google, scopes openid, email and profile only | No passwords of its own; no access to Gmail, Calendar or Drive |
 | Storage | SQLite through better-sqlite3 on a single volume | A household app needs one file, not a database server |
-| Model | Muse Spark through the Meta Model API's OpenAI compatible endpoint | Typed meals become structured ingredients |
+| Model | Muse Spark through the Meta Model API | Typed meals become structured ingredients |
 | Validation | Zod schemas on every model reply and API body | The engine only ever sees data it can trust |
 | Shopping | Instacart Developer Platform shopping list links | Instacart matches products at the family's store; checkout stays there |
 | Email | Nodemailer (SMTP) or Resend, with an allowlist | Real approval email for the household, recorded only in test mode |

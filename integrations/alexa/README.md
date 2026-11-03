@@ -2,7 +2,7 @@
 
 A private Alexa hosted skill ("Alexa, open family meal planner") that adds, moves, clears and reads back meals. It sends each command to the planner's `/api/voice` endpoint, which applies it to the household's saved plan and returns what Alexa says.
 
-Kept separate from alexa-home-control on purpose: that repo's ChatGPT skill stays as it is, and this skill borrows its `lambda_handler`/`respond()` shape, its S3 config pattern with an explicit `enabled` flag, and its fixture tests.
+This skill uses an explicit `enabled` flag, S3 configuration, and its own fixture tests.
 
 ## What it understands
 

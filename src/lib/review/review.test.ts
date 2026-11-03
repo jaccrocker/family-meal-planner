@@ -16,7 +16,7 @@ const plan: PlanLine[] = [
 describe("review email", () => {
   it("lists every day, keeps empty days, and carries both links", () => {
     const e = reviewEmail({
-      creatorName: "Jac",
+      creatorName: "Jane",
       weekOf: "Nov 2",
       plan,
       approveUrl: "https://x/r/t?action=approve",
@@ -33,7 +33,7 @@ describe("review email", () => {
 
   it("marks reminders and escapes names", () => {
     const e = reviewEmail({
-      creatorName: "<b>Jac</b>",
+      creatorName: "<b>Jane</b>",
       weekOf: "Nov 2",
       plan,
       approveUrl: "a",
@@ -42,7 +42,7 @@ describe("review email", () => {
       required: false,
     });
     expect(e.subject.startsWith("Reminder: ")).toBe(true);
-    expect(e.html).not.toContain("<b>Jac</b>");
+    expect(e.html).not.toContain("<b>Jane</b>");
     expect(e.text).toContain("optional");
   });
 

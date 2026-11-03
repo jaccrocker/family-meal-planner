@@ -44,3 +44,12 @@ next-env.d.ts
 
 # python
 __pycache__/
+
+# testing and automation artifacts
+/.playwright-mcp/
+
+# submission notes
+*submission-kit*
+Submission Kit*
+setup-demo.sh
+

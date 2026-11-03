@@ -5,9 +5,9 @@ set -euo pipefail
 # HOST_PORT in the environment; they are kept out of the repo.
 HOST_PORT="${HOST_PORT:?set HOST_PORT to the published port on VM 110}"
 HEALTH_ENDPOINT="/api/health"
-APP_DOMAIN="meals.example.com"
+APP_DOMAIN="${APP_DOMAIN:-meals.example.com}"
 APP_HOST="${APP_HOST:?set APP_HOST}"
-VM110="${VM110:-jaccrocker@$APP_HOST}"
+VM110="${VM110:-user@$APP_HOST}"
 
 echo "Running smoke tests..."
 
