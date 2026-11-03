@@ -13,11 +13,10 @@
     "import-amounts": "tsx scripts/import-amounts.ts"
   },
   "dependencies": {
-    "@types/nodemailer": "^8.0.2",
     "better-sqlite3": "^13.0.3",
     "next": "16.4.3",
     "next-auth": "^5.0.0-beta.32",
-    "nodemailer": "^8.0.11",
+    "nodemailer": "^10.1.4",
     "openai": "^7.45.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
@@ -48,5 +47,10 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "overrides": {
+    "next-auth": {
+      "nodemailer": "$nodemailer"
+    }
   }
 }
