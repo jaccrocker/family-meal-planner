@@ -1,5 +1,5 @@
 import "server-only";
-import nodemailer from "nodemailer";
+import nodemailer, { type Transporter } from "nodemailer";
 import { database } from "@/lib/store";
 import type { Email } from "./email";
 
@@ -26,7 +26,7 @@ function allowed(to: string): boolean {
   return list.length === 0 || list.includes(to.toLowerCase());
 }
 
-let smtp: nodemailer.Transporter | undefined;
+let smtp: Transporter | undefined;
 
 async function deliver(t: Transport, to: string, mail: Email): Promise<void> {
   const from = process.env.EMAIL_FROM ?? process.env.SMTP_USER ?? "Family Meal Planner <noreply@localhost>";
