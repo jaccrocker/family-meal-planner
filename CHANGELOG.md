@@ -8,10 +8,10 @@ All notable changes are recorded here. Format follows [Keep a Changelog](https:/
 - Dependabot version updates for npm, grouped monthly, minor and patch only.
 - Ruleset on `main`: pull request with review and passing CI required, force push and deletion blocked.
 - JSDoc across `src/lib`, API routes and components; expanded API route docs.
-- README status badges, roadmap and embedded demo video; `.nvmrc`, `CODEOWNERS` and a pull request template.
+- README status badges, roadmap and embedded demo video.
 
 ### Changed
-- React and React DOM to 19.3.1; nodemailer to 10.1.4; SHA-pinned actions refreshed.
+- React and React DOM to 19.3.1; nodemailer to 10.3.1; openai to 7.47.0; SHA-pinned actions refreshed.
 - Workflow `GITHUB_TOKEN` scoped to the permissions each job needs.
 
 ### Security
