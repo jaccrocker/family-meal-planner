@@ -6,7 +6,7 @@ Family Meal Planner turns a week of meals into a grocery list sized to the house
 
 Built for the Meta Global AI Developer Hackathon (Indie track, Build for Your World), with Muse Spark on the Meta Model API.
 
-Demo video (3 minutes): VIDEO_LINK
+Demo video (3 minutes): [family-meal-planner-demo.mp4](https://github.com/jaccrocker/family-meal-planner/releases/download/v0.1.0/family-meal-planner-demo.mp4)
 
 ## Contents
 
