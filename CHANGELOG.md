@@ -4,6 +4,20 @@ All notable changes are recorded here. Format follows [Keep a Changelog](https:/
 
 ## [Unreleased]
 
+### Added
+- Dependabot version updates for npm, grouped monthly, minor and patch only.
+- Ruleset on `main`: pull request with review and passing CI required, force push and deletion blocked.
+- JSDoc across `src/lib`, API routes and components; expanded API route docs.
+- README status badges, roadmap and embedded demo video; `.nvmrc`, `CODEOWNERS` and a pull request template.
+
+### Changed
+- React and React DOM to 19.3.1; nodemailer to 10.1.4; SHA-pinned actions refreshed.
+- Workflow `GITHUB_TOKEN` scoped to the permissions each job needs.
+
+### Security
+- Override `minimatch` to 11.x under typescript-estree (GHSA-g3hv-75wg-m249) and `uuid` to 11.x under exceljs (GHSA-w5hq-g745-h8pq); `npm audit` reports 0.
+- Demo capture accounts and the app host moved out of the repo and purged from history.
+
 ## [0.1.0] - 2026-11-02
 
 First public release.

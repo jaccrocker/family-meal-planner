@@ -1,5 +1,10 @@
 # Family Meal Planner
 
+[![CI](https://github.com/jaccrocker/family-meal-planner/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jaccrocker/family-meal-planner/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/jaccrocker/family-meal-planner/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/jaccrocker/family-meal-planner/security/code-scanning)
+[![Release](https://img.shields.io/github/v/release/jaccrocker/family-meal-planner)](https://github.com/jaccrocker/family-meal-planner/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Plan the family's meals in plain words and get the exact groceries for the people actually eating, in your Instacart cart.
 
 Family Meal Planner turns a week of meals into a grocery list sized to the household. You say who is eating, pick meals from a family library or type any meal you like, and the other adults approve the plan by email. The app then works out exact quantities, merges shared ingredients across meals, rounds up to the pack sizes stores actually sell, keeps pantry staples home, and hands the list to the family's Instacart cart. You check out in Instacart; the planner never places or pays for an order.
