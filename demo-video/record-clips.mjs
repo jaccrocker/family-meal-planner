@@ -5,19 +5,23 @@ import {spawn} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {createServer} from 'node:http';
 import {chromium} from 'playwright';
-import {APP,ROOT,installHelpers,smoothClick,focus,scrollTo,sleep,jsonRequest,telemetry} from './helpers.mjs';
+import {APP,ROOT,installHelpers,smoothClick,focus,scrollTo,sleep,jsonRequest,telemetry,setTelemetryPath,privacyAndCursor} from './helpers.mjs';
 import {scenes} from './scenes.mjs';
 import {readmePreview} from './readme-preview.mjs';
 import {storeProof} from './store-proof.mjs';
 
+const confidential=process.argv.includes('--confidential');
+const captureId=process.env.DEMO_CAPTURE_ID;
+const clipDir=path.join(ROOT,'public/clips',captureId??'');const reportDir=path.join(ROOT,'reports',captureId??'');
+await fs.mkdir(clipDir,{recursive:true});await fs.mkdir(reportDir,{recursive:true});setTelemetryPath(path.join(clipDir,'telemetry.json'));
 const runId=String(Date.now());const rawDir=path.join(ROOT,'raw',runId);await fs.mkdir(rawDir,{recursive:true});
-await fs.writeFile(path.join(ROOT,'reports/capture-attempt.json'),JSON.stringify({runId,status:'recording'}));
+await fs.writeFile(path.join(reportDir,'capture-attempt.json'),JSON.stringify({runId,status:'recording'}));
 const localHtml=await readmePreview();
 const localServer=createServer((_req,res)=>{res.writeHead(200,{'content-type':'text/html; charset=utf-8'});res.end(localHtml);});
 await new Promise(resolve=>localServer.listen(0,'127.0.0.1',resolve));
 const localUrl=`http://127.0.0.1:${localServer.address().port}`;
 const browser=await chromium.launch({headless:true});
-const resumed=process.argv.includes('--resume')?JSON.parse(await fs.readFile(path.join(ROOT,'reports/capture-checkpoint.json'),'utf8')):null;
+const resumed=process.argv.includes('--resume')?JSON.parse(await fs.readFile(path.join(reportDir,'capture-checkpoint.json'),'utf8')):null;
 const retryShop=process.argv.includes('--retry-shop');assert.ok(!retryShop||resumed,'A shop retry requires a complete checkpoint');
 const contexts=[];const ranges=(resumed?.scenes??[]).filter(scene=>!retryShop||scene.id!=='scene6-shop');const checks=resumed?.checks??{};
 if(resumed)telemetry.push(...resumed.telemetry.filter(event=>!retryShop||event.scene!=='scene6-shop'));
@@ -33,10 +37,10 @@ async function scene(id,page,actions){
   const spec=scenes.find(s=>s.id===id);page.__demoScene=id;
   active={...spec,page,start:stamp(page),startTime:Date.now(),skips:[],parts:[],telemetryStart:telemetry.length};
   console.log(`Recording ${id} (${spec.seconds}s)`);
-  await actions(active.startTime);
+  await privacyReady(page);await actions(active.startTime);await privacyReady(page);
   const skipped=active.skips.reduce((n,s)=>n+s.end-s.start,0);
-  const elapsed=stamp(page)-active.start-skipped;
-  if(elapsed<spec.seconds)await sleep((spec.seconds-elapsed)*1000+100);
+  const elapsed=(active.parts.length?active.parts.reduce((n,p)=>n+p.end-p.start,0):stamp(page)-active.start)-skipped;
+  if(elapsed<spec.seconds){await sleep((spec.seconds-elapsed)*1000+100);if(active.parts.length)active.parts.at(-1).end=stamp(active.parts.at(-1).page);}
   active.end=stamp(page);active.parts=active.parts.length?active.parts:[{page,start:active.start,end:active.end}];
   const duration=active.parts.reduce((n,p)=>n+p.end-p.start,0)-skipped;
   const scale=Math.min(1,spec.seconds/duration);
@@ -56,8 +60,8 @@ async function scene(id,page,actions){
   }
   ranges.push({...active,scale});ranges.sort((a,b)=>a.from-b.from);active=null;
   const checkpoint=[];
-  for(const range of ranges)checkpoint.push({id:range.id,seconds:range.seconds,from:range.from,scale:range.scale,skips:range.skips,parts:await Promise.all(range.parts.map(async part=>({start:part.start,end:part.end,host:part.host,file:part.file??await part.page.video().path()})))});
-  await fs.writeFile(path.join(ROOT,'reports/capture-checkpoint.json'),JSON.stringify({scenes:checkpoint,checks,telemetry},null,2));
+  for(const range of ranges)checkpoint.push({id:range.id,seconds:range.seconds,from:range.from,scale:range.scale,skips:range.skips,parts:await Promise.all(range.parts.map(async part=>({start:part.start,end:part.end,host:part.host,view:part.view,profile:part.profile,file:part.file??await part.page.video().path()})))});
+  await fs.writeFile(path.join(reportDir,'capture-checkpoint.json'),JSON.stringify({scenes:checkpoint,checks,telemetry},null,2));
 }
 async function waitForParser(page,promise){
   const start=stamp(page);const result=await promise;const end=stamp(page);
@@ -68,21 +72,49 @@ const nav=(page,step,time)=>smoothClick(page,page.locator(`nav a[href="/${step}"
 const appReady=async page=>{await page.getByRole('link',{name:'Open your planner',exact:true}).waitFor();await page.evaluate(()=>document.fonts.ready);};
 const run=async(cmd,args)=>new Promise((resolve,reject)=>{const p=spawn(cmd,args,{stdio:['ignore','ignore','pipe']});let err='';p.stderr.on('data',d=>{err+=d;});p.on('exit',code=>code===0?resolve():reject(new Error(`${cmd} failed: ${err.slice(-1500)}`)));});
 
+async function privacyReady(page){
+  for(const frame of page.frames()){
+    await frame.evaluate(privacyAndCursor).catch(()=>{});
+    await frame.waitForTimeout(150);
+    const leaks=await frame.evaluate(()=>({name:/Jac\s+Crocker/i.test(document.body?.innerText??''),email:[...document.querySelectorAll('input[type=email]')].some(n=>n.value&&getComputedStyle(n).filter==='none')})).catch(()=>({name:false,email:false}));
+    assert.equal(leaks.name,false,'Confidential name alias must be applied');assert.equal(leaks.email,false,'Email inputs must be obscured');
+  }
+}
+async function currentMail(page,query,validate){
+  const url='https://mail.google.com/mail/u/0/#search/'+encodeURIComponent(query);
+  for(let n=0;n<20;n++){
+    await page.goto(url);await page.reload({waitUntil:'domcontentloaded'});await page.getByRole('textbox',{name:/Search mail|Ask Gmail/}).waitFor();await sleep(1000);
+    const rows=page.locator('tr.zA:visible');
+    if(await rows.count()){
+      await rows.first().click();await page.locator('.adn').last().waitFor();await sleep(900);
+      const message=page.locator('.adn').last();
+      const trimmed=message.locator('.ajR');if(await trimmed.count())await trimmed.first().click();
+      await message.locator('.a3s').waitFor({state:'visible',timeout:10000});
+      await message.evaluate(n=>{for(const other of document.querySelectorAll('.adn'))if(other!==n)other.style.display='none';});
+      await message.scrollIntoViewIfNeeded();await privacyReady(page);await sleep(650);
+      if(await validate(page)){await privacyReady(page);await sleep(800);return;}
+    }
+    await sleep(1500);
+  }
+  throw Error('Current workflow email did not arrive in the expected mailbox');
+}
+
 try{
-  const planner=await launch('planner');const reviewer=await launch('reviewer');
+  const planner=await launch('planner');const reviewer=await launch(confidential?'reviewer-mail':'reviewer');
   // The gateway admits the owner; reviewer identity comes from the email token.
   // Reuse only the owner's existing gateway login, never their Google cookies.
   const gateway=(await planner.cookies(APP)).filter(c=>c.name==='CF_Authorization');
   assert.ok(gateway.length,'The authorized Cloudflare gateway session is required');
   await reviewer.addCookies(gateway);
+  const plannerMail=confidential?await launch('planner-mail'):null;const sent=plannerMail?await newPage(plannerMail):null;
   const p=await newPage(planner);await p.goto(APP);await appReady(p);
   const gmail=await newPage(reviewer);
   const search='https://mail.google.com/mail/u/0/#search/'+encodeURIComponent('subject:(Approve the meal plan) newer_than:1d');
-  await gmail.goto(search);await gmail.getByRole('textbox',{name:/Search mail/}).waitFor();await sleep(1200);
+  await gmail.goto(search);await gmail.getByRole('textbox',{name:/Search mail|Ask Gmail/}).waitFor();await sleep(1200);
   checks.plannerAccount=(await jsonRequest(planner,'/api/me')).user?.email==='demo-account-1@example.com';assert.ok(checks.plannerAccount);
   if(!resumed)assert.equal((await jsonRequest(planner,'/api/household')).state.plan.length,0,'Run reset before recording');
   else{
-    assert.equal((await jsonRequest(planner,'/api/review')).review.id,checks.sentReviewId,'The checkpoint review must still be current');
+    if(checks.sentReviewId)assert.equal((await jsonRequest(planner,'/api/review')).review.id,checks.sentReviewId,'The checkpoint review must still be current');
     await p.getByRole('link',{name:'Open your planner',exact:true}).click();await p.locator('nav a[href="/approve"]').click();
   }
   const library=JSON.parse(await fs.readFile(path.join(ROOT,'../src/data/meals.json'),'utf8'));
@@ -94,11 +126,26 @@ try{
   });
   await scene('scene2-setup',p,async t=>{
     const servingsBox=await p.getByText('adult servings per meal').boundingBox();
-    await fs.writeFile(path.join(ROOT,'public/clips/focus-points.json'),JSON.stringify({servings:{xPercent:(servingsBox.x+servingsBox.width/2)/1440*100,yPercent:(servingsBox.y+servingsBox.height/2)/900*100}}));
-    await sleep(1300);await smoothClick(p,p.getByRole('button',{name:'Fewer Kids 4 to 10',exact:true}),t,2);await sleep(2200);
-    await focus(p,p.getByText('adult servings per meal'),t,2);await sleep(1500);
-    await smoothClick(p,p.getByRole('button',{name:'More Kids 4 to 10',exact:true}),t,2);await sleep(2000);
-    await focus(p,p.getByText('Other adults',{exact:true}),t,1.45);await sleep(1500);await scrollTo(p,0,1000);
+    await fs.writeFile(path.join(clipDir,'focus-points.json'),JSON.stringify({servings:{xPercent:(servingsBox.x+servingsBox.width/2)/1440*100,yPercent:(servingsBox.y+servingsBox.height/2)/900*100}}));
+    if(confidential){
+      const initial=await jsonRequest(planner,'/api/household');assert.equal(initial.members.length,0);assert.equal(initial.state.household.adults,1);checks.initialOtherAdults=0;
+      await sleep(1800);const input=p.getByPlaceholder('Their Google email');
+      await input.evaluate(n=>n.setAttribute('data-demo-private','true'));
+      await smoothClick(p,input,t,1.5);await input.pressSequentially('demo-account-2@example.com',{delay:100});await sleep(700);
+      const added=p.waitForResponse(r=>r.url().endsWith('/api/household/members')&&r.request().method()==='POST');
+      await smoothClick(p,p.locator('form').filter({has:input}).getByRole('button',{name:'Add',exact:true}),t,1.4);assert.ok((await added).ok());
+      await p.getByRole('button',{name:'Remove',exact:true}).waitFor();await sleep(1300);
+      await smoothClick(p,p.getByRole('button',{name:'More Adults',exact:true}),t,1.5);await sleep(1000);
+      await focus(p,p.getByText('adult servings per meal'),t,1.6);await sleep(1800);
+      const final=await jsonRequest(planner,'/api/household');assert.deepEqual(final.members,['demo-account-2@example.com']);assert.equal(final.state.household.adults,2);checks.addedOtherAdult=true;
+      await jsonRequest(planner,'/api/review/settings',{method:'PUT',data:{...(await jsonRequest(planner,'/api/review')).settings,reviewers:[{email:'demo-account-2@example.com',required:true}]}});
+      await scrollTo(p,0,700);
+    }else{
+      await sleep(1300);await smoothClick(p,p.getByRole('button',{name:'Fewer Kids 4 to 10',exact:true}),t,2);await sleep(2200);
+      await focus(p,p.getByText('adult servings per meal'),t,2);await sleep(1500);
+      await smoothClick(p,p.getByRole('button',{name:'More Kids 4 to 10',exact:true}),t,2);await sleep(2000);
+      await focus(p,p.getByText('Other adults',{exact:true}),t,1.45);await sleep(1500);await scrollTo(p,0,1000);
+    }
     checks.household=(await jsonRequest(planner,'/api/household')).state.household;
   });
   await scene('scene3-meals',p,async t=>{
@@ -128,23 +175,58 @@ try{
     assert.equal(state.plan.length,7);assert.ok(state.plan.some(e=>e.day==='Wed'&&e.mealId===parsed.meal.id));assert.ok(state.customMeals.some(m=>m.id===parsed.meal.id));
     checks.persistedSlots=state.plan.length;await scrollTo(p,0,800);
   });
-  let sentReview;
+  let sentReview=resumed?(await jsonRequest(planner,'/api/review')).review:null;
+  const notificationAfter=Math.floor(Date.now()/1000)-5;
   await scene('scene4a-send',p,async t=>{
     await nav(p,'approve',t);await p.getByRole('heading',{name:'Get the plan approved'}).waitFor();
-    await p.getByRole('button',{name:'Required',exact:true}).waitFor();await sleep(1700);
-    await focus(p,p.getByRole('button',{name:'Required',exact:true}),t,1.8);await sleep(1700);
+    await p.getByRole('button',{name:'Required',exact:true}).waitFor();await privacyReady(p);await sleep(confidential?700:1700);
+    await focus(p,p.getByRole('button',{name:'Required',exact:true}),t,1.8);await sleep(confidential?600:1700);
     const response=p.waitForResponse(r=>r.url().endsWith('/api/review')&&r.request().method()==='POST');
     await smoothClick(p,p.getByRole('button',{name:/Send the updated plan|Send for approval/}),t,1.8);
     const result=await response;assert.equal(result.ok(),true,'Approval email send must succeed');
     sentReview=(await jsonRequest(planner,'/api/review')).review;
     assert.ok(sentReview?.requests?.some(r=>r.email==='demo-account-2@example.com'&&r.required));checks.sentReviewId=sentReview.id;await sleep(1300);
+    if(confidential){
+      const appEnd=stamp(p);
+      await currentMail(sent,`in:sent subject:(Approve the meal plan) after:${notificationAfter}`,async page=>{
+        const link=page.getByRole('link',{name:'Approve',exact:true}).last();if(!await link.count())return false;
+        const target=new URL(await link.getAttribute('href'));if(target.hostname!=='meals.example.com')return false;
+        const view=await jsonRequest(planner,'/api'+target.pathname);return view.review.status==='open'&&view.request.status==='pending'&&view.request.email==='demo-account-2@example.com';
+      });
+      const mailStart=stamp(sent);await sleep(4000);
+      active.parts=[{page:p,start:active.start,end:appEnd,host:'meals.example.com',profile:'planner'},{page:sent,start:mailStart,end:stamp(sent),host:'mail.google.com',view:'mail',profile:'planner'}];checks.plannerSentMessage=true;
+    }
   });
+  if(confidential){
+    await currentMail(gmail,`subject:(Approve the meal plan) after:${notificationAfter}`,async page=>{
+      const approve=page.getByRole('link',{name:'Approve',exact:true}).last();if(!await approve.count())return false;
+      const target=new URL(await approve.getAttribute('href'));if(target.hostname!=='meals.example.com'||!target.pathname.startsWith('/r/'))return false;
+      const view=await jsonRequest(reviewer,'/api'+target.pathname);return view.review.status==='open'&&view.request.status==='pending'&&view.request.email==='demo-account-2@example.com';
+    });
+    await scene('scene4b-gmail',gmail,async t=>{
+      await sleep(3400);const approve=gmail.getByRole('link',{name:'Approve',exact:true}).last();
+      const popupPromise=reviewer.waitForEvent('page',{timeout:15000});await smoothClick(gmail,approve,t,1);
+      const switchAt=stamp(gmail);const popup=await popupPromise;popup.__videoOrigin=Date.now();popup.__demoScene='scene4b-gmail';
+      await popup.getByText('You approved this plan. Thanks.',{exact:true}).waitFor({timeout:30_000});await privacyReady(popup);const popupStart=stamp(popup);await sleep(5000);
+      active.parts=[{page:gmail,start:active.start,end:switchAt,host:'mail.google.com',view:'mail',profile:'reviewer'},{page:popup,start:popupStart,end:stamp(popup),host:'meals.example.com',profile:'reviewer'}];checks.gmailApproval=true;
+    });
+    await p.locator('nav a[href="/meals"]').click();await p.locator('nav a[href="/approve"]').click();await p.getByText('Approved',{exact:true}).waitFor({timeout:35_000});
+    await currentMail(sent,`subject:(approved the meal plan) after:${notificationAfter}`,async page=>{
+      return await page.getByRole('link',{name:'Open the plan',exact:true}).count()>0&&await page.getByText('Every reviewer has answered. You can review the cart and shop.',{exact:true}).count()>0;
+    });
+    await scene('scene4c-approved',sent,async t=>{
+      await sleep(3800);const switchAt=stamp(sent);await privacyReady(p);const appStart=stamp(p);p.__demoScene='scene4c-approved';
+      await focus(p,p.getByText('Approved',{exact:true}),t,2);await sleep(3500);
+      active.parts=[{page:sent,start:active.start,end:switchAt,host:'mail.google.com',view:'mail',profile:'planner'},{page:p,start:appStart,end:stamp(p),host:'meals.example.com',profile:'planner'}];
+      checks.approved=(await jsonRequest(planner,'/api/review')).review.requests.find(r=>r.email==='demo-account-2@example.com')?.status==='approved';assert.ok(checks.approved);checks.plannerReceivedConfirmation=true;
+    });
+  }else{
   // Poll before the inbox shot, keeping email delivery latency out of the film.
   let latest;
   let emailReady=false;
   if(!ranges.some(range=>range.id==='scene4b-gmail')){
   for(let n=0;n<18;n++){
-    await gmail.goto(search);await gmail.reload({waitUntil:'domcontentloaded'});await gmail.getByRole('textbox',{name:/Search mail/}).waitFor();await sleep(1300);
+    await gmail.goto(search);await gmail.reload({waitUntil:'domcontentloaded'});await gmail.getByRole('textbox',{name:/Search mail|Ask Gmail/}).waitFor();await sleep(1300);
     latest=gmail.locator('tr.zA').filter({hasText:'Approve the meal plan'}).first();
     if(await latest.count()){
       await latest.click();const approve=gmail.getByRole('link',{name:'Approve',exact:true}).last();await approve.waitFor();
@@ -179,6 +261,7 @@ try{
     await sleep(1000);await focus(p,p.getByText('Approved',{exact:true}),t,2.2);await sleep(3500);
     checks.approved=(await jsonRequest(planner,'/api/review')).review.requests.find(r=>r.email==='demo-account-2@example.com')?.status==='approved';assert.ok(checks.approved);
   });
+  }
   await scene('scene5-review',p,async t=>{
     await nav(p,'review',t);await p.getByRole('heading',{name:'Review your cart'}).waitFor();await sleep(1600);
     const chicken=p.locator('li').filter({has:p.locator('div.font-semibold').filter({hasText:/chicken/i})}).first();
@@ -221,9 +304,13 @@ try{
   await scene('scene7-mobile',phone,async t=>{
     await sleep(3100);await smoothClick(phone,phone.locator('nav a[href="/review"]'),t,1);await phone.getByRole('heading',{name:'Review your cart'}).waitFor();await sleep(2200);checks.mobile=true;
   });
-  const repo=await newPage(planner);const github=await repo.goto('https://github.com/jaccrocker/family-meal-planner');
-  if(github.status()===404){await repo.goto(localUrl);checks.outroSource='Local README preview (repository is private)';}
-  else{await repo.locator('article.markdown-body').waitFor();checks.outroSource='GitHub repository';}
+  const repo=await newPage(planner);
+  if(confidential){await repo.goto(localUrl);checks.outroSource='Local README preview (approved confidential source shot)';}
+  else{
+    const github=await repo.goto('https://github.com/jaccrocker/family-meal-planner');
+    if(github.status()===404){await repo.goto(localUrl);checks.outroSource='Local README preview (repository is private)';}
+    else{await repo.locator('article.markdown-body').waitFor();checks.outroSource='GitHub repository';}
+  }
   await scrollTo(repo,900,500);
   await scene('scene8-outro',repo,async()=>{
     await scrollTo(repo,2200,2500);await sleep(2200);const cut=stamp(repo);
@@ -241,16 +328,16 @@ try{
       for(const slice of slices){const file=part.file??await part.page.video().path();inputs.push('-ss',slice.start.toFixed(3),'-t',(slice.end-slice.start).toFixed(3),'-i',file);filters.push(`[${index}:v]setpts=(PTS-STARTPTS)*${range.scale},fps=30,setsar=1[v${index}]`);labels.push(`[v${index}]`);index++;}
     }
     const filter=filters.join(';')+`;${labels.join('')}concat=n=${index}:v=1:a=0,tpad=stop_mode=clone:stop_duration=20,trim=duration=${range.seconds},fps=30[out]`;
-    await run('ffmpeg',['-y',...inputs,'-filter_complex',filter,'-map','[out]','-frames:v',String(range.seconds*30),'-r','30','-c:v','libx264','-pix_fmt','yuv420p','-crf','18','-preset','fast','-an',path.join(ROOT,'public/clips',range.id+'.mp4')]);
+    await run('ffmpeg',[captureId?'-n':'-y',...inputs,'-filter_complex',filter,'-map','[out]','-frames:v',String(range.seconds*30),'-r','30','-c:v','libx264','-pix_fmt','yuv420p','-crf','18','-preset','fast','-an',path.join(clipDir,range.id+'.mp4')]);
     console.log(`Encoded ${range.id}: ${range.seconds*30} frames`);
   }
-  await fs.writeFile(path.join(ROOT,'public/clips/telemetry.json'),JSON.stringify(telemetry,null,2));
-  const editMap=ranges.map(range=>{let ms=0;return {scene:range.id,parts:range.parts.map(part=>{const fromMs=ms;ms+=(part.end-part.start)*range.scale*1000;return {fromMs,host:part.host??'meals.example.com'};})};});
-  await fs.writeFile(path.join(ROOT,'public/clips/edit-map.json'),JSON.stringify(editMap,null,2));
+  await fs.writeFile(path.join(clipDir,'telemetry.json'),JSON.stringify(telemetry,null,2));
+  const editMap=ranges.map(range=>{let ms=0;return {scene:range.id,parts:range.parts.map(part=>{const fromMs=ms;ms+=(part.end-part.start)*range.scale*1000;return {fromMs,host:part.host??'meals.example.com',view:part.view,profile:part.profile};})};});
+  await fs.writeFile(path.join(clipDir,'edit-map.json'),JSON.stringify(editMap,null,2));
   const hash=async file=>createHash('sha256').update(await fs.readFile(file)).digest('hex');
-  const clipHashes=await Promise.all(scenes.map(async s=>({id:s.id,sha256:await hash(path.join(ROOT,'public/clips',s.id+'.mp4'))})));
-  await fs.writeFile(path.join(ROOT,'reports/capture.json'),JSON.stringify({runId,checks,clipHashes,telemetrySha256:await hash(path.join(ROOT,'public/clips/telemetry.json')),scenes:ranges.map(({id,seconds,from,scale})=>({id,seconds,from,scale})),clips:ranges.length,expectedClips:scenes.length},null,2));
-  await fs.writeFile(path.join(ROOT,'reports/capture-attempt.json'),JSON.stringify({runId,status:'complete'}));
+  const clipHashes=await Promise.all(scenes.map(async s=>({id:s.id,sha256:await hash(path.join(clipDir,s.id+'.mp4'))})));
+  await fs.writeFile(path.join(reportDir,'capture.json'),JSON.stringify({runId,captureId,confidential,checks,clipHashes,telemetrySha256:await hash(path.join(clipDir,'telemetry.json')),scenes:ranges.map(({id,seconds,from,scale})=>({id,seconds,from,scale})),clips:ranges.length,expectedClips:scenes.length},null,2));
+  await fs.writeFile(path.join(reportDir,'capture-attempt.json'),JSON.stringify({runId,status:'complete'}));
   console.log('Capture complete. All real workflow assertions passed.');
-}catch(error){await fs.writeFile(path.join(ROOT,'reports/capture-error.txt'),`${error.stack}\n`);throw error;}
+}catch(error){await fs.writeFile(path.join(reportDir,'capture-error.txt'),`${error.stack}\n`);throw error;}
 finally{for(const c of contexts)await c.close().catch(()=>{});await browser.close();localServer.close();}
