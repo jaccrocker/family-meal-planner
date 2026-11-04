@@ -1,6 +1,0 @@
-export const musicOptions=[
-  {id:'life-of-riley',title:'Life of Riley',artist:'Kevin MacLeod',mood:'Warm, collaborative and gently upbeat',source:'https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1400054',download:'https://www.incompetech.com/music/royalty-free/mp3-royaltyfree/Life%20of%20Riley.mp3',credit:'Life of Riley by Kevin MacLeod (incompetech.com). CC BY 4.0.',start:20},
-  {id:'wallpaper',title:'Wallpaper',artist:'Kevin MacLeod',mood:'A steady electronic groove for a faster, simpler workflow',source:'https://www.incompetech.com/music/royalty-free/index.html?isrc=USUAN1100843',download:'https://www.incompetech.com/music/royalty-free/mp3-royaltyfree/Wallpaper.mp3',credit:'Wallpaper by Kevin MacLeod (incompetech.com). CC BY 4.0.',start:20},
-  {id:'origami',title:'Origami',artist:'Scott Buckley',mood:'Layered electro-jazz with a more playful pulse',source:'https://www.scottbuckley.com.au/library/origami/',download:'https://www.scottbuckley.com.au/library/wp-content/uploads/2025/10/Origami.mp3',credit:'Origami by Scott Buckley. Released under CC BY 4.0. www.scottbuckley.com.au',start:20},
-];
-export const musicLicense='https://creativecommons.org/licenses/by/4.0/';
