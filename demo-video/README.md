@@ -37,7 +37,7 @@ The film uses the numbered in-app step links to retain client state. Long model 
 
 Only the owner's existing Cloudflare gateway cookie is shared with the reviewer context; the Google accounts stay separate. The Instacart segment adds products to a sandbox guest cart, then returns to the list to show the filled cart badge. Sign-in and checkout stay with the shopper.
 
-The repository is currently private. If GitHub returns 404, the outro uses a clearly labeled local README preview, served only on 127.0.0.1, with the source file's diagrams summarized visually. An authenticated GitHub page is used when available. The final browser address label reports the actual source.
+If the repository is private and GitHub returns 404, the outro uses a clearly labeled local README preview, served only on 127.0.0.1, with the source file's diagrams summarized visually. An authenticated GitHub page is used when available. The final browser address label reports the actual source.
 
 Each completed scene writes a raw-recording checkpoint. Final clip and telemetry SHA-256 digests bind verification to a single completed capture, preventing old and new files from passing as one run.
 
