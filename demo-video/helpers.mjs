@@ -3,14 +3,18 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 export const ROOT=path.dirname(fileURLToPath(import.meta.url));
-export const APP='https://meals.example.com';
+export const APP=process.env.DEMO_APP_URL??'http://localhost:3000';
+export const APP_HOST=new URL(APP).hostname;
+/** Reads a required setting for a live capture; see README.md "Settings". */
+export const requireEnv=name=>{const value=process.env[name];if(!value)throw new Error(`Set ${name} before recording (see demo-video/README.md)`);return value;};
 export const telemetry=[];
 let telemetryPath=path.join(ROOT,'public/clips/telemetry.json');
 export const setTelemetryPath=value=>{telemetryPath=value;};
 export const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 
 export function privacyAndCursor() {
-  const pattern=/[A-Z0-9.!#$%&'*+/=?^_`{|}~-]*?(?:jac\.crocker|jaccrock)[A-Z0-9.!#$%&'*+/=?^_`{|}~@-]*(?:\.[A-Z0-9-]+)*|[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@gmail\.com/gi;
+  // Masks every email address on screen, whatever the account or domain.
+  const pattern=/[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+/gi;
   const sensitive=value=>{pattern.lastIndex=0;return pattern.test(value||'');};
   const install=()=>{
     if(document.getElementById('demo-privacy-style'))return;

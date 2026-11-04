@@ -8,6 +8,18 @@ Dependencies already installed at the repository root are reused. On a clean che
 
 The result is `demo-video/family-meal-planner-demo.mp4`, 1920x1080, 30 fps, 180 seconds, 5,400 frames. Ten clips represent the eight scenes, including the three approval shots. Music is the existing `public/audio/ambient-bg.mp3` at 35% volume. No voiceover, TTS, paid rendering, API credentials or checkout actions are introduced.
 
+## Settings
+
+Live captures read their accounts and app address from the environment, so no personal details live in the repository. `record-clips.mjs` and `reset-blank-plan.mjs` refuse to start until all three are set.
+
+| Variable | Purpose |
+|---|---|
+| `DEMO_APP_URL` | Deployed planner the capture drives, for example `https://planner.example.com` (defaults to `http://localhost:3000` for tests) |
+| `DEMO_PLANNER_EMAIL` | Signed-in household owner account |
+| `DEMO_REVIEWER_EMAIL` | Collaborator who receives and approves the review request |
+
+The browser bar in a render shows whatever host was recorded, so record against a host you are willing to show.
+
 ## Files
 
 - `helpers.mjs`: init-script privacy masking, pointer, ripple, camera telemetry and smooth interactions.

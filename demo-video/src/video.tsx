@@ -80,7 +80,7 @@ function Camera({id,seconds,mobile=false,alternative=false}:{id:string;seconds:n
 function Browser({id,seconds,profile,alternative=false}:{id:string;seconds:number;profile:string;alternative?:boolean}){
   const frame=useCurrentFrame();
   const capture=useCapture();const parts=capture.editMap.find(e=>e.scene===id)?.parts??[];
-  const url=[...parts].reverse().find(p=>p.fromMs<=frame/30*1000)?.host??(profile==='reviewer'?'mail.google.com':'meals.example.com');
+  const url=[...parts].reverse().find(p=>p.fromMs<=frame/30*1000)?.host??(profile==='reviewer'?'mail.google.com':capture.editMap.flatMap(e=>e.parts).find(p=>p.host!=='mail.google.com')?.host??'localhost');
   return <div style={{position:'absolute',left:336,top:64,width:1248,borderRadius:18,overflow:'hidden',boxShadow:'0 32px 110px #0008',border:'1px solid #ffffff24',background:'#f4f5f2'}}>
     <div style={{height:44,background:'#e7ebe4',display:'flex',alignItems:'center',gap:18,padding:'0 20px',color:'#69716a'}}>
       <div style={{display:'flex',gap:8}}>{['#ef8576','#eac475','#8fb996'].map(c=><span key={c} style={{width:11,height:11,borderRadius:12,background:c}}/>)}</div>
