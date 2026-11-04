@@ -332,6 +332,10 @@ No dependency needs an install script. better-sqlite3 ships prebuilt binaries fo
 
 `npm audit` reports moderate findings in development tools only (ESLint's minimatch and the exceljs workbook importer). The app's runtime dependencies have none (`npm audit --omit=dev`), and the remaining fixes need breaking major upgrades of ESLint and exceljs, so they wait until after the hackathon.
 
+## Author
+
+Built by Jac Crocker; more of his writing is at [JCStrategies](https://www.jcstrategies.com/?utm_source=github&utm_medium=readme&utm_campaign=family-meal-planner).
+
 ## License
 
 MIT
