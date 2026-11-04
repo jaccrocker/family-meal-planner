@@ -8,6 +8,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# No token scopes by default; build-and-push grants its own, rollout needs none (SSH only).
+permissions: {}
+
 env:
   SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
 
