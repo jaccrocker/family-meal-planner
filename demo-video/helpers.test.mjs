@@ -8,7 +8,7 @@ import {storeProof} from './store-proof.mjs';
 test('privacy masks email substrings and live inputs while leaving status badges readable',async()=>{
   const browser=await chromium.launch({headless:true});const context=await browser.newContext();await installHelpers(context);const page=await context.newPage();
   try{
-    await page.goto('data:text/html,<body><div id="reviewer">Send to demo-account-1@example.com <button>Required</button><b>Approved</b></div><input value="demo-account-2@example.com"><div id="dynamic"></div></body>');
+    await page.goto('data:text/html,<body><div id="reviewer">Send to planner@example.com <button>Required</button><b>Approved</b></div><input value="reviewer@example.com"><div id="dynamic"></div></body>');
     await page.waitForSelector('.demo-private');
     await page.evaluate(()=>{document.querySelector('#dynamic').textContent='Partner other@gmail.com is ready';});
     await page.waitForFunction(()=>document.querySelectorAll('.demo-private').length===2);
@@ -55,7 +55,7 @@ test('confidential capture aliases names, including late content, and masks an a
 test('privacy installs on a Trusted Types protected email document',async()=>{
   const browser=await chromium.launch({headless:true});const page=await browser.newPage();
   try{
-    await page.goto('data:text/html,'+encodeURIComponent(`<meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'"><p>Jac Crocker</p><p>demo-account-2@example.com</p>`));
+    await page.goto('data:text/html,'+encodeURIComponent(`<meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'"><p>Jac Crocker</p><p>reviewer@example.com</p>`));
     await page.evaluate((await import('./helpers.mjs')).privacyAndCursor);
     assert.equal(await page.locator('p').first().innerText(),'Jac C');
     assert.equal(await page.locator('.demo-private').evaluate(n=>getComputedStyle(n).filter),'blur(7px)');

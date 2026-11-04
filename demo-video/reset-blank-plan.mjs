@@ -2,21 +2,21 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
-import {ROOT,jsonRequest} from './helpers.mjs';
+import {ROOT,jsonRequest,requireEnv} from './helpers.mjs';
 
 export async function resetBlankPlan({solo=false}={}){
   const browser=await chromium.launch({headless:true});
   const context=await browser.newContext({storageState:path.join(ROOT,'auth/planner.json')});
   try{
     const me=await jsonRequest(context,'/api/me');
-    assert.equal(me.user?.email,'demo-account-1@example.com','Planner login must match the authorized owner');
+    assert.equal(me.user?.email,requireEnv('DEMO_PLANNER_EMAIL'),'Planner login must match the authorized owner');
     const before=await jsonRequest(context,'/api/household');
     assert.equal(before.isOwner,true,'Reset requires the household owner');
     const review=await jsonRequest(context,'/api/review');
     assert.ok(['smtp','resend'].includes(review.transport),'Real email delivery must be configured');
     const backup=path.join(ROOT,'auth',`household-before-${Date.now()}.json`);
     await fs.writeFile(backup,JSON.stringify({record:before,review},null,2),{flag:'wx',mode:0o600});
-    const reviewer='demo-account-2@example.com';
+    const reviewer=requireEnv('DEMO_REVIEWER_EMAIL');
     for(const email of before.members.filter(email=>solo||email!==reviewer))await jsonRequest(context,'/api/household/members',{method:'DELETE',data:{email}});
     if(!solo&&!before.members.includes(reviewer))await jsonRequest(context,'/api/household/members',{method:'POST',data:{email:reviewer}});
     const current=await jsonRequest(context,'/api/household');
