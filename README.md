@@ -52,7 +52,7 @@ A two minute walk through for judges:
 4. Review: see every grocery line with its math, and untick what you already have.
 5. Shop: copy the list, or with an Instacart key open it as an Instacart shopping list. The planner stops at the cart; checkout stays in Instacart.
 
-Run the checks with `npm test` (61 tests), `npm run lint` and `npm run build`.
+Run the checks with `npm test` (65 tests), `npm run lint` and `npm run build`.
 
 ## How a week flows
 
@@ -187,7 +187,7 @@ flowchart TB
 | Validation | Zod schemas on every model reply and API body | The engine only ever sees data it can trust |
 | Shopping | Instacart Developer Platform shopping list links | Instacart matches products at the family's store; checkout stays there |
 | Email | Nodemailer (SMTP) or Resend, with an allowlist | Real approval email for the household, recorded only in test mode |
-| Tests | Vitest, 61 tests across the engine, parser, planner, Instacart adapter, review flow and integrations | The math is the product, so the math is tested |
+| Tests | Vitest, 65 tests across the engine, parser, planner, Instacart adapter, review flow and integrations | The math is the product, so the math is tested |
 
 ## How it works
 
